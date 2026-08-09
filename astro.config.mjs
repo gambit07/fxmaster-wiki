@@ -56,6 +56,7 @@ export default defineConfig({
       },
       favicon: faviconPath,
       customCss: ['./src/styles/custom.css'],
+      routeMiddleware: './src/routeData.ts',
       components: {
         MarkdownContent: './src/components/MarkdownContent.astro',
       },

@@ -1154,14 +1154,23 @@ if (environmentalFiltersSource.includes('several high-strength filters are stack
 
 const homeSource = read(path.join(docsRoot, 'index.mdx'));
 const expectedHeroActions = [
-  'link: ./getting-started/installation/',
-  'link: ./reference/effects/',
+  'link: /getting-started/installation/',
+  'link: /reference/effects/',
 ];
 for (const actionLink of expectedHeroActions) {
-  if (!homeSource.includes(actionLink)) fail(`The home-page hero is missing its repository-safe action link: ${actionLink}`);
+  if (!homeSource.includes(actionLink)) fail(`The home-page hero is missing its internal action link: ${actionLink}`);
 }
-if (/^\s+link:\s+\/(?!\/)/m.test(homeSource)) {
-  fail('The home-page hero contains a root-absolute action link that will bypass the GitHub Pages base path.');
+const routeDataPath = path.join(root, 'src/routeData.ts');
+if (!fs.existsSync(routeDataPath)) fail('The Starlight route-data middleware used to prefix hero actions with the configured base path is missing.');
+else {
+  const routeDataSource = read(routeDataPath);
+  for (const marker of ['defineRouteMiddleware', 'import.meta.env.BASE_URL', 'entry.data.hero?.actions', 'action.link = applyBasePath(action.link)']) {
+    if (!routeDataSource.includes(marker)) fail(`The route-data middleware is missing its hero-action base-path marker: ${marker}`);
+  }
+}
+const heroAstroConfigSource = read(path.join(root, 'astro.config.mjs'));
+if (!heroAstroConfigSource.includes("routeMiddleware: './src/routeData.ts'")) {
+  fail('Starlight is not configured to load the hero-action route-data middleware.');
 }
 const popularEffectOrder = "ids={['fireparticles', 'water', 'fish', 'clouds', 'fog-filter', 'snowstorm', 'lightning', 'screenshake']}";
 if (!homeSource.includes(popularEffectOrder)) fail('The home page popular effects are missing or out of order.');
