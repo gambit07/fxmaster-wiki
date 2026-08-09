@@ -1,0 +1,81 @@
+---
+title: "Glitch"
+description: "RGB displacement, slicing, pixelation, and optional digital glyph effects."
+sidebar:
+  order: 20
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Visual reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: glitch</span>
+</div>
+
+<EffectShowcase src="/videos/glitch.mp4" title="Glitch" description="Preview shows Glitch with both the Slice and Glyph parameters enabled" mapName="Cze & Peku" mapUrl="https://www.czepeku.com/" />
+
+RGB displacement, slicing, pixelation, and optional digital glyph effects.
+
+Visual filters change the rendered Scene. Check map, token, and text visibility after changing their strength or opacity.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Filter effect |
+| Category | Visual |
+| Runtime type | `glitch` |
+| Exposed parameters | 33 |
+
+## Important controls
+
+- **Enable Slices:** Turns the horizontal and angled scene-slice displacement system on or off.
+- **Slice Count:** Controls how many displaced slice bands are generated across the scene.
+- **Slice Offset:** Controls how far each slice can be displaced from its original position.
+- **Slice Pixelation:** Adds blocky pixel steps along slice edges. Higher values make the displaced bands look more digital and broken.
+- **Enable Glyphs:** Turns the animated digital glyph overlay on or off.
+- **Glyph Intensity:** Controls the brightness and opacity of the glyph overlay.
+
+## Setup notes
+
+- Slice and Glyph systems can be enabled independently.
+- RGB offsets create channel separation, Slice controls displace bands of the image, and Glyph controls add the digital overlay.
+- Use a Region to limit the Glitch filter to part of the Scene, or a timed macro for a short transition.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Ley Surge | `ley-surge` | FXMaster+ | Normal |
+| Veilfall | `veilfall` | FXMaster+ | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="glitch" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikiglitch_f",
+    "type": "glitch",
+    "options": {
+      "belowTokens": false,
+      "direction": 225
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

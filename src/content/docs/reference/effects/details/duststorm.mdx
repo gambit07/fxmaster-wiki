@@ -1,0 +1,92 @@
+---
+title: "Duststorm"
+description: "Canvas-locked dust shader with directional flow, turbulence, streaks, and tinting."
+sidebar:
+  order: 10
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Environmental reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: duststorm</span>
+</div>
+
+<EffectShowcase src="/videos/duststorm.mp4" title="Duststorm" description="Preview shows Duststorm and Sandstorm enabled together" mapName="Cze & Peku" mapUrl="https://www.czepeku.com/" />
+
+Canvas-locked dust shader with directional flow, turbulence, streaks, and tinting.
+
+Environmental filters change the Scene surface or atmosphere. They can cover the full Scene, be limited to Regions, and be moved within the effect stack.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Filter effect |
+| Category | Environmental |
+| Runtime type | `duststorm` |
+| Exposed parameters | 34 |
+
+## Important controls
+
+- **Direction:** Sets the base travel direction of the dust filter.
+- **Direction Randomization:** Randomly shifts the effect direction over time. At 1, the direction can randomize anywhere around the full compass.
+- **Density:** Controls how much airborne dust is visible across the canvas.
+- **Streakiness:** Controls how strongly the dust resolves into long directional streaks instead of a softer haze.
+- **Background:** Render a persistent settled-sand surface behind the sandstorm. The surface follows the effect's stack placement, scene or Region mask, Levels selection, and below-token/tile settings.
+- **Token Trails:** Let visible tokens press darker, lower trails into accumulated sand as they move.
+
+## Setup notes
+
+- Within an enabled Duststorm effect, the airborne dust and persistent sand **Background** can be toggled and configured separately. Disabling Duststorm disables both.
+- Direction Randomization controls variation around the base Direction; Time Between Direction Changes controls how often a new target is selected.
+- Streakiness and Opacity define the airborne filter, while the **Background** controls define persistent sand coverage.
+- Use Token Trails and trail refill to make token movement visibly disturb the surface.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Ashfall | `ashfall` | FXMaster+ | Normal, Top Down |
+| Dust Devil | `dust-devil` | FXMaster+ | Normal |
+| Hurricane | `hurricane` | FXMaster+ | Normal, Top Down |
+| Luminous Sky | `luminous-sky` | FXMaster+ | Normal |
+| Sandstorm | `sandstorm` | FXMaster+ | Normal |
+| Tornado | `tornado` | FXMaster+ | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="duststorm" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikiduststorm_f",
+    "type": "duststorm",
+    "options": {
+      "belowTokens": true,
+      "color": {
+        "value": "#b38b5a",
+        "apply": true
+      },
+      "speed": 0.2,
+      "direction": 0,
+      "density": 0.55
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

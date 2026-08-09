@@ -1,0 +1,21 @@
+---
+title: Weather Effects
+description: Rain, hail, snow, snowstorm, clouds, fog, Fire, Sandstorm, and Wind Wisps particle guidance.
+---
+
+import EffectCatalog from '../../../components/EffectCatalog.astro';
+
+Weather particles provide the main moving layer for [Rain](../../reference/effects/details/rain/), [Snow](../../reference/effects/details/snow/), [Hail](../../reference/effects/details/hail/), [Fog](../../reference/effects/details/fog/), [Fire](../../reference/effects/details/fireparticles/), [Wind Wisps](../../reference/effects/details/windwisps/), and similar effects. Configure the presentation and movement controls that the selected effect actually exposes before adding filters on top.
+
+FXMaster particle effects also appear in Foundry's Scene **Weather Effect** field. That route is available if needed, but it uses default values without FXMaster parameter controls. Most users should use [Foundry Scene weather effects](../#foundry-scene-weather-effects) only as a fallback or quick default option rather than a normal FXMaster workflow.
+
+## Recommended workflow
+
+1. Select side-view or Top Down behavior when the effect supports both.
+2. Tune the available density, placement, and movement controls at the largest camera zoom expected during play.
+3. Add background accumulation or token interaction when those options are available.
+4. Add filters, lighting flashes, or SoundFX last.
+
+<EffectCatalog kind="particle" group="weather" interactive={false} />
+
+<span class="fxm-plus-only">FXMaster+ only</span> [Fire](../../reference/effects/details/fireparticles/), [Sandstorm](../../reference/effects/details/sandstorm/), and [Wind Wisps](../../reference/effects/details/windwisps/) appear in the weather catalog when FXMaster+ is active.

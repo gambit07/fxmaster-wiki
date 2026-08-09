@@ -1,0 +1,83 @@
+---
+title: "Hail"
+description: "Directional hail particles with top-down mode, synchronized direction, and configurable scale, speed, density, and alpha."
+sidebar:
+  order: 21
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Weather reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: hail</span>
+</div>
+
+Directional hail particles with top-down mode, synchronized direction, and configurable scale, speed, density, and alpha.
+
+Weather effects can cover a full Scene or be limited to Regions. Configure the placement or movement controls exposed by the effect first, then tune its appearance, population, and optional background controls.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Weather |
+| Runtime type | `hail` |
+| Exposed parameters | 17 |
+
+## Important controls
+
+- **Top Down:** Switches Hail to the overhead presentation intended for top-down maps. This changes particle projection and movement, so set it before finalizing scale and direction.
+- **Direction:** Sets the primary travel direction for hail particles. Directional Spread can add variation around this angle.
+- **Synchronized Direction:** Uses the active Wind or Duststorm direction for Hail. When the source direction changes, this effect follows it.
+- **Scale:** Changes the rendered size of hail particles. It does not change how many particles are present.
+- **Density:** Changes how many hail particles are visible or spawned at once. It does not change their size.
+
+## Setup notes
+
+- Top Down changes the hail projection and should be selected before tuning Scale and Direction.
+- Hail is visually strong, so moderate Opacity and Density values usually preserve token readability better.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Hail | `hail` | FXMaster | Normal, Top Down |
+| Ice Storm | `ice-storm` | FXMaster | Normal, Top Down |
+| Sleet | `sleet` | FXMaster | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="hail" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikihail_p",
+    "type": "hail",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "topDown": false,
+      "scale": 0.27,
+      "speed": 0.18
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

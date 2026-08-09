@@ -1,0 +1,79 @@
+---
+import { withBase } from '../utils/links';
+
+interface Props {
+  id: string;
+  title: string;
+  src: string;
+  label?: string;
+  caption?: string;
+}
+
+const { id, title, src, label = 'Preview', caption } = Astro.props;
+const resolvedSrc = withBase(src);
+---
+
+<div class="fxm-inline-video" data-fxm-inline-video data-fxm-inline-video-id={id}>
+  <div class="fxm-inline-video__trigger-wrap" data-fxm-inline-video-trigger-wrap>
+    <button
+      type="button"
+      class="fxm-inline-video__trigger"
+      data-fxm-inline-video-trigger
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      aria-controls={`${id}-panel`}
+    >
+      <span class="fxm-inline-video__trigger-icon" aria-hidden="true">▶</span>
+      <span>{label}</span>
+    </button>
+    <div class="fxm-inline-video__panel" id={`${id}-panel`} role="dialog" aria-label={title}>
+      <div class="fxm-inline-video__panel-inner">
+        <video class="fxm-inline-video__video" src={resolvedSrc} autoplay muted loop playsinline controls preload="metadata"></video>
+        {caption && <p class="fxm-inline-video__caption">{caption}</p>}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initializeInlineVideo(root: HTMLElement): void {
+    if (root.dataset.fxmInlineVideoInitialized === 'true') return;
+
+    const triggerWrap = root.querySelector<HTMLElement>('[data-fxm-inline-video-trigger-wrap]');
+    const trigger = root.querySelector<HTMLButtonElement>('[data-fxm-inline-video-trigger]');
+    if (!triggerWrap || !trigger) return;
+
+    let anchor = root.previousElementSibling as HTMLElement | null;
+    if (anchor && !anchor.matches('.sl-heading-wrapper, h1, h2, h3, h4, h5, h6')) {
+      anchor = anchor.previousElementSibling as HTMLElement | null;
+    }
+
+    if (anchor) {
+      anchor.classList.add('fxm-inline-video-anchor');
+      anchor.appendChild(triggerWrap);
+    }
+
+    const setExpanded = (value: boolean): void => {
+      trigger.setAttribute('aria-expanded', value ? 'true' : 'false');
+    };
+
+    triggerWrap.addEventListener('mouseenter', () => setExpanded(true));
+    triggerWrap.addEventListener('mouseleave', () => setExpanded(false));
+    triggerWrap.addEventListener('focusin', () => setExpanded(true));
+    triggerWrap.addEventListener('focusout', (event) => {
+      const nextTarget = event.relatedTarget;
+      if (nextTarget instanceof Node && triggerWrap.contains(nextTarget)) return;
+      setExpanded(false);
+    });
+
+    root.dataset.fxmInlineVideoInitialized = 'true';
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll<HTMLElement>('[data-fxm-inline-video]').forEach(initializeInlineVideo);
+    }, { once: true });
+  } else {
+    document.querySelectorAll<HTMLElement>('[data-fxm-inline-video]').forEach(initializeInlineVideo);
+  }
+</script>

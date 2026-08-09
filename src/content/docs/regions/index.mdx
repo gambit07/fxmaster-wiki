@@ -1,0 +1,133 @@
+---
+title: Region Effects
+description: Add FXMaster particles and filters to Foundry Regions with events, elevation constraints, fade, and layer controls.
+---
+
+import ScreenshotPreview from '../../../components/ScreenshotPreview.astro';
+
+Regions let FXMaster apply particles and filters to specific areas instead of the full Scene. A Region can also suppress Scene-level particles, filters, or FXMaster+ sounds inside its shape.
+
+## Available Region behaviors
+
+<ScreenshotPreview
+  id="region-document-behaviors"
+  title="Available Region behaviors"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/region-document.webp',
+      alt: 'A Foundry Region document opened to the Behaviors tab with FXMaster Filter Effects, Particle Effects, and Scene suppression behaviors listed.',
+      label: 'Behavior list',
+      caption: 'The Region document Behaviors tab shows the FXMaster effect and suppression behaviors currently added to the Region.',
+      width: 505,
+      height: 538,
+    },
+  ]}
+/>
+
+| Behavior | Purpose |
+|---|---|
+| FXMaster: Particle Effects | Adds one or more registered particle effects inside the Region. |
+| FXMaster: Filter Effects | Adds one or more registered filters inside the Region. |
+| FXMaster: Suppress Scene Particles | Hides Scene-level particles inside the Region. |
+| FXMaster: Suppress Scene Filters | Hides Scene-level filters inside the Region. |
+| FXMaster: Suppress Scene Sounds | <span class="fxm-plus-only">FXMaster+ only</span> Independently suppresses Scene-level Environmental and Token Movement SoundFX rules for listeners inside the Region. |
+
+## Add a Region effect
+
+<ScreenshotPreview
+  id="region-effect-behaviors"
+  title="Add a Region effect"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/particle-effects-region-management.webp',
+      alt: 'FXMaster Particle Effects Region behavior showing behavior identity, events, elevation constraints, edge fade, and available particle effect toggles.',
+      label: 'Particle Effects',
+      caption: 'Add FXMaster: Particle Effects to enable and configure one or more particle effects within the Region.',
+      width: 651,
+      height: 1303,
+    },
+    {
+      src: '/images/screenshots/filter-effects-region-management.webp',
+      alt: 'FXMaster Filter Effects Region behavior showing behavior identity, events, elevation constraints, and available filter toggles.',
+      label: 'Filter Effects',
+      caption: 'Add FXMaster: Filter Effects to enable and configure one or more filters within the Region, including per-filter edge fade.',
+      width: 653,
+      height: 1305,
+    },
+  ]}
+/>
+
+1. Draw or select a Region.
+2. Open its behaviors.
+3. Add **FXMaster: Particle Effects** or **FXMaster: Filter Effects**.
+4. Enable the effect types that should appear inside the Region.
+5. Configure each enabled effect.
+6. Configure **Events** and **Elevation Constraints** when the Region should not display continuously for every view.
+7. Save the behavior.
+8. Open <span class="fxm-control-label" data-control="layers">Manage Layers</span> and place the Region rows in the intended stack order.
+
+A single behavior can include more than one effect, and a Region can contain more than one FXMaster behavior.
+
+### Configure the enabled effects
+
+<ScreenshotPreview
+  id="region-effect-options"
+  title="Region effect options"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/configure-particle-effect-region.webp',
+      alt: 'FXMaster Particle Effects Region behavior with a Fire effect expanded to show Region-specific configuration options.',
+      label: 'Particle options',
+      caption: 'Enable a particle effect in the Region behavior, then expand it to adjust its available Region parameters.',
+      width: 594,
+      height: 699,
+    },
+    {
+      src: '/images/screenshots/configure-filter-effect-region.webp',
+      alt: 'FXMaster Filter Effects Region behavior with a Fog filter expanded to show Region-specific configuration options, including edge fade.',
+      label: 'Filter options',
+      caption: 'Enable a filter in the Region behavior, then expand it to configure its layer placement, effect settings, and Region-specific controls.',
+      width: 596,
+      height: 463,
+    },
+  ]}
+/>
+
+After an effect is enabled inside the behavior, expand it to configure its available Region options. Particle effects and filters both inherit their normal parameters, and Region-specific controls appear where supported.
+
+
+## Events
+
+The **Events** field can use the token-enter and token-exit Region events to start or stop particle and filter behaviors. Use these events when an effect should react to movement through a trap, portal, magical zone, room, or similar area. Leave **Events** empty when the Region effect should remain continuously available.
+
+## Elevation Constraints
+
+The **Elevation Constraints** field controls whether the Region effect is shown for the current controlled-token point of view:
+
+| Elevation Constraints | Behavior |
+|---|---|
+| None | Adds no controlled-token elevation check. |
+| Tokens POV | Uses the elevation of the viewer’s currently controlled tokens. The effect is shown when at least one controlled token is inside the Region’s elevation range. |
+| Specific Tokens POV | Uses only currently controlled tokens listed in **Token UUID** when checking the Region’s elevation range. |
+
+**Token UUID** is shown with **Specific Tokens POV** and identifies the tokens that may satisfy the visibility check. **Always Visible for GM** bypasses the constraint for GMs while leaving the player-facing result constrained.
+
+These fields are separate from the elevation thresholds used by token trails and other surface interactions. See [Overhead Levels](./overhead-levels/) for additional Level behavior.
+
+## Region-specific effect controls
+
+Individual effect pages combine Scene and Region parameters in one list. A **Region only** badge identifies controls that appear only when the effect is configured through a Region behavior.
+
+The reviewed effect definitions currently include these effect-specific Region controls:
+
+- Every filter includes **Edge Fade %** when it is used through **FXMaster: Filter Effects**. Each enabled filter can use a different edge fade.
+- [Water](../reference/effects/details/water/) includes **Follow Region Path** and **Path Influence**. These controls use the Region geometry to steer Flowing Water.
+
+For **FXMaster: Particle Effects**, **Edge Fade %** is a shared Region behavior field rather than an individual effect parameter. It applies to every particle effect enabled in that behavior. A value of `0` creates a hard edge; higher values soften the transition between the affected and unaffected portions of the Scene.
+
+## Live preview
+
+Changes to a Region effect are previewed before the form is saved. Save the behavior to keep the result. Closing or discarding the form restores the stored version.

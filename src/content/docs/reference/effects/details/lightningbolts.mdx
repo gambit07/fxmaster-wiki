@@ -1,0 +1,84 @@
+---
+title: "Lightning Bolts"
+description: "Animated horizontal or top-down lightning bolts with branching and flash synchronization."
+sidebar:
+  order: 24
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Environmental reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: lightningbolts</span>
+</div>
+
+<EffectShowcase src="/videos/lightning-bolts.mp4" title="Lightning Bolts" description="Preview shows Lightning Bolts with the Horizontal Lightning Mode enabled" mapName="Angela's Maps" mapUrl="https://angelamaps.com/" />
+
+Animated horizontal or top-down lightning bolts with branching and flash synchronization.
+
+Environmental filters change the Scene surface or atmosphere. They can cover the full Scene, be limited to Regions, and be moved within the effect stack.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Filter effect |
+| Category | Environmental |
+| Runtime type | `lightningbolts` |
+| Exposed parameters | 31 |
+
+## Important controls
+
+- **Lightning Mode:** Selects whether the effect creates horizontal bolts, top-down strikes, or both supported presentations.
+- **Trigger Chance:** Controls the chance that a scheduled lightning event actually produces a visible bolt.
+- **Period:** Sets the approximate time between automatic lightning events. Higher values create longer gaps.
+- **Branchiness:** Controls how many secondary branches split away from the main bolt.
+- **Sync with Lightning Flash:** Triggers the core Lightning flash at the same time as a bolt so the scene brightens with the strike.
+- **Audio Aware:** Allows bass-heavy audio peaks to trigger Lightning Bolts. Use Audio Channels to choose what it listens to and Audio Bass Threshold to control sensitivity.
+
+## Setup notes
+
+- Lightning Mode selects the bolt presentation; Top Down controls become available for overhead strikes.
+- Trigger Chance and Period control occurrence, while Line Width, Branchiness, Bolt Length, Jitter, Glow, and Brightness shape each bolt.
+- Sync with Lightning Flash coordinates the bolt with the core [Lightning filter](../lightning/).
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Hurricane | `hurricane` | FXMaster+ | Normal, Top Down |
+| Thunderstorm | `thunderstorm` | FXMaster+ | Normal, Top Down |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="lightningbolts" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikilightningbolts_f",
+    "type": "lightningbolts",
+    "options": {
+      "mode": "side",
+      "thickness": 0.5,
+      "branches": 0.5,
+      "brightness": 0.8,
+      "frequency": 0.5
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

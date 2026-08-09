@@ -1,0 +1,108 @@
+---
+title: "Rain"
+description: "Procedural rain with side-view or top-down rendering, splashes, wet ground backgrounds, and token trails."
+sidebar:
+  order: 28
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Weather reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: rain</span>
+</div>
+
+<EffectShowcase src="/videos/rain.mp4" title="Rain" description="Preview shows Rain in Top Down mode with Background and Token Trails enabled" />
+
+Procedural rain with side-view or top-down rendering, splashes, wet ground backgrounds, and token trails.
+
+Weather effects can cover a full Scene or be limited to Regions. Configure the placement or movement controls exposed by the effect first, then tune its appearance, population, and optional background controls.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Weather |
+| Runtime type | `rain` |
+| Exposed parameters | 37 |
+
+## Rain presentation
+
+Rain has separate normal and Top Down presentations. Choose **Top Down** before tuning movement because it changes how the rain, direction, and splash layer are rendered.
+
+### Airborne rain and splashes
+
+**Scale**, **Speed**, **Density**, **Opacity**, and **Direction** control the main rain layer. **Splash** adds impact sprites. **Splash Density** and **Splash Scale** are independent from the main Rain Density and Scale, so impacts can remain visible without forcing the airborne layer to use the same amount or size.
+
+### Background water
+
+Within an enabled Rain effect, **Background** adds a persistent wet surface with controls separate from the airborne rain and splashes. Disabling Rain disables the Background as well. It supports immediate or timed fill, ground coverage, patch size, fill variation, movement, opacity, sheen, and shimmer.
+
+### Token trails
+
+**Token Trails** disturbs the background around moving tokens. **Trail Width** defines the affected path, **Trail Strength** controls the amount of disturbance, **Token Elevation Threshold** limits which tokens interact with the surface, and **Settle Time (Seconds)** controls how quickly it returns.
+
+## Important controls
+
+- **Top Down:** Switches Rain to the overhead presentation intended for top-down maps. This changes particle projection and movement, so set it before finalizing scale and direction.
+- **Splash:** Enables animated impact splashes where the rain reaches the scene surface.
+- **Splash Density:** Scales only the animated rain-splash population. Falling rain still uses the main Density control.
+- **Direction:** Sets the primary travel direction for rain streaks. Directional Spread can add variation around this angle.
+- **Background:** Render a persistent wet-surface layer behind the rain effect. The layer follows the effect's stack placement, scene or Region mask, Levels selection, and below-token/tile settings.
+- **Token Trails:** Create short-lived water splashes and wake highlights from visible token trails moving through the rain wet-surface background.
+
+## Setup notes
+
+- Choose the normal or Top Down presentation before tuning Density and Direction because the two modes use different movement and splash behavior.
+- Splash Density is independent from the primary Rain Density when splashes are enabled.
+- Background Water can fill immediately or over time and supports sheen, shimmer, token interaction, elevation thresholds, and settling.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Acid Rain | `acid-rain` | FXMaster | Normal, Top Down |
+| Blood Rain | `blood-rain` | FXMaster | Normal, Top Down |
+| Drizzle | `drizzle` | FXMaster | Normal, Top Down |
+| Hurricane | `hurricane` | FXMaster, FXMaster+ | Normal, Top Down |
+| Monsoon | `monsoon` | FXMaster, FXMaster+ | Normal |
+| Rain | `rain` | FXMaster | Normal, Top Down |
+| Sleet | `sleet` | FXMaster | Normal |
+| Sunshower | `sunshower` | FXMaster, FXMaster+ | Normal, Top Down |
+| Thunderstorm | `thunderstorm` | FXMaster, FXMaster+ | Normal, Top Down |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="rain" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikirain_p",
+    "type": "rain",
+    "options": {
+      "topDown": true,
+      "splash": true,
+      "direction": 270,
+      "speed": 0.2,
+      "density": 0.4,
+      "backgroundEnabled": false
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

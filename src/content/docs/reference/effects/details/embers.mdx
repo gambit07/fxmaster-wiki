@@ -1,0 +1,84 @@
+---
+title: "Embers"
+description: "Drifting embers for fires, volcanic scenes, ash, or magical atmospheres."
+sidebar:
+  order: 12
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Ambient reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: embers</span>
+</div>
+
+Drifting embers for fires, volcanic scenes, ash, or magical atmospheres.
+
+Ambient effects add visible movement without replacing the full weather setup. Use them on their own or layer them with another particle or filter.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Ambient |
+| Runtime type | `embers` |
+| Exposed parameters | 20 |
+
+## Important controls
+
+- **Top Down:** Switches Embers to the overhead presentation intended for top-down maps. This changes particle projection and movement, so set it before finalizing scale and direction.
+- **Directional Movement:** Makes embers travel in the configured Direction instead of relying only on the effect's default random movement.
+- **Synchronized Direction:** Uses the active Wind or Duststorm direction for Embers. When the source direction changes, this effect follows it.
+- **Lifetime:** Changes how long individual embers remain active before they are recycled or replaced. Higher values usually allow longer travel paths.
+- **Density:** Changes how many embers are visible or spawned at once. It does not change their size.
+
+## Setup notes
+
+- Enable Synchronized Direction when [Wind](../wind/) or [Duststorm](../duststorm/) should drive the ember flow.
+- Lower Density with a moderate Lifetime can suggest distant fire without obscuring the map.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Ashfall | `ashfall` | FXMaster+ | Normal, Top Down |
+| Divine Light | `divine-light` | FXMaster+ | Normal |
+| Spore Cloud | `spore-cloud` | FXMaster | Normal |
+| Wildfire Smoke | `wildfire-smoke` | FXMaster | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="embers" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikiembers_p",
+    "type": "embers",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#f77300",
+        "apply": false
+      },
+      "topDown": false,
+      "orbit": false,
+      "directionalMovement": false
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

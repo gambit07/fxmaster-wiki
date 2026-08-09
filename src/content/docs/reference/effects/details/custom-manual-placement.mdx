@@ -1,0 +1,85 @@
+---
+title: Manual Placement
+description: Custom particle base for placing individual images at exact Scene positions, with orientation, glow, optional light sources, and token-burning controls.
+sidebar:
+  badge:
+    text: FXMaster+
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Custom particle base</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noreferrer" title="Open Gambit’s FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle base</span>
+</div>
+
+Manual Placement replaces automatic particle distribution with positions placed directly on the Scene. Each custom definition supplies the images available to the effect and to its individual placements.
+
+Create the custom effect through <span class="fxm-control-label" data-control="user-particles">Manage User Particle Effects</span>, then select **Manual Placement** from **Base Effect**.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Definition type | Custom particle base |
+| Base Effect label | Manual Placement |
+| Exposed parameters | 35 |
+
+## Important controls
+
+- **Sprites:** Selects which custom images are available to the effect and its placements.
+- **Manual Placement:** Switches between exact placed positions and automatic particle distribution.
+- **Manual Placement Controls:** Provides **Place**, **Delete**, and **Clear** actions.
+- **Direction:** Sets the orientation or movement direction used by the images.
+- **Light Source:** Creates optional Foundry light sources for manually placed images.
+- **Glow:** Adds a glow around each custom image.
+- **Burn Tokens:** Adds the temporary token-burning presentation when eligible tokens enter the effect area.
+
+## Place custom particles
+
+1. Create the custom definition and add one or more images under **Textures**.
+2. Select <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> from <span class="fxm-control-label" data-control="effects">FXMaster Controls</span>, then add or edit the custom effect.
+3. Enable **Manual Placement**.
+4. Use **Sprites** to choose which custom images are available.
+5. Use **Place** to add a position, **Delete** to target an existing position, or **Clear** to remove every placement for that effect.
+6. Use the on-canvas preview to position and orient the image.
+
+Placements are stored with the Scene and restored when the Scene loads. Closing **Particle Effects Management** exits the active placement interaction without deleting saved positions.
+
+## Placement presentation
+
+**Scale**, **Opacity**, **Direction**, **Horizontal Flip**, **Glow**, and **Glow Radius** control the placed images. When **Light Source** is enabled, each placement can also create a Foundry light using **Light Color**, **Light Radius**, **Bright Radius**, **Light Intensity**, and **Light Flicker**.
+
+**Burn Tokens** is optional. It adds a temporary client-side burning presentation to eligible tokens that enter the custom particle area, with controls for duration, trigger radius, scale, opacity, pulse detail, and tint.
+
+The built-in [Fire](../fireparticles/) and [Ghosts](../ghosts/) effects also provide their own Manual Placement modes. Their pages document the controls specific to those effects.
+
+## Parameters
+
+The table combines the settings inherited by a custom Manual Placement effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open.
+
+<ParameterTable effectId="custom-manual-placement" />
+
+## Direct-effect API example
+
+After a custom effect is created, its generated effect ID can be used as a particle type. Stored manual placements remain Scene data; the API example below starts the custom row that uses them.
+
+```js
+const customType = 'your-custom-particle-id';
+
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    id: 'apiMacro_customManual_p',
+    type: customType,
+    options: {
+      manualPlacement: true,
+      scale: 0.35,
+      glow: 0.25,
+    },
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For scene targeting, stack ordering, updates, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

@@ -1,0 +1,84 @@
+---
+title: "Bubbles"
+description: "Rising or top-down bubbles with orbiting, synchronized direction, and token trail interactions."
+sidebar:
+  order: 6
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Ambient reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: bubbles</span>
+</div>
+
+<EffectShowcase src="/videos/bubbles.mp4" title="Bubbles" description="Preview shows Bubbles being played with Token Trails enabled" />
+
+Rising or top-down bubbles with orbiting, synchronized direction, and token trail interactions.
+
+Ambient effects add visible movement without replacing the full weather setup. Use them on their own or layer them with another particle or filter.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Ambient |
+| Runtime type | `bubbles` |
+| Exposed parameters | 24 |
+
+## Important controls
+
+- **Top Down:** Switches Bubbles to the overhead presentation intended for top-down maps. This changes particle projection and movement, so set it before finalizing scale and direction.
+- **Directional Movement:** Makes bubbles travel in the configured Direction instead of relying only on the effect's default random movement.
+- **Synchronized Direction:** Uses the active Wind or Duststorm direction for Bubbles. When the source direction changes, this effect follows it.
+- **Token Trails:** Pop bubbles that moving tokens pass through.
+- **Trail Width:** Sets the bubble pop path width as a multiplier of the moving token's footprint.
+
+## Setup notes
+
+- Top Down is intended for overhead maps and can pair well with [Underwater](../underwater/) or [Water](../water/).
+- Token Trails create temporary openings through the bubbles. Tune Trail Width before increasing Trail Strength.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Nullfront | `nullfront` | FXMaster | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="bubbles" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikibubbles_p",
+    "type": "bubbles",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "topDown": false,
+      "orbit": false,
+      "directionalMovement": false
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

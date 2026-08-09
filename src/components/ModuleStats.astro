@@ -1,0 +1,87 @@
+---
+import reference from '../data/reference.json';
+
+const effects = reference.effects;
+const particleCount = effects.filter((effect) => effect.kind === 'particle').length;
+const filterCount = effects.filter((effect) => effect.kind === 'filter').length;
+const presetCount = new Set(reference.presets.map((preset) => preset.id)).size;
+const plusCount = effects.filter((effect) => effect.package === 'plus').length;
+---
+
+<div class="stats" aria-label="FXMaster documentation coverage">
+  <div class="stat">
+    <strong>{effects.length}</strong>
+    <span>Built-in effects</span>
+  </div>
+  <div class="stat">
+    <strong>{particleCount}</strong>
+    <span>Particle effects</span>
+  </div>
+  <div class="stat">
+    <strong>{filterCount}</strong>
+    <span>Filter effects</span>
+  </div>
+  <div class="stat">
+    <strong>{presetCount}</strong>
+    <span>Preset families</span>
+  </div>
+  <div class="stat">
+    <strong>{plusCount}</strong>
+    <span>FXMaster+ effects</span>
+  </div>
+</div>
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    margin-block: 1.5rem 3rem;
+    overflow: hidden;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--sl-color-bg-sidebar) 84%, transparent);
+  }
+
+  .stat {
+    display: grid;
+    gap: 0.2rem;
+    padding: 1.1rem 1rem;
+    border-inline-end: 1px solid var(--sl-color-hairline-light);
+  }
+
+  .stat:last-child {
+    border-inline-end: 0;
+  }
+
+  strong {
+    color: var(--sl-color-white);
+    font-size: clamp(1.45rem, 4vw, 2.15rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  span {
+    color: var(--sl-color-gray-3);
+    font-size: 0.75rem;
+    line-height: 1.25;
+  }
+
+  @media (max-width: 52rem) {
+    .stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat {
+      border-bottom: 1px solid var(--sl-color-hairline-light);
+    }
+
+    .stat:nth-child(even) {
+      border-inline-end: 0;
+    }
+
+    .stat:last-child {
+      grid-column: 1 / -1;
+      border-bottom: 0;
+    }
+  }
+</style>

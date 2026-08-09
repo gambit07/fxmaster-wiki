@@ -1,0 +1,63 @@
+---
+title: Direction and Movement
+description: Understand FXMaster direction degrees, synchronized direction, orbit, spread, lateral motion, and randomization.
+---
+
+
+FXMaster uses geometric direction degrees:
+
+| Direction | Degrees |
+|---|---:|
+| East / Right | 0° |
+| North / Up | 90° |
+| West / Left | 180° |
+| South / Down | 270° |
+| Northeast | 45° |
+| Northwest | 135° |
+| Southwest | 225° |
+| Southeast | 315° |
+
+The Preset API also accepts compass strings such as `north`, `sw`, `left`, or `down`.
+
+## Directional movement
+
+Creature and ambient particles may expose a **Directional Movement** toggle. When disabled, the effect can use its natural wandering or procedural behavior. When enabled, direction, spread, and lateral movement shape the path.
+
+- **Direction** establishes the main vector.
+- **Spread** allows particles to deviate from that vector.
+- **Lateral Movement** adds side-to-side variation without changing the destination direction.
+
+## Orbit
+
+Orbit circulates particles around a focal area. **Orbit Distance** controls how far the path extends from the center. It is useful for [Bats](../../reference/effects/details/bats/) around a tower, [Birds](../../reference/effects/details/birds/) above a battlefield, [Fireflies](../../reference/effects/details/fireflies/) around a clearing, or [Clouds](../../reference/effects/details/clouds/) around a focal point.
+
+## Synchronized direction
+
+Compatible particles and filters include **Synchronized Direction**. When enabled, [Wind](../../reference/effects/details/wind/) or [Duststorm](../../reference/effects/details/duststorm/) direction changes also update the linked effect. This keeps [Clouds](../../reference/effects/details/clouds/), [Fog particles](../../reference/effects/details/fog/), the [Fog filter](../../reference/effects/details/fog-filter/), [Rain](../../reference/effects/details/rain/), [Snow](../../reference/effects/details/snow/), [Autumn Leaves](../../reference/effects/details/autumnleaves/), [Summer Leaves](../../reference/effects/details/summerleaves/), [Embers](../../reference/effects/details/embers/), and other supported effects moving with the same wind direction.
+
+The synchronized effect retains its own speed, density, scale, and presentation controls.
+
+## Direction randomization
+
+[Wind](../../reference/effects/details/wind/) and [Duststorm](../../reference/effects/details/duststorm/) provide:
+
+- Base direction.
+- Direction randomization amount.
+- Randomization radius.
+- Time between direction changes.
+
+Small randomization produces evolving weather without obvious turns. Large values are better for magical or chaotic scenes.
+
+## Preset speed and density overrides
+
+The Preset API supports named relative multipliers:
+
+| Value | Multiplier |
+|---|---:|
+| `very-low` | 0.0 |
+| `low` | 0.5 |
+| `medium` | 1.0 |
+| `high` | 1.5 |
+| `very-high` | 2.0 |
+
+Numeric multipliers are also accepted and are clamped to the registered effect ranges.

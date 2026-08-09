@@ -1,0 +1,89 @@
+---
+title: Custom Particle Effects
+description: Create FXMaster+ particle effects from user-selected images and one of four supported base behaviors.
+---
+
+import ScreenshotPreview from '../../../components/ScreenshotPreview.astro';
+
+Select <span class="fxm-control-label" data-control="user-particles">Manage User Particle Effects</span> from <span class="fxm-control-label" data-control="effects">FXMaster Controls</span> to open **User Particle Effects**. A custom particle definition combines a name, base behavior, group, one or more images, and an icon.
+
+## User Particle Effects
+
+<ScreenshotPreview
+  id="user-particle-effects"
+  title="User Particle Effects"
+  images={[
+    {
+      src: '/images/screenshots/user-particle-effects.webp',
+      alt: 'User Particle Effects showing a custom Manual Placement effect and the Add Effect button.',
+      label: 'Custom effects',
+      caption: 'Manage User Particle Effects lists saved custom definitions and provides quick actions to edit or delete them.',
+      width: 612,
+      height: 197,
+    },
+  ]}
+/>
+
+Use **Add Effect** to create a new custom definition, or use the row actions to edit or delete an existing one.
+
+## Create an effect
+
+
+<ScreenshotPreview
+  id="custom-particle-effect-form"
+  title="Custom particle effect"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/custom-particle-effect.webp',
+      alt: 'Custom Particle Effect form showing the fields used to define a new user particle effect.',
+      label: 'Definition form',
+      caption: 'A custom particle definition combines a name, base effect, group, textures, and icon before it is saved and registered.',
+      width: 508,
+      height: 487,
+    },
+  ]}
+/>
+
+
+1. Select <span class="fxm-control-label" data-control="user-particles">Manage User Particle Effects</span>.
+2. Select **Add Effect**.
+3. Enter a **Custom Particle Name**.
+4. Select a **Base Effect**.
+5. Choose the **Group** where the effect should appear.
+6. Add one or more images under **Textures**. **Sound Only** does not require an image.
+7. Choose an **Icon**.
+8. Select **Save** and reload when prompted so the new effect can be registered throughout Foundry.
+
+## Definition fields
+
+| Field | What it controls |
+|---|---|
+| Custom Particle Name | The effect name shown in FXMaster’s particle lists. |
+| Base Effect | The movement and parameter set inherited by the custom effect. |
+| Group | Places the effect in Weather, Ambient, or Animals. |
+| Textures | Lists the images used by the effect. Add one image path per line or use the File Picker. |
+| Icon | Sets the image shown beside the custom effect in FXMaster. |
+
+## Base effects
+
+Each base has its own effect-style reference page with the complete parameter list, defaults, availability rules, and canvas behavior descriptions.
+
+| Base Effect | How it behaves | Parameter reference |
+|---|---|---|
+| Directional Drift | Moves images across the Scene in a selected direction and can use Top Down, Orbit, a persistent background, and token interaction. | [Open Directional Drift](../../reference/effects/details/custom-directional-drift/) |
+| Ambient Float | Spawns images across the visible area and lets them drift without requiring a selected travel direction. It can also use a persistent background and token interaction. | [Open Ambient Float](../../reference/effects/details/custom-ambient-float/) |
+| Manual Placement | Places individual images at exact Scene positions and provides placement, orientation, glow, optional light, and token-burning controls. | [Open Manual Placement](../../reference/effects/details/custom-manual-placement/) |
+| Sound Only | Creates no visual particles. It provides a named effect that can activate matching SoundFX rules. | [Open Sound Only](../../reference/effects/details/custom-sound-only/) |
+
+## Texture lists
+
+Enter one image path per line or use the File Picker to add images. Multiple images create visual variation. For a [Manual Placement](../../reference/effects/details/custom-manual-placement/) effect, the selected images are also available while authoring individual placements.
+
+## Runtime controls
+
+Visual custom effects inherit the render-order, Scene Level, darkness, and SoundFX controls available to their selected base. The base reference page identifies the movement, background, interaction, and placement controls that will appear on the effect row.
+
+## Editing an existing definition
+
+Changing the images or **Base Effect** can affect active Scene and Region rows. After saving a revised definition, refresh the world so the updated effect registration and image choices propagate throughout Foundry.

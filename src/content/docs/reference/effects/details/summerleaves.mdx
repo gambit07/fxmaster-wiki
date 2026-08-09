@@ -1,0 +1,91 @@
+---
+title: "Summer Leaves"
+description: "Summer leaf particles with selectable variants, top-down and orbit modes, synchronized direction, advanced motion controls, and persistent ground coverage."
+sidebar:
+  order: 38
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Ambient reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: summerleaves</span>
+</div>
+
+<EffectShowcase src="/videos/summer-leaves.mp4" title="Summer Leaves" description="Preview shows Summer Leaves and Wind enabled together, with Directional Movement and Synchronized Direction enabled" />
+
+Summer leaf particles with selectable variants, top-down and orbit modes, synchronized direction, advanced motion controls, and persistent ground coverage.
+
+Ambient effects add visible movement without replacing the full weather setup. Use them on their own or layer them with another particle or filter.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Particle effect |
+| Category | Ambient |
+| Runtime type | `summerleaves` |
+| Exposed parameters | 47 |
+
+## Summer leaf layers
+
+Within an enabled Summer Leaves effect, the airborne and **Background** systems are configured separately, using the same Background model as [Autumn Leaves](../autumnleaves/). **Background** is not standalone; disabling Summer Leaves disables both layers. **Variants** chooses which leaf and petal designs can appear.
+
+### Airborne motion
+
+Choose the Variants first, then configure **Spawn Mode**, **Direction**, **Directional Spread**, **Scale**, **Speed**, **Density**, **Spin Speed**, **Turbulence**, **Gustiness**, **Depth Variation**, **Ripple**, and the edge controls.
+
+### Ground coverage and trails
+
+**Background** controls fill, opacity, coverage, variation, piles, and ground-particle size. **Token Trails** controls the disturbed area, strength, swirl, lift chance, elevation threshold, and settling behavior around moving tokens.
+
+## Important controls
+
+- **Variants:** Choose which Summer Leaves types can appear. Each leaf type includes both color variants. Empty or invalid selection uses Tree Leaves.
+- **Spawn Mode:** Chooses whether leaves spawn across the view, along the top edge, or along the edge facing into the selected wind direction.
+- **Turbulence:** Adds small independent changes to leaf travel direction.
+- **Background:** Render a persistent field of settled leaves behind the falling effect. The field follows the same stack placement, scene or Region mask, Levels selection, and below-token/tile settings.
+- **Token Trails:** Allow visible token trails to push, spin, and briefly lift nearby settled leaves while moving through them. Displaced leaves settle in their new positions for the current canvas session.
+
+## Setup notes
+
+- Variants controls which summer leaf designs may spawn.
+- Spin Speed, Turbulence, Gustiness, Ripple, Edge Definition, and Edge Width shape separate parts of the motion and rendering.
+- The **Background** uses the same disturbance, elevation, and settling model as [Autumn Leaves](../autumnleaves/).
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="summerleaves" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikisummerleaves_p",
+    "type": "summerleaves",
+    "options": {
+      "topDown": true,
+      "direction": 225,
+      "density": 0.35,
+      "backgroundEnabled": false
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

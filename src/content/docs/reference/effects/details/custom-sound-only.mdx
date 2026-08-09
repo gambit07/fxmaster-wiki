@@ -1,0 +1,76 @@
+---
+title: Sound Only
+description: Custom particle base that creates no visual emitters and exists only to activate matching SoundFX rules.
+sidebar:
+  badge:
+    text: FXMaster+
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Custom particle base</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noreferrer" title="Open Gambit’s FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Non-visual base</span>
+</div>
+
+Sound Only does not create visible particles. It provides a named effect that can be added to a Scene or Region and matched by a SoundFX rule.
+
+Create the custom effect through <span class="fxm-control-label" data-control="user-particles">Manage User Particle Effects</span>, then select **Sound Only** from **Base Effect**.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Definition type | Custom particle base |
+| Base Effect label | Sound Only |
+| Exposed parameters | 2 |
+
+## Important controls
+
+- **Sound FX:** Allows the Sound Only effect to activate a matching SoundFX rule.
+- **Sound FX Sounds:** Limits the effect to selected sound entries when a matching enabled rule uses **Multi-Sound Mode: Manual** with at least two configured sounds.
+
+## Create and use a Sound Only effect
+
+1. Select <span class="fxm-control-label" data-control="user-particles">Manage User Particle Effects</span> from <span class="fxm-control-label" data-control="effects">FXMaster Controls</span>.
+2. Select **Add Effect** in **User Particle Effects**.
+3. Enter a descriptive **Custom Particle Name** such as `Forest Night`, `Market Crowd`, or `Distant Machinery`.
+4. Select **Sound Only** from **Base Effect**.
+5. Choose a **Group** and **Icon**. No image is required under **Textures**.
+6. Select **Save**.
+7. Select <span class="fxm-control-label" data-control="soundfx-manager">Manage Sound Effects</span> and create a rule targeting the new effect.
+8. Add the Sound Only effect through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or **FXMaster: Particle Effects** on a Region.
+
+Name the effect after the environmental state rather than one audio file. The matching SoundFX rule can later change its files, playback mode, level, radius, or Scene scope without renaming the effect.
+
+## Scene and Region behavior
+
+The effect follows the normal Scene and Region configuration path, allowing its active state to drive SoundFX matching and suppression. Because it creates no emitters and has no visual fade, enabling or disabling the row does not create a particle transition.
+
+## Parameters
+
+Sound Only intentionally exposes only the SoundFX controls required to activate and refine a matching rule.
+
+<ParameterTable effectId="custom-sound-only" />
+
+## Direct-effect API example
+
+After a Sound Only definition is created, its generated effect ID can be activated through the Direct Effect API. Replace the placeholder below with the ID used by the custom definition.
+
+```js
+const customType = 'your-sound-only-effect-id';
+
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    id: 'apiMacro_soundOnly_p',
+    type: customType,
+    options: {
+      soundFxEnabled: true,
+    },
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For scene targeting, updates, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

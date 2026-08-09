@@ -1,0 +1,95 @@
+---
+title: "Snow"
+description: "Falling snow with configurable movement and persistent snow-cover background support."
+sidebar:
+  order: 34
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Weather reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: snow</span>
+</div>
+
+Falling snow with configurable movement and persistent snow-cover background support.
+
+Weather effects can cover a full Scene or be limited to Regions. Configure the placement or movement controls exposed by the effect first, then tune its appearance, population, and optional background controls.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Weather |
+| Runtime type | `snow` |
+| Exposed parameters | 30 |
+
+## Airborne and settled snow
+
+Within an enabled Snow effect, the airborne and **Background** layers are configured separately. The Background can build to full coverage without requiring the airborne flakes to become a whiteout, but disabling Snow disables both layers.
+
+### Airborne snow
+
+Choose **Top Down** before adjusting **Direction**, **Scale**, **Speed**, and **Density**. The normal presentation shows drifting snowfall across a side-facing view; Top Down changes the motion and coverage for overhead maps.
+
+### Background snow
+
+**Background** creates persistent snow coverage with immediate or timed fill, opacity, fill variation, drift height, and drift size. Configure the background after the airborne layer so the two remain visually balanced.
+
+### Token trails and refill
+
+**Token Trails** removes a path through the accumulated snow. **Trail Width** and **Trail Strength** define the path, **Refill Trails Over Time** restores it over the configured **Trail Refill Time**, and **Token Elevation Threshold** prevents elevated tokens from affecting the surface.
+
+## Important controls
+
+- **Top Down:** Switches Snow to the overhead presentation intended for top-down maps. This changes particle projection and movement, so set it before finalizing scale and direction.
+- **Direction:** Sets the primary travel direction for snowflakes. Directional Spread can add variation around this angle.
+- **Density:** Changes how many snowflakes are visible or spawned at once. It does not change their size.
+- **Background:** Render a persistent settled-snow surface behind this effect. The surface follows the effect's stack placement, scene or Region mask, Levels selection, and below-token/tile settings.
+- **Token Trails:** Create visible background trails as tokens move through the surface. By default trails remain for the current canvas session; Refill Trails Over Time can gradually restore the background.
+
+## Setup notes
+
+- Balance airborne Density separately from **Background** coverage while Snow is enabled.
+- Background trails can expose paths through snow and optionally refill over a configured duration.
+- Use the Token Elevation Threshold to prevent flying or elevated tokens from carving trails through the surface.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Snow | `snow` | FXMaster | Normal, Top Down |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="snow" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikisnow_p",
+    "type": "snow",
+    "options": {
+      "topDown": true,
+      "direction": 270,
+      "speed": 0.25,
+      "density": 0.4,
+      "backgroundEnabled": false
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

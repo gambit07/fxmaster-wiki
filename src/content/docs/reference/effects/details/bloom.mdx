@@ -1,0 +1,75 @@
+---
+title: "Bloom"
+description: "Adds a bright-pass glow around luminous scene content."
+sidebar:
+  order: 5
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Visual reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: bloom</span>
+</div>
+
+Adds a bright-pass glow around luminous scene content.
+
+Visual filters change the rendered Scene. Check map, token, and text visibility after changing their strength or opacity.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Filter effect |
+| Category | Visual |
+| Runtime type | `bloom` |
+| Exposed parameters | 12 |
+
+## Important controls
+
+- **Threshold:** Sets how bright a scene pixel must be before Bloom affects it. Lower values bloom more of the map; higher values restrict the glow to the brightest areas.
+- **Bloom:** Controls the strength of the bloom added around pixels that pass the Threshold setting. Higher values make those highlights brighter and more prominent.
+- **Blur:** Controls how far bright pixels spread before they are composited back over the scene. Higher values create a softer, wider glow.
+
+## Setup notes
+
+- Raise Threshold before Bloom when only the brightest highlights should glow.
+- Bloom compounds with bright particles, lighting, and emissive artwork, so review it with the complete stack active.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Arcane Winds | `arcane-winds` | FXMaster+ | Normal |
+| Heat Wave | `heat-wave` | FXMaster | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="bloom" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikibloom_f",
+    "type": "bloom",
+    "options": {
+      "blur": 2,
+      "bloomScale": 1,
+      "threshold": 0.5
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

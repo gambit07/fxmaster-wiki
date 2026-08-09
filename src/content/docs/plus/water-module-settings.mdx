@@ -1,0 +1,73 @@
+---
+title: Water Module Settings
+description: Enable only the FXMaster+ Water feature groups needed by the world to build a lighter Water shader.
+---
+
+import ScreenshotPreview from '../../../components/ScreenshotPreview.astro';
+
+
+FXMaster+ provides a GM-only **Water Options** settings menu. These world settings remove unused [Water](../../reference/effects/details/water/) systems before the shader is built, allowing Water to use a lighter shader and load more quickly based on the features needed by the world.
+
+## Configure Water features
+
+<ScreenshotPreview
+  id="water-options-window"
+  title="Water Options"
+  variant="tall"
+  attachToHeadingId="configure-water-features"
+  images={[
+    {
+      src: '/images/screenshots/water-options-modal.webp',
+      alt: 'Water Options window showing Caustics, Vortex Water, Follow Region Path, Waves, and Token Trails feature toggles.',
+      label: 'Water Options',
+      caption: 'Water Options controls which optional Water shader feature groups are available to the world.',
+      width: 530,
+      height: 749,
+    },
+  ]}
+/>
+
+### Feature gates
+
+| Feature | Default | Expected shader impact | Effect controls |
+|---|---:|---|---|
+| Follow Region Path | Enabled | Heavy | Follow Region Path and Path Influence |
+| Caustics | Enabled | Medium-heavy | Caustics, strength, and tint |
+| Waves | Enabled | Medium | Waves, speed, direction, and strength |
+| Vortex | Enabled | Low | Vortex toggle, size, speed, direction, and strength |
+| Token Trails | Disabled | Heavy | Token Trails, width, strength, and settle time |
+
+### Change the settings
+
+<ScreenshotPreview
+  id="open-water-options"
+  title="Open Water Options"
+  variant="wide"
+  attachToHeadingId="change-the-settings"
+  images={[
+    {
+      src: '/images/screenshots/water-options-setting-row.webp',
+      alt: 'Game Settings opened to Gambit’s FXMaster+ with the Water Options setting row and Configure button visible.',
+      label: 'Module setting',
+      caption: 'Find Water Options under Configure Settings → Module Settings in Gambit’s FXMaster+, then select Configure.',
+      width: 789,
+      height: 688,
+    },
+  ]}
+/>
+
+1. Open **Configure Settings → Module Settings**.
+2. Find **Water Options** under **Gambit’s FXMaster+** and select **Configure**.
+3. Enable only the feature groups needed by the world.
+4. Select **Save**.
+5. Accept the world reload prompt.
+
+When a feature is disabled, stored Scene, Region, API, and passive Water configurations are sanitized so the unavailable option cannot remain active invisibly.
+
+## Choosing what to enable
+
+Keep commonly used systems enabled when several Scenes need them. Disable high-impact systems such as **Follow Region Path** or **Token Trails** when the world does not use them. The settings remove those controls from Water and reduce the shader work included during its initial setup.
+
+## Existing effects
+
+After changing a feature gate, review active Water rows. A disabled feature is cleared from stored options; re-enabling the world feature does not necessarily restore the previous per-effect value.

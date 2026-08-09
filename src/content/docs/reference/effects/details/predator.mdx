@@ -1,0 +1,70 @@
+---
+title: "Predator"
+description: "Applies animated refractive noise with a chromatic edge treatment."
+sidebar:
+  order: 27
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Visual reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: predator</span>
+</div>
+
+Applies animated refractive noise with a chromatic edge treatment.
+
+Visual filters change the rendered Scene. Check map, token, and text visibility after changing their strength or opacity.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Filter effect |
+| Category | Visual |
+| Runtime type | `predator` |
+| Exposed parameters | 12 |
+
+## Important controls
+
+- **Noise Density:** Controls the amount of animated refractive noise inside the Predator-style distortion.
+- **Speed:** Changes how quickly the distortion pattern evolves and moves across the scene.
+- **Line Width:** Changes the width of the bright refractive outline around distorted areas.
+
+## Setup notes
+
+- Noise Density and Line Width define the refractive silhouette, while Speed controls the animation cadence.
+- Use a Region to limit the filter to one part of the Scene, or a timed macro when it should appear only briefly.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="filters">Filter Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="predator" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikipredator_f",
+    "type": "predator",
+    "options": {
+      "belowTokens": false
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

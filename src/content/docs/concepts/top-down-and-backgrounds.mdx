@@ -1,0 +1,55 @@
+---
+title: Top-Down and Backgrounds
+description: Configure overhead particle presentation and persistent scene-surface systems.
+---
+
+import InlineVideoPreview from '../../../components/InlineVideoPreview.astro';
+
+Top-down presentation and persistent backgrounds solve different problems:
+
+- **Top Down** changes the camera interpretation and motion of airborne particles.
+- **Background** creates a persistent material or surface across the map.
+
+An effect may support one, both, or neither. **Background** is an optional layer of its parent effect, not a standalone effect. Its controls can be configured separately from the airborne or primary layer, but it only renders while the parent effect is enabled.
+
+## Top-down presentation
+
+[Rain](../../reference/effects/details/rain/), [Hail](../../reference/effects/details/hail/), [Snow](../../reference/effects/details/snow/), [Snowstorm](../../reference/effects/details/snowstorm/), [Embers](../../reference/effects/details/embers/), and related effects expose overhead behavior. Select **Top Down** before adjusting scale, rotation, density, direction, or splash presentation because the visual meaning of those values will change.
+
+## Background modes
+
+Persistent surfaces commonly support:
+
+- **Immediate fill:** the background is present as soon as the effect starts.
+- **Timed fill:** coverage grows over the configured duration.
+- **Coverage and fill variation:** control how complete and irregular the material appears.
+- **Opacity and material controls:** define the final appearance.
+
+[Rain](../../reference/effects/details/rain/) uses wet ground with reflection and shimmer. [Snow](../../reference/effects/details/snow/) and [Snowstorm](../../reference/effects/details/snowstorm/) use accumulating snow and trails. [Autumn Leaves](../../reference/effects/details/autumnleaves/), [Summer Leaves](../../reference/effects/details/summerleaves/), [Sakura Bloom](../../reference/effects/details/sakurabloom/), and [Sakura Blossoms](../../reference/effects/details/sakurablossoms/) use piles and lift interactions. [Sandstorm](../../reference/effects/details/sandstorm/) and [Duststorm](../../reference/effects/details/duststorm/) use drift, ripple, migration, and refill.
+
+## Token interaction
+
+<InlineVideoPreview id="token-interaction-preview" title="Token interaction background preview" src="/videos/token-interaction-background.mp4" label="Preview" caption="This preview shows a token disturbing the snow surface background creating a path through it, followed by snow re-accumulation over the created token path." />
+
+Token interaction parameters allow moving tokens to disturb a persistent background surface. Depending on the effect, tokens can create trails, part or push material, lift leaves or petals back into the airborne layer, produce ripples, or allow the surface to settle and refill after movement.
+
+Background interaction is generally configured in this order:
+
+1. Enable interaction or trails.
+2. Set the radius or width.
+3. Set strength.
+4. Set swirl, lift chance, or refill where supported.
+5. Set elevation eligibility.
+6. Set the settle or refill duration.
+
+A narrow, readable path usually looks better than a very large disturbance radius.
+
+Foundry's highlighted movement spaces can be hidden with **Disable Grid Movement Highlighting** under **Configure Settings → Module Settings**. This leaves token movement, ruler paths, waypoints, and measurement unchanged.
+
+## Elevation thresholds
+
+An interaction elevation threshold prevents tokens outside the intended surface plane from disturbing the background. This is useful for flying tokens, elevated platforms, or multi-level scenes.
+
+## Performance approach
+
+Background surfaces add persistent state and interaction work. Enable only the features needed for a given scene. For example, leave token trails off when the scene has no tokens or when the surface is purely decorative.

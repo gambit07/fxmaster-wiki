@@ -1,0 +1,52 @@
+---
+title: Overhead Levels
+description: Configure FXMaster Region behavior on Scene Levels and overhead Level overlays.
+---
+
+FXMaster effect rows and Region behaviors can be restricted to Scene Levels. This allows different weather, filters, suppression, and background interaction on different elevations of a multi-level Scene.
+
+## Per-effect Scene Levels
+
+Scene and API effects expose a **Scene Level** selection where supported. The Preset API accepts a Level id, name, label, title, or an array of those values:
+
+```js
+await FXMASTER.api.presets.play('rolling-fog', {
+  levels: ['Ground Floor', 'Basement'],
+});
+```
+
+Unmatched selections fall back to all Levels rather than silently producing an unusable effect.
+
+## Elevation Constraints
+
+Region particle, filter, and suppression behaviors use the **Elevation Constraints** field:
+
+| Elevation Constraints | What it does |
+|---|---|
+| None | Applies no additional controlled-token elevation constraint. |
+| Tokens POV | Uses the viewer’s currently controlled tokens. The Region effect is shown when at least one controlled token is inside the Region’s elevation range. |
+| Specific Tokens POV | Applies the same check only to currently controlled tokens listed in **Token UUID**. |
+
+When **Specific Tokens POV** is selected, use **Token UUID** to identify the eligible token IDs or UUIDs. Enable **Always Visible for GM** when GMs should continue seeing the Region effect while authoring even when the current controlled-token view does not satisfy the constraint.
+
+With **Tokens POV** or **Specific Tokens POV**, the effect is hidden when no eligible token is currently controlled.
+
+## Apply Region Behaviors to Overhead Levels
+
+The world setting **Apply Region Behaviors to Overhead Levels** allows overhead Level overlays to display Region particles, filters, and Scene suppression when a Region is assigned to multiple Levels.
+
+:::caution[Performance-sensitive setting]
+The setting can have a large impact on multi-level Scenes because multiple Region pipelines and masks may remain relevant to the current view. Test representative player views before enabling it for live play.
+:::
+
+## Setup example
+
+1. Assign Regions to the intended Scene Levels.
+2. Keep **Apply Region Behaviors to Overhead Levels** off initially.
+3. Configure and verify the active-view Region effects.
+4. Enable **Apply Region Behaviors to Overhead Levels** only when the visual result requires it.
+5. Test panning, zooming, tile hover, occlusion, token elevation, and player vision.
+
+## Interaction elevation
+
+Persistent backgrounds such as snow, leaves, rainwater, and sand can also expose a token-interaction elevation threshold. That control determines whether a token disturbs a surface; it does not determine whether the Region effect itself is visible.

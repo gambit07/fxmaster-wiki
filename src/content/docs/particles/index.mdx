@@ -1,0 +1,109 @@
+---
+title: Particle Effects
+description: Browse the particle effects included with FXMaster and FXMaster+.
+---
+
+import EffectCatalog from '../../../components/EffectCatalog.astro';
+import ScreenshotPreview from '../../../components/ScreenshotPreview.astro';
+
+Particle effects add moving sprites or procedural particles over the Scene. They can cover the full Scene, stay inside a Region, display below tokens or tiles, activate only at selected darkness levels, and use supported background or token-interaction options.
+
+## Add and customize particle effects
+
+<ScreenshotPreview
+  id="particle-effects-management"
+  title="Particle Effects Management"
+  variant="wide"
+  images={[
+    {
+      src: '/images/screenshots/particle-effects-management.webp',
+      alt: 'Particle Effects Management showing Weather, Ambient, and Animals groups with multiple built-in effects and a custom effect available from the same window.',
+      label: 'Effect list',
+      caption: 'Particle Effects Management groups available effects by category and shows the activation button and expandable options for each effect.',
+      width: 1372,
+      height: 542,
+    },
+  ]}
+/>
+
+Select <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> from <span class="fxm-control-label" data-control="effects">FXMaster Controls</span> to open **Particle Effects Management**. This is the recommended way to add particle effects because it provides the complete FXMaster parameter set, layer placement, multiple effect rows, backgrounds, token interactions, Sound FX controls when available, and other effect-specific options.
+
+### Configure a particle effect
+
+<ScreenshotPreview
+  id="particle-effect-options"
+  title="Particle effect options"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/particle-effect-options.webp',
+      alt: 'Particle Effects Management showing an expanded Rain effect with placement, tint, density, splash, and other Scene-level parameters.',
+      label: 'Scene effect options',
+      caption: 'Expand an active particle effect to adjust its placement, appearance, movement, density, and other effect-specific parameters.',
+      width: 484,
+      height: 813,
+    },
+  ]}
+/>
+
+Expand an active effect to configure its parameters. The available controls depend on the selected effect and its current mode; conditionally visible controls appear only when they are relevant.
+
+## Foundry Scene weather effects
+
+<ScreenshotPreview
+  id="foundry-scene-weather-effects"
+  title="Foundry Scene weather effects"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/foundry-scene-weather-effects.webp',
+      alt: 'Foundry Scene configuration showing the Weather Effect field with FXMaster particle effects registered in the dropdown list.',
+      label: 'Scene config view',
+      caption: 'Foundry can list FXMaster particle effects in the Scene Weather Effect field, but that workflow only applies a basic default effect.',
+      width: 608,
+      height: 800,
+    },
+  ]}
+/>
+
+FXMaster also registers its particle effects in Foundry's standard **Weather Effects** field. In the Scenes directory, right-click a Scene, select **Edit**, and choose an FXMaster particle effect through **Weather Effect**. FXMaster entries are labeled with the effect name followed by **(FXMaster)**.
+
+:::caution[Usually not the recommended workflow]
+Foundry's **Weather Effect** field is available if needed, but most users should avoid it for normal FXMaster setup. It uses Foundry's basic weather-effect implementation and applies the selected effect without FXMaster customization and does not expose the full FXMaster control set. In most scenarios, use <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> instead so the effect can be configured properly.
+:::
+
+Use the Foundry Scene field only when a quick default effect is sufficient and no FXMaster-specific customization is needed.
+
+## Hide Particle Effects
+
+<ScreenshotPreview
+  id="hide-particle-effects"
+  title="Hide Particle Effects"
+  variant="wide"
+  images={[
+    {
+      src: '/images/screenshots/particle-effects-management-menu-highlight.webp',
+      alt: 'Particle Effects Management with the overflow menu highlighted at the top-right of the window.',
+      label: 'Open the menu',
+      caption: 'Use the overflow menu in Particle Effects Management to access Hide Particle Effects.',
+      width: 1372,
+      height: 542,
+    },
+    {
+      src: '/images/screenshots/hide-particle-effect.webp',
+      alt: 'Hide Particle Effects window listing particle effects that can be hidden from the management list on a per-user basis.',
+      label: 'Hide list',
+      caption: 'Hide Particle Effects removes selected entries from the Particle Effects management list for the current user without deleting the underlying effect.',
+      width: 528,
+      height: 1104,
+    },
+  ]}
+/>
+
+Open the overflow menu in **Particle Effects Management** and select **Hide Particle Effects** to declutter the management list. This window is per-user and only changes whether an effect is shown in the Particle Effects manager. It does not delete the effect, and it does not prevent macros, presets, or the API from enabling that effect.
+
+Use the row toggle to hide or show each effect in the management list. Hidden effects can be re-enabled from the same window later.
+
+## Particle catalog
+
+<EffectCatalog kind="particle" />

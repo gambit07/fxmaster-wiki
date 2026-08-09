@@ -1,0 +1,15 @@
+---
+import reference from '../data/reference.json';
+
+const coreEffects = reference.effects.filter((effect) => effect.package === 'core').length;
+const plusEffects = reference.effects.filter((effect) => effect.package === 'plus').length;
+const presetNames = new Set(reference.presets.map((preset) => preset.id)).size;
+const topDownVariants = reference.presets.filter((preset) => preset.variant === 'topDown').length;
+---
+
+<div class="fxm-stat-grid">
+  <div><span>FXMaster effects</span><strong>{coreEffects}</strong></div>
+  <div><span>FXMaster+ effects</span><strong>{plusEffects}</strong></div>
+  <div><span>Preset families</span><strong>{presetNames}</strong></div>
+  <div><span>Top-down variants</span><strong>{topDownVariants}</strong></div>
+</div>

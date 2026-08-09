@@ -1,0 +1,107 @@
+---
+title: "Wind"
+description: "Canvas-locked wind distortion with turbulence, gusts, streaks, synchronized direction, and manual painting."
+sidebar:
+  order: 42
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Environmental reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: wind</span>
+</div>
+
+<EffectShowcase src="/videos/wind.mp4" title="Wind" description="Preview shows Wind and Summer Leaves enabled together, with Wind in Manual Painting mode" mapName="Angela's Maps" mapUrl="https://angelamaps.com/" />
+
+Canvas-locked wind distortion with turbulence, gusts, streaks, synchronized direction, and manual painting.
+
+Environmental filters change the Scene surface or atmosphere. They can cover the full Scene, be limited to Regions, and be moved within the effect stack.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Filter effect |
+| Category | Environmental |
+| Runtime type | `wind` |
+| Exposed parameters | 28 |
+
+## Procedural and painted Wind
+
+Wind can run across the complete Scene or Region, or it can be limited to a painted mask.
+
+### Procedural Wind
+
+Start with **Direction**, **Speed**, and **Density**. Then use **Scale** and **Opacity** to set the overall coverage. **Distortion**, **Turbulence**, **Sway Strength**, **Sway Frequency**, **Gustiness**, **Streakiness**, and **Highlight** shape the movement and visible detail.
+
+**Direction Randomization** adds variation around the base direction. **Direction Change Radius** sets the allowed range, and **Time Between Direction Changes** controls how often a new target is selected.
+
+### Manual Painting
+
+Enable **Manual Painting** to create a movement mask. **Brush Radius (Grid Spaces)** controls the painted area, while the **Painting** actions add to, erase, or clear the mask. This can work well for wind passing through a doorway, moving around a large obstruction, following a canyon, or remaining on one side of a Region.
+
+See [Wind Painting](../../../../plus/wind-painting/) for the complete painting workflow.
+
+### Synchronized direction
+
+Wind can act as the direction source for compatible effects. Enable **Synchronized Direction** on a supported particle or filter to follow Wind’s direction changes while retaining its own speed, scale, density, and appearance.
+
+## Important controls
+
+- **Manual Painting:** Restrict movement to painted areas while leaving the subtle visible wind sheen across the full Scene or Region.
+- **Direction:** Sets the base direction of the wind movement.
+- **Direction Randomization:** Randomly shifts the effect direction over time. At 1, the direction can randomize anywhere around the full compass.
+- **Turbulence:** Irregular movement inside painted Manual Painting areas. Higher values create rougher local motion.
+- **Gustiness:** Adds larger shared pulses in wind speed so the effect accelerates and eases instead of remaining constant.
+- **Streakiness:** Controls how strongly the wind appears as long directional streaks.
+- **Highlight:** Controls the brightness of the subtle moving highlight used to make the wind visible.
+
+## Setup notes
+
+- Manual Painting opens the Wind painting tools. Brush Radius (Grid Spaces) controls the paint area, and the Painting actions add, erase, or clear the mask.
+- Direction Randomization and Time Between Direction Changes create evolving wind, while Sway, Turbulence, Gustiness, Streakiness, and Highlight shape its appearance.
+- Wind can drive Synchronized Direction on compatible particle and filter effects.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Arcane Winds | `arcane-winds` | FXMaster+ | Normal |
+| Gravewind | `gravewind` | FXMaster+ | Normal |
+| Windy | `windy` | FXMaster+ | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="wind" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikiwind_f",
+    "type": "wind",
+    "options": {
+      "manualPlacement": false,
+      "direction": 180,
+      "speed": 0.4,
+      "density": 0.55,
+      "turbulence": 0.5,
+      "gustiness": 0.45
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

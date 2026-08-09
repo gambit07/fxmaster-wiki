@@ -1,0 +1,90 @@
+---
+title: "Sakura Blossoms"
+description: "Sakura blossom particles with standard movement controls and persistent background accumulation."
+sidebar:
+  order: 31
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Ambient reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: sakurablossoms</span>
+</div>
+
+<EffectShowcase src="/videos/sakura-blossoms.mp4" title="Sakura Blossoms" description="Preview shows Sakura Bloom enabled with Background and Token Trails enabled" />
+
+Sakura blossom particles with standard movement controls and persistent background accumulation.
+
+Ambient effects add visible movement without replacing the full weather setup. Use them on their own or layer them with another particle or filter.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Particle effect |
+| Category | Ambient |
+| Runtime type | `sakurablossoms` |
+| Exposed parameters | 30 |
+
+## Blossom ambience and ground coverage
+
+Within an enabled Sakura Blossoms effect, the drifting blossom layer and optional persistent **Background** accumulation are configured separately. **Background** is not standalone; disabling Sakura Blossoms disables both layers. The airborne layer uses **Scale**, **Speed**, **Lifetime**, **Density**, and **Opacity**, while **Background** has its own fill and appearance controls.
+
+### Background and trails
+
+**Background** controls fill timing, opacity, coverage, variation, pile amount, pile size, and **Ground Particle Size**. **Token Trails** controls the affected radius, strength, swirl, lift chance, settle time, and settle impact around moving tokens.
+
+## Important controls
+
+- **Scale:** Changes the rendered size of sakura blossoms. It does not change how many particles are present.
+- **Density:** Changes how many sakura blossoms are visible or spawned at once. It does not change their size.
+- **Background:** Render a persistent field of settled particles behind the active effect. The field follows the same stack placement, scene or Region mask, Levels selection, and below-token/tile settings.
+- **Token Trails:** Allows moving tokens to disturb the persistent background and leave visible trails through it.
+- **Trail Lift Chance:** Controls how often a disturbed background particle is lifted briefly into the air instead of only sliding along the surface.
+
+## Setup notes
+
+- Background fill and appearance controls are separate from airborne Scale, Speed, Lifetime, Density, and Opacity while the effect is enabled.
+- Use Trail Lift Chance sparingly so frequent token movement does not continuously refill the airborne layer.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="sakurablossoms" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikisakurablossoms_p",
+    "type": "sakurablossoms",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "scale": 0.24,
+      "speed": 0.27,
+      "density": 0.15
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

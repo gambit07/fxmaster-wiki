@@ -1,0 +1,82 @@
+---
+title: "Rats"
+description: "Ground-level rat swarms with token avoidance and directional movement controls."
+sidebar:
+  order: 29
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Animals reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: rats</span>
+</div>
+
+<EffectShowcase src="/videos/rats.mp4" title="Rats" description="Preview shows Rats in Directional Movement mode with Directional Spread enabled" />
+
+Ground-level rat swarms with token avoidance and directional movement controls.
+
+Animal effects add moving subjects to a Scene without creating tokens. Scale and Density control the population, while the available movement controls determine how they travel around the map. This effect also includes Token Avoidance controls for steering around eligible tokens.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Animals |
+| Runtime type | `rats` |
+| Exposed parameters | 25 |
+
+## Important controls
+
+- **Directional Movement:** Makes rats travel in the configured Direction instead of relying only on the effect's default random movement.
+- **Token Avoidance:** Makes rats steer away from eligible tokens instead of moving directly through them.
+- **Avoid Stationary Tokens:** Keeps rats avoiding eligible tokens even when those tokens are not moving. Disable it when only token movement should cause a reaction.
+- **Avoidance Radius:** Sets how far from an eligible token rats begin changing course.
+- **Avoidance Strength:** Controls how sharply and forcefully rats turn away from eligible tokens.
+
+## Setup notes
+
+- Enable Token Avoidance when rats should visibly scatter from moving creatures.
+- Avoid Stationary Tokens keeps nearby tokens relevant even when they are not moving. Disable it when only movement should provoke a response.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="rats" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikirats_p",
+    "type": "rats",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "orbit": false,
+      "directionalMovement": false,
+      "scale": 0.27
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

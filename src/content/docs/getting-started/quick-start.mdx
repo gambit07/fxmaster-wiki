@@ -1,0 +1,61 @@
+---
+title: Quick Start
+description: Add a particle effect, add a filter effect, check the layer order, save the result, and clear all effects.
+---
+
+For a first setup, add one particle effect and one filter effect, then check where both effects sit in the layer stack.
+
+## 1. Add a particle effect
+
+1. Open the <span class="fxm-control-label" data-control="effects">FXMaster Controls</span> Scene Controls group.
+2. Select <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span>.
+3. Add [**Rain**](../../reference/effects/details/rain/), [**Snow**](../../reference/effects/details/snow/), [**Clouds**](../../reference/effects/details/clouds/), [**Fog**](../../reference/effects/details/fog/), or another particle effect.
+4. Set the main layout options first: **Top Down**, **Below Tokens**, **Below Tiles**, direction, and background mode.
+5. Adjust scale and speed, followed by density and opacity.
+6. Save the row and check the result on the Scene.
+
+For an overhead battle map, consider starting with **Top Down** enabled when the effect supports it.
+
+## 2. Add a filter effect
+
+1. Select <span class="fxm-control-label" data-control="filters">Filter Effects</span>.
+2. Add [**Color**](../../reference/effects/details/color/), [**Bloom**](../../reference/effects/details/bloom/), [**Fog**](../../reference/effects/details/fog-filter/), [**Underwater**](../../reference/effects/details/underwater/), or another filter effect.
+3. Confirm whether the filter effect should display below tokens, below tiles, or in the default weather layer.
+4. Tune the filter effect while the particle effect remains active so the combined result stays readable.
+
+Filter effects change the rendered Scene image, so small adjustments can have a larger visual impact than the same adjustment on a particle effect.
+
+## 3. Check the effect stack
+
+Open <span class="fxm-control-label" data-control="layers">Manage Layers</span> and arrange the active Scene effects from top to bottom. The stack controls which FXMaster effects are drawn over or under the others.
+
+A useful starting order is:
+
+1. Short effects such as [Screen Shake](../../reference/effects/details/screenshake/) or [Lightning](../../reference/effects/details/lightning/).
+2. Airborne weather particles.
+3. [Color](../../reference/effects/details/color/) and [Bloom](../../reference/effects/details/bloom/) filters.
+4. [Fog](../../reference/effects/details/fog-filter/) and other atmosphere filters.
+5. Ground-level particles and persistent backgrounds.
+
+See [Layers and Ordering](../../concepts/layers-and-ordering/) for the complete layer model.
+
+## 4. Save the result
+
+Select <span class="fxm-control-label" data-control="save">Save Particle and Filter Effects as Macro</span> to create a reusable macro from the current particle and filter effect setup. Run the macro later to recreate that setup.
+
+## 5. Clear all effects
+
+Use left-click on <span class="fxm-control-label" data-control="clearfx">Clear Scene Particle and Filter Effects (Right-click: Disable Region Effects)</span> to clear the effects you've placed on the canvas after confirmation.
+
+## Example first Scene
+
+Try this setup on a rainy overhead map:
+
+| Effect | Initial choices |
+|---|---|
+| [Rain](../../reference/effects/details/rain/) particle effect | Top Down on, Splash on, Background off, moderate density |
+| [Fog](../../reference/effects/details/fog-filter/) filter effect | Low opacity, slow movement, token trails off |
+| [Color](../../reference/effects/details/color/) filter effect | Slightly lower saturation with a cool tint |
+| Layer order | [Rain](../../reference/effects/details/rain/) above both [Color](../../reference/effects/details/color/) and [Fog](../../reference/effects/details/fog-filter/) |
+
+After the main result looks correct, try enabling [Rain](../../reference/effects/details/rain/)'s **Background** and **Token Interaction** parameters, or a suppression Region to prevent the effect in a specific area.

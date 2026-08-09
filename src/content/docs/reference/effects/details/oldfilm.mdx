@@ -1,0 +1,72 @@
+---
+title: "Old Film"
+description: "Applies scratches, noise, flicker, and vintage film degradation."
+sidebar:
+  order: 26
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Visual reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: oldfilm</span>
+</div>
+
+Applies scratches, noise, flicker, and vintage film degradation.
+
+Visual filters change the rendered Scene. Check map, token, and text visibility after changing their strength or opacity.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Filter effect |
+| Category | Visual |
+| Runtime type | `oldfilm` |
+| Exposed parameters | 14 |
+
+## Important controls
+
+- **Sepia:** Adds a warm brown archival tint to the scene. Higher values move farther away from the original colors.
+- **Noise Density:** Controls how much animated film grain appears over the scene.
+- **Noise Size:** Changes the size of the film-grain pattern. Higher values make each grain cluster larger and more visible.
+- **Scratch Density:** Changes how many film scratches are visible at the same time.
+- **Scratch Size:** Changes the width and visibility of individual film scratches.
+
+## Setup notes
+
+- Balance Sepia, Noise Density, and Scratch Density instead of maximizing all three at once.
+- Higher values can work well for a short transition, while lower values are easier to leave active for a complete Scene.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="filters">Filter Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="oldfilm" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikioldfilm_f",
+    "type": "oldfilm",
+    "options": {
+      "belowTokens": false
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

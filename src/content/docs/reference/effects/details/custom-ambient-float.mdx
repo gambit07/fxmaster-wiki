@@ -1,0 +1,75 @@
+---
+title: Ambient Float
+description: Custom particle base for images that spawn across the visible area and drift without a selected travel direction, with optional background and token-interaction controls.
+sidebar:
+  badge:
+    text: FXMaster+
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Custom particle base</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noreferrer" title="Open Gambit’s FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle base</span>
+</div>
+
+Ambient Float is used when custom images should appear across the visible area and drift without a user-selected travel direction. It supports standard particle controls, spin, a persistent background surface, and token interaction.
+
+Create the custom effect through <span class="fxm-control-label" data-control="user-particles">Manage User Particle Effects</span>, then select **Ambient Float** from **Base Effect**.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Definition type | Custom particle base |
+| Base Effect label | Ambient Float |
+| Exposed parameters | 31 |
+
+## Important controls
+
+- **Scale:** Changes the rendered size of each custom image.
+- **Speed:** Changes how quickly the images drift across the canvas.
+- **Lifetime:** Controls how long each particle remains active before being replaced.
+- **Density:** Controls how many images are visible at once.
+- **Spin:** Controls how quickly the images rotate while drifting.
+- **Background:** Adds a persistent field of settled images.
+- **Token Trails:** Allows moving tokens to disturb the background surface.
+
+## Airborne movement
+
+Ambient Float does not expose **Direction**, Top Down, or Orbit. The base distributes images across the visible area and uses **Speed**, **Lifetime**, **Density**, **Opacity**, and **Spin** to define their movement and presentation.
+
+## Background and token interaction
+
+Within an enabled custom Ambient Float effect, **Background** can be toggled and configured separately from the airborne particles. It is not a standalone effect; disabling the custom effect disables both layers. The **Background** layer can appear at full coverage or fill over time. Enable **Token Trails** when moving tokens should push, swirl, lift, and temporarily clear the settled images.
+
+## Parameters
+
+The table combines the settings inherited by a custom Ambient Float effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open.
+
+<ParameterTable effectId="custom-ambient-float" />
+
+## Direct-effect API example
+
+After a custom effect is created, its generated effect ID can be used as a particle type. Replace the placeholder below with the ID used by the custom definition.
+
+```js
+const customType = 'your-custom-particle-id';
+
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    id: 'apiMacro_customAmbient_p',
+    type: customType,
+    options: {
+      scale: 0.3,
+      speed: 0.3,
+      density: 0.15,
+      spin: 0.35,
+    },
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For scene targeting, stack ordering, updates, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

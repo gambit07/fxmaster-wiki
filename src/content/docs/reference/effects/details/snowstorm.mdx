@@ -1,0 +1,99 @@
+---
+title: "Snowstorm"
+description: "Dense procedural snowstorm with side-view or top-down presentation and sweeping background snow."
+sidebar:
+  order: 35
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Weather reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: snowstorm</span>
+</div>
+
+<EffectShowcase src="/videos/snowstorm.mp4" title="Snowstorm" description="Preview shows Snowstorm in Top Down mode with Background and Sweeping Snow enabled" />
+
+Dense procedural snowstorm with side-view or top-down presentation and sweeping background snow.
+
+Weather effects can cover a full Scene or be limited to Regions. Configure the placement or movement controls exposed by the effect first, then tune its appearance, population, and optional background controls.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Weather |
+| Runtime type | `snowstorm` |
+| Exposed parameters | 36 |
+
+## Snowstorm layers
+
+Snowstorm is the denser and more directional snow effect. Within an enabled Snowstorm effect, the main airborne storm, persistent **Background** snow, and optional **Sweeping Snow** layer are configured separately. Disabling Snowstorm disables all of them.
+
+### Airborne storm
+
+Choose **Top Down** before tuning **Rotation Strength**, **Direction**, **Scale**, **Speed**, and **Density**. Rotation Strength has its largest visual effect in Top Down mode and should remain lower when the flakes need to follow a more consistent route.
+
+### Background and sweeping snow
+
+**Background** adds accumulated snow with fill, opacity, variation, drift height, and drift size controls. **Sweeping Snow** adds a separate moving layer with its own opacity, scale, speed, and strength. The background is intentionally less opaque than [Snow](../snow/)’s maximum so more of the map remains visible through the storm.
+
+### Token trails and refill
+
+Token trails use the same width, strength, refill, refill-time, and elevation controls as Snow. Configure these after the background appearance is established.
+
+## Important controls
+
+- **Top Down:** Switches Snowstorm to the overhead presentation intended for top-down maps. This changes particle projection and movement, so set it before finalizing scale and direction.
+- **Rotation Strength:** How strongly particles rotate as they move. 0 = no rotation; 1 = maximum configured rotation.
+- **Direction:** Sets the primary travel direction for storm snowflakes. Directional Spread can add variation around this angle.
+- **Background:** Render a persistent settled-snow surface beneath the snow storm effect. The surface follows the same stack placement, scene or Region mask, Levels selection, and below-token/tile settings as the standard snow background.
+- **Sweeping Snow:** Adds the broad wind-swept snow sheet to the snow storm background instead of tying it to the main snowflake density.
+- **Token Trails:** Create visible background trails as tokens move through the surface. By default trails remain for the current canvas session; Refill Trails Over Time can gradually restore the background.
+
+## Setup notes
+
+- Snowstorm is denser and more directional than Snow and includes a separate Sweeping Snow layer.
+- Rotation Strength has its largest effect in Top Down mode. Keep it lower when flakes should follow a more consistent direction.
+- Background Opacity can remain below full coverage so map details remain visible beneath the accumulated snow.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Blizzard | `blizzard` | FXMaster | Normal, Top Down |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="snowstorm" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikisnowstorm_p",
+    "type": "snowstorm",
+    "options": {
+      "topDown": true,
+      "direction": 270,
+      "speed": 0.55,
+      "density": 0.45,
+      "backgroundEnabled": false
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

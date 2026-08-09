@@ -1,0 +1,82 @@
+---
+title: "Stars"
+description: "Slow ambient star particles for astral scenes, dreamlike spaces, or void backgrounds."
+sidebar:
+  order: 37
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Ambient reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: stars</span>
+</div>
+
+Slow ambient star particles for astral scenes, dreamlike spaces, or void backgrounds.
+
+Ambient effects add visible movement without replacing the full weather setup. Use them on their own or layer them with another particle or filter.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Ambient |
+| Runtime type | `stars` |
+| Exposed parameters | 16 |
+
+## Important controls
+
+- **Orbit:** Makes stars circulate around the effect area instead of only crossing the canvas in a straight or drifting path.
+- **Scale:** Changes the rendered size of stars. It does not change how many particles are present.
+- **Speed:** Changes how quickly stars move and animate across the canvas. It does not change particle size or count.
+- **Density:** Changes how many stars are visible or spawned at once. It does not change their size.
+- **Opacity:** Controls the transparency of stars. Lower values allow more of the map to show through.
+
+## Setup notes
+
+- Lower Density works well when Stars are used as a subtle accent. Raise it when the stars should become a stronger background layer.
+- Tint, Opacity, and Scale usually change the overall mood more than Density alone.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Divine Light | `divine-light` | FXMaster+ | Normal |
+| Nullfront | `nullfront` | FXMaster | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="stars" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikistars_p",
+    "type": "stars",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#bee8ee",
+        "apply": false
+      },
+      "orbit": false,
+      "scale": 0.27,
+      "speed": 0.27
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

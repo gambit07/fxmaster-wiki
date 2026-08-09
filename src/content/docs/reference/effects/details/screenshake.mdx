@@ -1,0 +1,83 @@
+---
+title: "Screen Shake"
+description: "Timed or continuous camera shake with strength, speed, smoothness, decay, edge protection, and audio-aware controls."
+sidebar:
+  order: 33
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Visual reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: screenshake</span>
+</div>
+
+<EffectShowcase src="/videos/screen-shake.mp4" title="Screen Shake" description="Preview shows Screen Shake with Timed mode disabled" />
+
+Timed or continuous camera shake with strength, speed, smoothness, decay, edge protection, and audio-aware controls.
+
+Visual filters change the rendered Scene. Check map, token, and text visibility after changing their strength or opacity.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Filter effect |
+| Category | Visual |
+| Runtime type | `screenshake` |
+| Exposed parameters | 21 |
+
+## Important controls
+
+- **Timed:** When enabled, the scene effect turns itself off after Duration. Disable for a continuous shake, or enable Audio Aware for audio-triggered bursts.
+- **Strength:** Maximum shake displacement. 0 = no movement; 1 = strongest shake.
+- **Shake Speed:** Controls how quickly the shake changes direction. Higher values feel like rapid vibration; lower values feel like a heavier rolling impact.
+- **Smoothness:** Smooths the shake path. Higher = softer camera drift; lower = harsher impact jitter.
+- **Decay:** How strongly a timed shake fades toward zero over its duration.
+- **Edge Protection:** Slightly overscans the composited image while shaking to reduce exposed edges.
+- **Audio Aware:** Allows bass-heavy audio peaks to trigger Screen Shake. Use Audio Channels to choose what it listens to and Audio Bass Threshold to control sensitivity.
+
+## Setup notes
+
+- Timed automatically ends the effect after the configured Duration.
+- Edge Protection reduces exposed canvas edges during displacement; stronger shake generally needs more protection.
+- Audio Aware can turn the filter into a reactive thunder, impact, or music-bass effect.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="filters">Filter Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="screenshake" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikiscreenshake_f",
+    "type": "screenshake",
+    "options": {
+      "timed": true,
+      "strength": 0.25,
+      "duration": 1.2,
+      "speed": 0.5,
+      "smoothness": 0.5,
+      "decay": 0.5
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

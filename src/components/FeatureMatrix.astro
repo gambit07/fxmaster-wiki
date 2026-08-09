@@ -1,0 +1,73 @@
+<div class="matrix-wrap">
+  <table class="matrix">
+    <thead>
+      <tr><th>Capability</th><th>FXMaster</th><th>FXMaster+</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Core particle and filter management</td><td><span class="yes">Included</span></td><td><span class="yes">Uses FXMaster</span></td></tr>
+      <tr><td>Scene and Region effects</td><td><span class="yes">Included</span></td><td><span class="yes">Expanded</span></td></tr>
+      <tr><td>Preset and direct-effect APIs</td><td><span class="yes">Included</span></td><td><span class="yes">Expanded</span></td></tr>
+      <tr><td>Custom Particle Effects</td><td><span class="no">—</span></td><td><span class="plus">Included</span></td></tr>
+      <tr><td>Sound Effects Manager</td><td><span class="no">—</span></td><td><span class="plus">Included</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .matrix-wrap {
+    overflow-x: auto;
+    margin-block: 1.25rem 2rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.85rem;
+  }
+
+  .matrix {
+    width: 100%;
+    min-width: 38rem;
+    border-collapse: collapse;
+    background: color-mix(in srgb, var(--sl-color-bg-sidebar) 76%, transparent);
+  }
+
+  th,
+  td {
+    padding: 0.75rem 0.85rem;
+    border-bottom: 1px solid var(--sl-color-hairline-light);
+    text-align: start;
+  }
+
+  th {
+    background: var(--sl-color-bg-sidebar);
+    color: var(--sl-color-gray-2);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .yes,
+  .plus,
+  .no {
+    display: inline-flex;
+    padding: 0.18rem 0.4rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .yes {
+    background: rgba(80, 215, 255, 0.1);
+    color: var(--fxm-cyan);
+  }
+
+  .plus {
+    background: rgba(255, 194, 110, 0.1);
+    color: var(--fxm-gold);
+  }
+
+  .no {
+    color: var(--sl-color-gray-3);
+  }
+</style>

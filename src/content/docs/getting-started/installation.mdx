@@ -1,0 +1,44 @@
+---
+title: Installation
+description: Install Gambit’s FXMaster, optionally add Gambit’s FXMaster+, and confirm that the module controls are available in a Foundry world.
+---
+
+**Gambit’s FXMaster** is the core module that enables functionality within Foundry. **Gambit’s FXMaster+** is an expansion module that is installed in addition to FXMaster with additional effects and features.
+
+## Install Gambit’s FXMaster
+
+1. Open **Add-on Modules** from Foundry’s Setup screen.
+2. Select **Install Module**.
+3. Search for **Gambit’s FXMaster** and install the package published by me, Gambit!
+4. Launch the intended world, open **Manage Modules**, enable **Gambit’s FXMaster**, and save.
+5. Reload when Foundry requests it.
+
+FXMaster releases and source are available in the [FXMaster GitHub repository](https://github.com/gambit07/fxmaster). Installing through Foundry’s package browser is normally the easiest option because Foundry can track compatible releases and available updates.
+
+## Add Gambit’s FXMaster+
+
+1. Follow the [Accessing FXMaster+](../../plus/access/) guide to subscribe, link Patreon to Foundry VTT, restart the server, and install the module.
+2. Enable both **Gambit’s FXMaster** and **Gambit’s FXMaster+** in the same world.
+3. Reload when Foundry requests it.
+
+FXMaster+ requires FXMaster to be installed and active. Update both modules together when a release requires a newer FXMaster version.
+
+## Confirm the installation
+
+After loading a Scene as a GM:
+
+- Open the <span class="fxm-control-label" data-control="effects">FXMaster Controls</span> Scene Controls group.
+- Confirm that <span class="fxm-control-label" data-control="activation">FXMaster Tools Overview</span>, <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span>, <span class="fxm-control-label" data-control="filters">Filter Effects</span>, <span class="fxm-control-label" data-control="layers">Manage Layers</span>, <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>, <span class="fxm-control-label" data-control="save">Save Particle and Filter Effects as Macro</span>, and <span class="fxm-control-label" data-control="clearfx">Clear Scene Particle and Filter Effects (Right-click: Disable Region Effects)</span> are available.
+- With FXMaster+ active, confirm that <span class="fxm-control-label" data-control="soundfx-manager">Manage Sound Effects</span> and <span class="fxm-control-label" data-control="user-particles">Manage User Particle Effects</span> also appear.
+- Open **Module Settings → Gambit’s FXMaster** and confirm that the client and world settings are present.
+
+Continue with the [Quick Start](../quick-start/) after the controls appear.
+
+## Updating
+
+Before a major Foundry or FXMaster update, back up the world. After updating:
+
+1. Reload when Foundry requests it.
+2. Open a Scene that already uses particles, filters, Regions, and API effects.
+3. Confirm that the effect stack and Scene Levels still display correctly.
+4. Review the release notes for migrations or renamed parameters before updating saved macros.

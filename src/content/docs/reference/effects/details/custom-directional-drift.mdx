@@ -1,0 +1,83 @@
+---
+title: Directional Drift
+description: Custom particle base for images that travel across the Scene in a selected direction, with optional Top Down, Orbit, background, and token-interaction controls.
+sidebar:
+  badge:
+    text: FXMaster+
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Custom particle base</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noreferrer" title="Open Gambit’s FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle base</span>
+</div>
+
+Directional Drift is used when a custom particle should travel across the Scene in a selected direction. It also supports Top Down and Orbit presentations, a persistent background surface, and token interaction.
+
+Create the custom effect through <span class="fxm-control-label" data-control="user-particles">Manage User Particle Effects</span>, then select **Directional Drift** from **Base Effect**.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Definition type | Custom particle base |
+| Base Effect label | Directional Drift |
+| Exposed parameters | 35 |
+
+## Important controls
+
+- **Direction:** Sets the main travel direction while Top Down and Orbit are disabled.
+- **Top Down:** Switches the particle projection to the overhead presentation.
+- **Orbit:** Makes the images circulate around the effect area instead of crossing the Scene.
+- **Spin:** Controls how quickly each image rotates while moving.
+- **Background:** Adds a persistent field of settled images behind the airborne particles.
+- **Token Trails:** Allows moving tokens to disturb the persistent background.
+
+## Movement modes
+
+### Directional travel
+
+Leave **Top Down** and **Orbit** disabled to move the images across the Scene using **Direction**, **Speed**, **Lifetime**, and **Density**.
+
+### Top Down
+
+Enable **Top Down** for an overhead presentation. Direction is handled by the Top Down movement rather than the normal **Direction** field.
+
+### Orbit
+
+Enable **Orbit** to circulate the images around the effect area. **Orbit Distance** controls the radius of the path. Top Down and Orbit are mutually exclusive.
+
+## Background and token interaction
+
+Within an enabled custom Directional Drift effect, **Background** can be toggled and configured separately from the airborne particles. It is not a standalone effect; disabling the custom effect disables both layers. **Background Fill**, coverage, pile, and particle-size controls define the settled surface. Enable **Token Trails** when moving tokens should displace that surface, create trails, lift particles, and allow them to settle again.
+
+## Parameters
+
+The table combines the settings inherited by a custom Directional Drift effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open.
+
+<ParameterTable effectId="custom-directional-drift" />
+
+## Direct-effect API example
+
+After a custom effect is created, its generated effect ID can be used as a particle type. Replace the placeholder below with the ID used by the custom definition.
+
+```js
+const customType = 'your-custom-particle-id';
+
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    id: 'apiMacro_customDirectional_p',
+    type: customType,
+    options: {
+      direction: 0,
+      speed: 0.35,
+      density: 0.2,
+    },
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For scene targeting, stack ordering, updates, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

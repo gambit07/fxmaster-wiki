@@ -1,0 +1,82 @@
+---
+title: "Eagles"
+description: "Large soaring birds with configurable movement, orbiting, and shadow projection."
+sidebar:
+  order: 11
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Animals reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: eagles</span>
+</div>
+
+<EffectShowcase src="/videos/eagles.mp4" title="Eagles" description="Preview shows Eagles with Shadow enabled" />
+
+Large soaring birds with configurable movement, orbiting, and shadow projection.
+
+Animal effects add moving subjects to a Scene without creating tokens. Scale and Density control the population, while the available movement controls determine how they travel around the map.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Animals |
+| Runtime type | `eagles` |
+| Exposed parameters | 27 |
+
+## Important controls
+
+- **Animations:** Selects which animation variants are allowed to appear for eagles.
+- **Scale:** Changes the rendered size of eagles. It does not change how many particles are present.
+- **Orbit:** Makes eagles circulate around the effect area instead of only crossing the canvas in a straight or drifting path.
+- **Directional Movement:** Makes eagles travel in the configured Direction instead of relying only on the effect's default random movement.
+- **Shadow:** Adds a separate projected shadow beneath eagles to give the effect more depth against the map.
+
+## Setup notes
+
+- A larger Scale with lower Density can make the eagles feel farther above the map than a crowded flock.
+- Orbit can draw attention to a mountain, fortress, battlefield, or another point of interest.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="eagles" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikieagles_p",
+    "type": "eagles",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "orbit": false,
+      "directionalMovement": false,
+      "scale": 0.27
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

@@ -1,0 +1,85 @@
+---
+title: "Magic Crystals"
+description: "Floating magical crystals with orbiting, rainbow tinting, glow, bloom, and spin."
+sidebar:
+  order: 25
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Ambient reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: magiccrystals</span>
+</div>
+
+<EffectShowcase src="/videos/magic-crystals.mp4" title="Magic Crystals" description="Preview shows Magic Crystals with Orbit mode turned off" mapName="Zach Moeller" mapUrl="https://www.patreon.com/zachmoeller" />
+
+Floating magical crystals with orbiting, rainbow tinting, glow, bloom, and spin.
+
+Ambient effects add visible movement without replacing the full weather setup. Use them on their own or layer them with another particle or filter.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Particle effect |
+| Category | Ambient |
+| Runtime type | `magiccrystals` |
+| Exposed parameters | 20 |
+
+## Important controls
+
+- **Rainbow:** Cycles crystal colors through a rainbow treatment instead of using only the selected Tint.
+- **Orbit:** Makes magic crystals circulate around the effect area instead of only crossing the canvas in a straight or drifting path.
+- **Spin Speed:** Changes how quickly the crystal sprites rotate while moving.
+- **Glow:** Controls the direct glow around each crystal sprite.
+- **Bloom:** Controls the soft bloom around bright crystal pixels.
+
+## Setup notes
+
+- Rainbow replaces the single Tint color with a changing multicolor treatment.
+- Glow and Bloom compound, so raise one at a time while viewing the complete effect stack.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Aether Haze | `aether-haze` | FXMaster+ | Normal |
+| Ley Surge | `ley-surge` | FXMaster+ | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="magiccrystals" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikimagiccrystals_p",
+    "type": "magiccrystals",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "orbit": false,
+      "scale": 0.27,
+      "speed": 0.27
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

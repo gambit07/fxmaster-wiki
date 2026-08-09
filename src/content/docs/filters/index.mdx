@@ -1,0 +1,83 @@
+---
+title: Filter Effects
+description: Browse the filter effects included with FXMaster and FXMaster+.
+---
+
+import EffectCatalog from '../../../components/EffectCatalog.astro';
+import ScreenshotPreview from '../../../components/ScreenshotPreview.astro';
+
+Filter effects change the rendered Scene image instead of adding individual particle sprites. They can cover the full Scene, stay inside a Region, display at different points in the layer stack, use Scene Levels and darkness controls, and support painted areas where available.
+
+## Add and customize filter effects
+
+<ScreenshotPreview
+  id="filter-effects-management"
+  title="Filter Effects Management"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/filter-effects-management.webp',
+      alt: 'Filter Effects Management showing an expanded Color filter and the full list of available filter effects.',
+      label: 'Effect list',
+      caption: 'Filter Effects Management lists the available filters and lets you expand an active filter to adjust its parameters without leaving the window.',
+      width: 531,
+      height: 729,
+    },
+  ]}
+/>
+
+Select <span class="fxm-control-label" data-control="filters">Filter Effects</span> from <span class="fxm-control-label" data-control="effects">FXMaster Controls</span> to open **Filter Effects Management**. This is the recommended way to add filter effects because it provides the complete FXMaster parameter set, layer placement, multiple effect rows, darkness controls, Sound FX controls when available, and other effect-specific options.
+
+### Configure a filter effect
+
+<ScreenshotPreview
+  id="filter-effect-options"
+  title="Filter effect options"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/filter-effect-options.webp',
+      alt: 'Filter Effects Management showing an expanded Color filter with tint, blend mode, saturation, contrast, brightness, gamma, and darkness activation controls.',
+      label: 'Scene effect options',
+      caption: 'Expand an active filter to adjust its layer placement, color processing, visibility, and other effect-specific parameters.',
+      width: 481,
+      height: 687,
+    },
+  ]}
+/>
+
+The available controls depend on the selected filter and its current mode. Each filter page explains what its parameters change on the canvas.
+
+## Hide Filter Effects
+
+<ScreenshotPreview
+  id="hide-filter-effects"
+  title="Hide Filter Effects"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/filter-effects-management-menu-highlight.webp',
+      alt: 'Filter Effects Management with the overflow menu highlighted at the top-right of the window.',
+      label: 'Open the menu',
+      caption: 'Use the overflow menu in Filter Effects Management to access Hide Filter Effects.',
+      width: 531,
+      height: 729,
+    },
+    {
+      src: '/images/screenshots/hide-filter-effects.webp',
+      alt: 'Hide Filter Effects window listing filter effects that can be hidden from the management list on a per-user basis.',
+      label: 'Hide list',
+      caption: 'Hide Filter Effects removes selected entries from the Filter Effects management list for the current user without deleting the underlying effect.',
+      width: 530,
+      height: 1106,
+    },
+  ]}
+/>
+
+Open the overflow menu in **Filter Effects Management** and select **Hide Filter Effects** to declutter the management list. This window is per-user and only changes whether an effect is shown in the Filter Effects manager. It does not delete the effect, and it does not prevent macros, presets, or the API from enabling that effect.
+
+Use the row toggle to hide or show each effect in the management list. Hidden effects can be re-enabled from the same window later.
+
+## Filter catalog
+
+<EffectCatalog kind="filter" />

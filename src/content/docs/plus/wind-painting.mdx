@@ -1,0 +1,51 @@
+---
+title: Wind Painting
+description: Author a manual Wind mask with the FXMaster+ brush workflow.
+---
+
+Wind Painting limits the [Wind](../../reference/effects/details/wind/) filter to areas painted directly on the Scene or inside a Region. The painted mask is saved with that Wind effect.
+
+## Paint a Wind mask
+
+### Enter painting mode
+
+1. Select <span class="fxm-control-label" data-control="filters">Filter Effects</span> from <span class="fxm-control-label" data-control="effects">FXMaster Controls</span>, then add or edit the FXMaster+ [**Wind**](../../reference/effects/details/wind/) filter. For a Region, open **FXMaster: Filter Effects** and edit Wind there.
+2. Enable **Manual Painting**.
+3. Set **Brush Radius (Grid Spaces)**.
+4. Under **Painting**, use **Paint**, **Erase**, or **Clear**.
+5. Paint over the Scene or Region while watching the brush and overlay preview.
+6. Select **Save** after the mask and Wind options are configured.
+
+### What to paint
+
+Paint the areas where Wind should influence the Scene. Useful patterns include:
+
+- A corridor through an open doorway.
+- Air moving around a large obstruction.
+- A canyon or river path.
+- Localized magical gusts.
+- Wind limited to one side of a Region.
+
+### Brush size
+
+Use a small brush for boundaries and narrow passages. Use a large brush to establish broad coverage, then refine the edges. The Wind effect exposes a normalized brush control in its configuration, while the runtime constrains the final brush size to a safe supported range.
+
+### Clear or revise a mask
+
+Use **Paint** to add coverage, **Erase** to remove coverage, and **Clear** to remove the complete mask for the current Scene or Region. Disabling **Manual Painting** returns the Wind row to full procedural coverage; the saved paint mask is not used while **Manual Painting** is disabled.
+
+## Wind behavior
+
+### Combine with procedural controls
+
+Painting defines where Wind movement is present; the normal Wind options still define its character:
+
+- Direction and direction randomization.
+- Speed and density.
+- Distortion and turbulence.
+- Sway strength and frequency.
+- Gustiness, streakiness, sheen, and opacity.
+
+### Synchronized effects
+
+Compatible particles and filters can still synchronize direction with a painted Wind row. The mask limits Wind’s visible field, while the row’s direction state remains available to dependent effects.

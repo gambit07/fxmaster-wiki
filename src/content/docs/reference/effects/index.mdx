@@ -1,0 +1,26 @@
+---
+title: Effect Catalog
+description: Search all registered FXMaster and FXMaster+ particle and filter effects.
+---
+
+import EffectCatalog from '../../../../components/EffectCatalog.astro';
+import ModuleStats from '../../../../components/ModuleStats.astro';
+
+Browse every built-in FXMaster and FXMaster+ particle and filter effect. Open an effect to review its module, runtime type, setup notes, bundled preset usage, API example, and complete parameter list.
+
+Hover over a parameter’s info button for a quick description, or click it to keep the card open. It explains what the parameter changes on the canvas and shows its API key, control type, default value, range or choices, and availability rules.
+
+<ModuleStats />
+
+<EffectCatalog />
+
+## Custom particle bases
+
+FXMaster+ custom particle definitions inherit their available parameters from one of four bases:
+
+- [Directional Drift](./details/custom-directional-drift/) moves custom images in a selected direction and can use Top Down, Orbit, a persistent background, and token interaction.
+- [Ambient Float](./details/custom-ambient-float/) distributes custom images across the visible area without a selected travel direction.
+- [Manual Placement](./details/custom-manual-placement/) places custom images at exact Scene positions.
+- [Sound Only](./details/custom-sound-only/) creates no visible particles and activates matching SoundFX rules.
+
+Create and manage these definitions through [Custom Particle Effects](../../plus/custom-particles/).

@@ -1,0 +1,141 @@
+---
+import Default from '@astrojs/starlight/components/MarkdownContent.astro';
+import ScreenshotPreview from './ScreenshotPreview.astro';
+
+const pathname = Astro.url.pathname;
+const isSettingsPage = pathname.endsWith('/reference/settings/');
+const isAutomationOverviewPage = pathname.endsWith('/automation/');
+const isPresetApiPage = pathname.endsWith('/automation/preset-api/');
+---
+
+<Default>
+  {isSettingsPage && (
+    <ScreenshotPreview
+      id="fxmaster-module-settings"
+      title="FXMaster module settings"
+      variant="tall"
+      attachToHeadingId="configurable-settings"
+      images={[
+        {
+          src: '/images/screenshots/fxmaster-module-settings.webp',
+          alt: 'Game Settings opened to Gambit’s FXMaster with Enable Effects, Disable Grid Movement Highlighting, Include Foundry Grid in FX Stack, and other module settings visible.',
+          label: 'Module settings',
+          caption: 'Configure Settings → Module Settings under Gambit’s FXMaster contains the primary FXMaster world and client settings.',
+          width: 914,
+          height: 1054,
+        },
+      ]}
+    />
+  )}
+  {isAutomationOverviewPage && (
+    <ScreenshotPreview
+      id="save-effects-as-macro"
+      title="Save Effects as Macro"
+      variant="wide"
+      attachToHeadingId="generate-a-macro-from-the-scene-controls"
+      images={[
+        {
+          src: '/images/screenshots/save-effects-as-macro.webp',
+          alt: 'Save Effects as Macro window showing Macro Name, Macro Action, Skip Fading, Save, and Cancel controls.',
+          label: 'Macro options',
+          caption: 'Save Particle and Filter Effects as Macro captures the current Scene effect setup and provides Macro Name, Macro Action, and Skip Fading options.',
+          width: 530,
+          height: 295,
+        },
+      ]}
+    />
+  )}
+  {isPresetApiPage && (
+    <ScreenshotPreview
+      id="preset-api-manage-effects"
+      title="Manage API Effects"
+      variant="wide"
+      attachToHeadingId="manage-api-created-effects"
+      images={[
+        {
+          src: '/images/screenshots/manage-api-effects.webp',
+          alt: 'Manage API Effects showing active particle and filter rows with Source, Name, edit, and delete controls.',
+          label: 'Preset API rows',
+          caption: 'Preset API effects appear in Manage API Effects with an API - Preset source, alongside macro and direct-API effects.',
+          width: 769,
+          height: 239,
+        },
+      ]}
+    />
+  )}
+  <slot />
+</Default>
+
+<script>
+  const subsectionHeadingSelector = '.sl-heading-wrapper.level-h3';
+  const sectionBoundarySelector = '.sl-heading-wrapper.level-h2, .sl-heading-wrapper.level-h3';
+
+  function groupSubsections(content: HTMLElement): void {
+    if (content.dataset.fxmSubsections === 'grouped') return;
+
+    const children = Array.from(content.children);
+    let index = 0;
+
+    while (index < children.length) {
+      const child = children[index];
+      if (!(child instanceof HTMLElement) || !child.matches(subsectionHeadingSelector)) {
+        index += 1;
+        continue;
+      }
+
+      const group = document.createElement('section');
+      group.className = 'fxm-subsection-group';
+      group.dataset.fxmSubsection = '';
+
+      const heading = child.querySelector<HTMLHeadingElement>('h3');
+      if (heading?.id) group.setAttribute('aria-labelledby', heading.id);
+
+      content.insertBefore(group, child);
+      group.append(child);
+      index += 1;
+
+      while (index < children.length) {
+        const next = children[index];
+        if (next instanceof HTMLElement && next.matches(sectionBoundarySelector)) break;
+        group.append(next);
+        index += 1;
+      }
+    }
+
+    content.dataset.fxmSubsections = 'grouped';
+  }
+
+  function initializeSubsections(): void {
+    document.querySelectorAll<HTMLElement>('.sl-markdown-content').forEach(groupSubsections);
+  }
+
+  function initializeExternalLinks(): void {
+    document.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((link) => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+
+      let destination: URL;
+      try {
+        destination = new URL(href, window.location.href);
+      } catch {
+        return;
+      }
+
+      if (!['http:', 'https:'].includes(destination.protocol) || destination.origin === window.location.origin) return;
+
+      link.target = '_blank';
+      const relationship = new Set(link.rel.split(/\s+/).filter(Boolean));
+      relationship.add('noopener');
+      relationship.add('noreferrer');
+      link.rel = [...relationship].join(' ');
+    });
+  }
+
+  function initializeMarkdownContent(): void {
+    initializeSubsections();
+    initializeExternalLinks();
+  }
+
+  initializeMarkdownContent();
+  document.addEventListener('astro:page-load', initializeMarkdownContent);
+</script>

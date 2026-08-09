@@ -1,0 +1,80 @@
+---
+title: "Ice"
+description: "Frosted ice overlay with depth, veins, sheen, and highlight controls."
+sidebar:
+  order: 22
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Environmental reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: ice</span>
+</div>
+
+<EffectShowcase src="/videos/ice.mp4" title="Ice" description="Preview shows Ice enabled" mapName="Cze & Peku" mapUrl="https://www.czepeku.com/" />
+
+Frosted ice overlay with depth, veins, sheen, and highlight controls.
+
+Environmental filters change the Scene surface or atmosphere. They can cover the full Scene, be limited to Regions, and be moved within the effect stack.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Filter effect |
+| Category | Environmental |
+| Runtime type | `ice` |
+| Exposed parameters | 24 |
+
+## Important controls
+
+- **Opacity:** Controls the overall opacity of the ice treatment. Lower values preserve more of the original map.
+- **Scale:** Changes the size of the ice, frost, and vein pattern. Higher values create broader frozen features.
+- **Frost Strength:** Controls how much cloudy frost appears over the ice.
+- **Water Strength:** Controls how visible the moving water layer is beneath the ice.
+- **Reflection Strength:** Controls how strongly the scene is reflected in the ice.
+- **Reflection Fresnel:** Controls how strongly the reflection increases toward glancing viewing angles and surface edges.
+
+## Setup notes
+
+- Ice, Frost, Water, Sheen, and Reflection are separate visual layers and can be tuned one group at a time.
+- Reflection Distance, Reflection Blur, and Reflection Fresnel have a larger readability impact than tint alone.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Permafrost Surge | `permafrost-surge` | FXMaster+ | Normal |
+| Plague Miasma | `plague-miasma` | FXMaster+ | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="ice" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikiice_f",
+    "type": "ice",
+    "options": {
+      "belowTokens": false,
+      "strength": 1
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

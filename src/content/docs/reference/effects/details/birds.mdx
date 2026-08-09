@@ -1,0 +1,79 @@
+---
+title: "Birds"
+description: "Flocks of birds with selectable flight animations, orbiting, directional movement, and shadows."
+sidebar:
+  order: 4
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Animals reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: birds</span>
+</div>
+
+Flocks of birds with selectable flight animations, orbiting, directional movement, and shadows.
+
+Animal effects add moving subjects to a Scene without creating tokens. Scale and Density control the population, while the available movement controls determine how they travel around the map.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Animals |
+| Runtime type | `birds` |
+| Exposed parameters | 27 |
+
+## Important controls
+
+- **Animations:** Selects which animation variants are allowed to appear for birds.
+- **Orbit:** Makes birds circulate around the effect area instead of only crossing the canvas in a straight or drifting path.
+- **Directional Movement:** Makes birds travel in the configured Direction instead of relying only on the effect's default random movement.
+- **Shadow:** Adds a separate projected shadow beneath birds to give the effect more depth against the map.
+- **Density:** Changes how many birds are visible or spawned at once. It does not change their size.
+
+## Setup notes
+
+- Select only the Animations that fit the Scene so the flock does not look like several unrelated effects.
+- Lower Density with a longer Lifetime usually reads more naturally than a dense flock that is replaced quickly.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="birds" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikibirds_p",
+    "type": "birds",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "orbit": false,
+      "directionalMovement": false,
+      "scale": 0.27
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

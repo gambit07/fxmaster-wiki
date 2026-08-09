@@ -1,0 +1,81 @@
+---
+title: "Lightning"
+description: "Full-scene lightning flashes with timing, tint, duration, and audio-aware controls."
+sidebar:
+  order: 23
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Environmental reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: lightning</span>
+</div>
+
+Full-scene lightning flashes with timing, tint, duration, and audio-aware controls.
+
+Environmental filters change the Scene surface or atmosphere. They can cover the full Scene, be limited to Regions, and be moved within the effect stack.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Filter effect |
+| Category | Environmental |
+| Runtime type | `lightning` |
+| Exposed parameters | 16 |
+
+## Important controls
+
+- **Period:** Sets the approximate time between automatic lightning flashes. Higher values create longer gaps between flashes.
+- **Duration:** Sets how long each lightning flash remains visible before fading out.
+- **Brightness:** Controls how strongly each lightning flash brightens the rendered scene.
+- **Audio Aware:** Allows bass-heavy audio peaks to trigger Lightning. Use Audio Channels to choose what it listens to and Audio Bass Threshold to control sensitivity.
+
+## Setup notes
+
+- Period controls the spacing between automatic events, while Duration controls each flash.
+- Audio Aware can trigger from selected audio channels when the bass threshold is met.
+- Keep Brightness conservative on already bright maps to avoid washing out large portions of the Scene.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Hurricane | `hurricane` | FXMaster, FXMaster+ | Normal, Top Down |
+| Thunderstorm | `thunderstorm` | FXMaster, FXMaster+ | Normal, Top Down |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="lightning" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikilightning_f",
+    "type": "lightning",
+    "options": {
+      "color": {
+        "apply": false,
+        "value": "#ffffff"
+      },
+      "frequency": 0.5,
+      "spark_duration": 0.5,
+      "brightness": 1
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

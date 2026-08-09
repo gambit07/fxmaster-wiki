@@ -1,0 +1,76 @@
+---
+title: "Underwater"
+description: "Animated underwater distortion for submerged scenes or other liquid-like visual treatments."
+sidebar:
+  order: 40
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Environmental reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: underwater</span>
+</div>
+
+<EffectShowcase src="/videos/fish.mp4" title="Underwater" description="Preview shows Underwater and Fish enabled together" mapName="Moonlight Maps" mapUrl="https://moonlight-maps.com/" />
+
+Animated underwater distortion for submerged scenes or other liquid-like visual treatments.
+
+Environmental filters change the Scene surface or atmosphere. They can cover the full Scene, be limited to Regions, and be moved within the effect stack.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Filter effect |
+| Category | Environmental |
+| Runtime type | `underwater` |
+| Exposed parameters | 11 |
+
+## Important controls
+
+- **Scale:** Changes the size of the moving underwater distortion pattern. Higher values create broader ripples across the scene.
+- **Speed:** Changes how quickly the underwater distortion moves.
+
+## Setup notes
+
+- Speed controls movement while Scale controls the size of the distortion pattern.
+- Underwater can pair with [Bubbles](../bubbles/), [Fish](../fish/), or [Water](../water/), but several strong distortion filters in the same area can make the map difficult to read.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Aether Haze | `aether-haze` | FXMaster+ | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="underwater" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikiunderwater_f",
+    "type": "underwater",
+    "options": {
+      "belowTokens": false,
+      "speed": 0.15,
+      "scale": 0.19
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

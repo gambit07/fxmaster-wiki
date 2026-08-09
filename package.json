@@ -1,0 +1,33 @@
+{
+  "name": "fxmaster-wiki",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "start": "node scripts/dev-server.mjs",
+    "dev:fresh": "node scripts/dev-server.mjs --force",
+    "dev:health": "node scripts/dev-health.mjs",
+    "dev:status": "astro dev status",
+    "dev:logs": "astro dev logs",
+    "dev:stop": "astro dev stop",
+    "build": "npm run check && astro build",
+    "preview": "astro preview",
+    "check": "npm run reference:validate && astro check",
+    "reference:normalize": "node scripts/normalize-reference.mjs",
+    "reference:pages": "node scripts/generate-effect-pages.mjs",
+    "reference:validate": "node scripts/validate-reference.mjs",
+    "reference:refresh": "npm run reference:normalize && npm run reference:pages && npm run reference:validate"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "0.41.7",
+    "astro": "7.2.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "typescript": "5.9.3"
+  }
+}

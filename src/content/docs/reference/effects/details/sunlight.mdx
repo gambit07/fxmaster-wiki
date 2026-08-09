@@ -1,0 +1,87 @@
+---
+title: "Sunlight"
+description: "Directional sunlight rays with beam, color, edge fade, and intensity controls."
+sidebar:
+  order: 39
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Environmental reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: sunlight</span>
+</div>
+
+<EffectShowcase src="/videos/sunlight.mp4" title="Sunlight" description="Preview shows Sunlight with Parallel mode disabled" />
+
+Directional sunlight rays with beam, color, edge fade, and intensity controls.
+
+Environmental filters change the Scene surface or atmosphere. They can cover the full Scene, be limited to Regions, and be moved within the effect stack.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Filter effect |
+| Category | Environmental |
+| Runtime type | `sunlight` |
+| Exposed parameters | 17 |
+
+## Important controls
+
+- **Parallel Rays:** Keeps the sunlight rays parallel instead of making them converge toward a single source point.
+- **Ray Direction:** Sets the direction the sunlight rays travel across the canvas.
+- **Ray Intensity:** Controls the brightness and visual strength of the sunlight rays.
+- **Ray Volume:** Controls how much ray detail and variation fills the beam area. Higher values create a fuller, more textured light volume.
+- **Ray Length:** Controls how far each sunlight ray extends across the canvas.
+- **Opacity:** Controls the overall opacity of the sunlight rays.
+
+## Setup notes
+
+- Ray Direction and Ray Length establish the beam geometry, while Ray Intensity, Opacity, and Tint establish visibility.
+- Parallel Rays works well for broad sunlight. Disabling it makes the rays converge toward a more localized source point.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Twilight Sun | `twilight-sun` | FXMaster+ | Normal |
+| Black Sun | `black-sun` | FXMaster+ | Normal |
+| Divine Light | `divine-light` | FXMaster+ | Normal |
+| Monsoon | `monsoon` | FXMaster+ | Normal |
+| Sunshower | `sunshower` | FXMaster+ | Normal, Top Down |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="sunlight" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikisunlight_f",
+    "type": "sunlight",
+    "options": {
+      "belowTokens": false,
+      "color": {
+        "value": "#fff2a8",
+        "apply": false
+      },
+      "speed": 0.1
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

@@ -1,0 +1,195 @@
+---
+import reference from '../data/reference.json';
+import { withBase } from '../utils/links';
+
+interface Usage {
+  id: string;
+  label: string;
+  description: string;
+}
+
+interface GlossaryEntry {
+  id: string;
+  labels: Set<string>;
+  types: Set<string>;
+  descriptions: Set<string>;
+  effects: Usage[];
+}
+
+interface ReferenceDefinition {
+  id: string;
+  label: string;
+  parameters: Array<{ id: string; label?: string; type?: string; description: string }>;
+}
+
+const definitions = [
+  ...(reference.effects as unknown as ReferenceDefinition[]),
+  ...(((reference as unknown as { customParticleBases?: ReferenceDefinition[] }).customParticleBases) ?? []),
+];
+const customBaseIds = new Set(
+  (((reference as unknown as { customParticleBases?: ReferenceDefinition[] }).customParticleBases) ?? []).map((entry) => entry.id),
+);
+const displayLabel = (effect: ReferenceDefinition) => effect.label;
+
+const glossary = new Map<string, GlossaryEntry>();
+for (const effect of definitions) {
+  for (const parameter of effect.parameters) {
+    const entry = glossary.get(parameter.id) ?? {
+      id: parameter.id,
+      labels: new Set<string>(),
+      types: new Set<string>(),
+      descriptions: new Set<string>(),
+      effects: [],
+    };
+    const description = parameter.description;
+    if (parameter.label) entry.labels.add(parameter.label);
+    if (parameter.type) entry.types.add(parameter.type);
+    entry.descriptions.add(description);
+    entry.effects.push({ id: effect.id, label: displayLabel(effect), description });
+    glossary.set(parameter.id, entry);
+  }
+}
+
+const entries = [...glossary.values()].sort((a, b) => {
+  const aLabel = [...a.labels][0] || a.id;
+  const bLabel = [...b.labels][0] || b.id;
+  return aLabel.localeCompare(bLabel);
+});
+---
+
+<section class="glossary" data-parameter-glossary>
+  <div class="controls" role="search" aria-label="Search parameters">
+    <label>
+      <span>Search parameter names, API keys, effects, and descriptions</span>
+      <input type="search" placeholder="direction, token trails, opacity…" data-search />
+    </label>
+  </div>
+
+  <p class="result-count"><strong data-count>{entries.length}</strong> unique parameter keys</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Control type</th>
+          <th>Description</th>
+          <th>Used by</th>
+        </tr>
+      </thead>
+      <tbody>
+        {entries.map((entry) => {
+          const labels = [...entry.labels];
+          const descriptions = [...entry.descriptions];
+          const searchText = `${entry.id} ${labels.join(' ')} ${descriptions.join(' ')} ${entry.effects.map((effect) => `${effect.label} ${effect.description}`).join(' ')}`.toLowerCase();
+          return (
+            <tr data-row data-search-text={searchText}>
+              <td>
+                <strong>{labels[0] || entry.id}</strong>
+                <code>{entry.id}</code>
+                {labels.length > 1 && <small>Also labeled: {labels.slice(1).join(', ')}</small>}
+              </td>
+              <td>{[...entry.types].join(', ')}</td>
+              <td>
+                {descriptions.length === 1
+                  ? descriptions[0]
+                  : `Behavior varies across ${entry.effects.length} effects. Open the effect list for the description used by each one.`}
+              </td>
+              <td>
+                <details>
+                  <summary>{entry.effects.length} effect{entry.effects.length === 1 ? '' : 's'}</summary>
+                  <div class="effect-links">
+                    {entry.effects
+                      .sort((a, b) => a.label.localeCompare(b.label))
+                      .map((effect) => (
+                        <div class="effect-use">
+                          <a href={withBase(`/reference/effects/details/${effect.id}/`)}>{effect.label}{customBaseIds.has(effect.id) ? ' custom base' : ''}</a>
+                          <p>{effect.description}</p>
+                        </div>
+                      ))}
+                  </div>
+                </details>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+  <p class="empty" data-empty hidden>No parameters match that search.</p>
+</section>
+
+<script>
+  function initializeParameterGlossary(root: HTMLElement): void {
+    if (root.dataset.initialized === 'true') return;
+    root.dataset.initialized = 'true';
+    const search = root.querySelector<HTMLInputElement>('[data-search]');
+    const rows = [...root.querySelectorAll<HTMLElement>('[data-row]')];
+    const count = root.querySelector<HTMLElement>('[data-count]');
+    const empty = root.querySelector<HTMLElement>('[data-empty]');
+
+    const update = () => {
+      const query = search?.value.trim().toLowerCase() || '';
+      let visible = 0;
+      for (const row of rows) {
+        const matches = !query || (row.dataset.searchText ?? '').includes(query);
+        row.hidden = !matches;
+        if (matches) visible += 1;
+      }
+      if (count) count.textContent = String(visible);
+      if (empty) empty.hidden = visible !== 0;
+    };
+
+    search?.addEventListener('input', update);
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-parameter-glossary]').forEach(initializeParameterGlossary);
+  document.addEventListener('astro:page-load', () => document.querySelectorAll<HTMLElement>('[data-parameter-glossary]').forEach(initializeParameterGlossary));
+</script>
+
+<style>
+  .glossary { margin-block: 1.25rem 2rem; }
+  .controls {
+    padding: 0.85rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.85rem;
+    background: color-mix(in srgb, var(--sl-color-bg-sidebar) 88%, transparent);
+  }
+  label { display: grid; gap: 0.32rem; }
+  label span {
+    color: var(--sl-color-gray-3);
+    font-size: 0.69rem;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  input {
+    min-block-size: 2.55rem;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.55rem;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-white);
+    font: inherit;
+  }
+  .result-count { margin: 0.75rem 0; color: var(--sl-color-gray-3); font-size: 0.78rem; }
+  .result-count strong { color: var(--sl-color-white); }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--sl-color-hairline); border-radius: 0.85rem; }
+  table { width: 100%; min-width: 62rem; border-collapse: collapse; background: color-mix(in srgb, var(--sl-color-bg-sidebar) 76%, transparent); font-size: 0.79rem; }
+  th, td { padding: 0.72rem 0.75rem; border-bottom: 1px solid var(--sl-color-hairline-light); text-align: start; vertical-align: top; }
+  th { background: var(--sl-color-bg-sidebar); color: var(--sl-color-gray-2); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  tr:last-child td { border-bottom: 0; }
+  tr[hidden] { display: none; }
+  td:first-child { min-width: 12rem; }
+  td:nth-child(3) { min-width: 18rem; }
+  td strong, td code, td small { display: block; }
+  td strong { color: var(--sl-color-white); }
+  td code { width: fit-content; margin-top: 0.18rem; color: var(--sl-color-accent-high); font-size: 0.72rem; }
+  td small { margin-top: 0.35rem; color: var(--sl-color-gray-3); }
+  summary { cursor: pointer; color: var(--sl-color-accent-high); font-weight: 700; }
+  .effect-links { display: grid; gap: 0.5rem; width: min(34rem, 70vw); margin-top: 0.55rem; }
+  .effect-use { padding: 0.52rem 0.58rem; border: 1px solid var(--sl-color-hairline); border-radius: 0.58rem; background: color-mix(in srgb, var(--sl-color-bg) 70%, transparent); }
+  .effect-links a { color: var(--sl-color-accent-high); font-size: 0.73rem; font-weight: 750; text-decoration: none; }
+  .effect-use p { margin: 0.25rem 0 0; color: var(--sl-color-gray-3); font-size: 0.72rem; line-height: 1.42; }
+  .empty { padding: 2rem; text-align: center; color: var(--sl-color-gray-3); }
+</style>

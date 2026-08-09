@@ -1,0 +1,40 @@
+---
+title: Parameter Glossary
+description: Search shared and effect-specific FXMaster parameter keys, descriptions, control types, and usage.
+---
+
+import ParameterGlossary from '../../../components/ParameterGlossary.astro';
+
+FXMaster effects share a number of common controls, but the result of a parameter can change depending on the effect. For example, **Density** controls a particle population on [Rain](../effects/details/rain/) while the same general type of control may change the visibility or procedural detail of a filter.
+
+Use the glossary to look up an API key across multiple effects. For exact canvas behavior, open an effect and hover over or click the info button beside that parameter.
+
+## Frequently used parameters
+
+| Parameter family | What it changes |
+|---|---|
+| Below Tokens / Tiles / Foreground | Moves an effect below the selected canvas layer |
+| Levels | Limits a Scene effect to selected Scene Levels |
+| Darkness Activation | Shows an effect only within a selected darkness range |
+| Sound FX | Enables a matching active FXMaster+ SoundFX rule |
+| Tint / Color | Changes the effect color |
+| Scale | Changes the rendered size |
+| Speed | Changes animation or travel speed |
+| Density | Changes particle count, coverage, or procedural detail depending on the effect |
+| Lifetime | Changes how long individual particles remain active |
+| Opacity / Alpha | Changes transparency |
+| Direction | Uses degrees: 0 east, 90 north, 180 west, 270 south |
+| Synchronized Direction | Follows the active [Wind](../effects/details/wind/) or [Duststorm](../effects/details/duststorm/) direction |
+| Orbit | Circles particles around a focal area |
+| Top Down | Switches to the overhead presentation |
+| Background | Adds a persistent accumulated or ground-surface layer |
+| Token Trails / Interaction | Lets moving tokens disturb a supported effect or surface |
+| Elevation Threshold | Excludes tokens above the allowed elevation |
+| Edge Fade % | Softens a filter boundary inside a Region; available only on Region filter effects |
+| Follow Region Path / Path Influence | Steers Water flow along Region geometry; available only on Region Water effects |
+
+## Conditional controls
+
+A parameter marked **Context-dependent** is shown or hidden by more than one condition. Common examples include controls that appear only after a parent feature is enabled, while Top Down is active, or when a matching SoundFX rule is available.
+
+<ParameterGlossary />

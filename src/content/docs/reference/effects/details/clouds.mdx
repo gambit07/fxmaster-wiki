@@ -1,0 +1,88 @@
+---
+title: "Clouds"
+description: "Moving cloud particles with orbit mode, direction synchronization, and shadows."
+sidebar:
+  order: 7
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Weather reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: clouds</span>
+</div>
+
+Moving cloud particles with orbit mode, direction synchronization, and shadows.
+
+Weather effects can cover a full Scene or be limited to Regions. Configure the placement or movement controls exposed by the effect first, then tune its appearance, population, and optional background controls.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Weather |
+| Runtime type | `clouds` |
+| Exposed parameters | 24 |
+
+## Important controls
+
+- **Orbit:** Makes clouds circulate around the effect area instead of only crossing the canvas in a straight or drifting path.
+- **Direction:** Sets the primary travel direction for clouds. Directional Spread can add variation around this angle.
+- **Synchronized Direction:** Uses the active Wind or Duststorm direction for Clouds. When the source direction changes, this effect follows it.
+- **Scale:** Changes the rendered size of clouds. It does not change how many particles are present.
+- **Shadow:** Adds a separate projected shadow beneath clouds to give the effect more depth against the map.
+
+## Setup notes
+
+- Synchronized Direction allows Clouds to follow [Wind](../wind/) or [Duststorm](../duststorm/) direction changes.
+- Orbit works well when clouds should circulate around a focal area rather than cross the full Scene.
+- Shadow controls add depth, but high Shadow Opacity can reduce map readability.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Cloudy | `cloudy` | FXMaster | Normal |
+| Nullfront | `nullfront` | FXMaster | Normal |
+| Overcast | `overcast` | FXMaster | Normal |
+| Partly Cloudy | `partly-cloudy` | FXMaster | Normal |
+| Sunshower | `sunshower` | FXMaster, FXMaster+ | Normal, Top Down |
+| Thunderstorm | `thunderstorm` | FXMaster, FXMaster+ | Normal, Top Down |
+| Wildfire Smoke | `wildfire-smoke` | FXMaster | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="clouds" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikiclouds_p",
+    "type": "clouds",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "orbit": false,
+      "scale": 0.27,
+      "speed": 0.27
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

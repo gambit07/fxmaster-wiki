@@ -1,0 +1,60 @@
+---
+title: FXMaster Wiki
+description: Setup guides and reference material for FXMaster and FXMaster+.
+template: splash
+hero:
+  title: FXMaster Documentation
+  tagline: How to set up FXMaster and FXMaster+, what every effect does, and what each control changes on the canvas.
+  actions:
+    - text: Install and start
+      link: /getting-started/installation/
+      variant: primary
+    - text: Browse effects
+      link: /reference/effects/
+      variant: secondary
+---
+
+import ReferenceStats from '../../components/ReferenceStats.astro';
+import EffectCatalog from '../../components/EffectCatalog.astro';
+import { withBase } from '../../utils/links';
+
+<p class="fxm-kicker">FXMaster documentation</p>
+
+FXMaster is a real-time visual effects module within Foundry that includes Scene or Region based particle and filter effects. FXMaster+ is an expansion module that is installed in addition to FXMaster with additional effects and features. Use these guides to set up effects, understand how they behave, see what each parameter changes on the canvas, and more!
+
+<ReferenceStats />
+
+<div class="fxm-callout-grid">
+  <div class="fxm-callout-card">
+    <h3>Start with FXMaster</h3>
+    <p>Install the module, open <span class="fxm-control-label" data-control="effects">FXMaster Controls</span>, and add a particle or filter effect to a Scene.</p>
+    <p><a href={withBase('/getting-started/quick-start/')}>Follow the quick start →</a></p>
+  </div>
+  <div class="fxm-callout-card">
+    <h3>Use Regions and layers</h3>
+    <p>Limit effects to specific areas, suppress scene-wide effects, and control where each effect sits in the layer stack.</p>
+    <p><a href={withBase('/regions/')}>Open the Region guide →</a></p>
+  </div>
+  <div class="fxm-callout-card">
+    <h3>Add FXMaster+ features</h3>
+    <p>Create custom particle effects, paint Wind areas, place individual particles, and connect effects to SoundFX rules.</p>
+    <p><a href={withBase('/plus/')}>Explore FXMaster+ →</a></p>
+  </div>
+  <div class="fxm-callout-card">
+    <h3>Browse presets</h3>
+    <p>Start with bundled weather and atmosphere setups, then adjust the resulting effects for the Scene.</p>
+    <p><a href={withBase('/presets/catalog/')}>Open the Preset Catalog →</a></p>
+  </div>
+</div>
+
+## Popular effects
+
+Some of the most popular effects are [Fire](./reference/effects/details/fireparticles/), [Water](./reference/effects/details/water/), [Fish](./reference/effects/details/fish/), [Clouds](./reference/effects/details/clouds/), [Fog](./reference/effects/details/fog-filter/), [Snowstorm](./reference/effects/details/snowstorm/), [Lightning](./reference/effects/details/lightning/), and [Screen Shake](./reference/effects/details/screenshake/). Open an effect to review its available controls, defaults, ranges, and a description of what every parameter changes on the canvas.
+
+<EffectCatalog
+  interactive={false}
+  compact={true}
+  ids={['fireparticles', 'water', 'fish', 'clouds', 'fog-filter', 'snowstorm', 'lightning', 'screenshake']}
+/>
+
+[Browse all 43 effects →](reference/effects/)

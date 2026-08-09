@@ -1,0 +1,244 @@
+---
+title: Direct Effect API
+description: Create, order, stop, and toggle arbitrary FXMaster particle and filter rows.
+---
+
+import ScreenshotPreview from '../../../components/ScreenshotPreview.astro';
+
+The Direct Effect API creates entries shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Scene rows added through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or <span class="fxm-control-label" data-control="filters">Filter Effects</span> remain separate.
+
+## Manage API-created effects
+
+<ScreenshotPreview
+  id="manage-api-effects-window"
+  title="Manage API Effects"
+  variant="wide"
+  images={[
+    {
+      src: '/images/screenshots/manage-api-effects.webp',
+      alt: 'Manage API Effects showing active particle and filter rows created by the API, along with their source, name, and actions.',
+      label: 'API rows',
+      caption: 'Manage API Effects identifies each API-created row, its source and name, and provides edit and delete actions.',
+      width: 769,
+      height: 239,
+    },
+  ]}
+/>
+
+Use <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span> to inspect, edit, or delete active effects created by macros, presets, or module integrations.
+
+## Edit API-created effects
+
+<ScreenshotPreview
+  id="edit-api-effects"
+  title="Edit API-created effects"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/edit-api-effect-particle.webp',
+      alt: 'Edit API Effect window showing a particle effect created through the API and its configurable parameters.',
+      label: 'Particle row',
+      caption: 'Particle rows created through the Direct Effect API can be reviewed and adjusted from Manage API Effects.',
+      width: 615,
+      height: 1174,
+    },
+    {
+      src: '/images/screenshots/edit-api-effect-filter.webp',
+      alt: 'Edit API Effect window showing a filter effect created through the API and its configurable parameters.',
+      label: 'Filter row',
+      caption: 'Filter rows created through the Direct Effect API can also be edited directly from their API-managed row.',
+      width: 514,
+      height: 857,
+    },
+  ]}
+/>
+
+Use the edit action in <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span> when an API-created row needs adjustment without re-running the macro or integration that created it.
+
+
+## Create effects
+
+### Play particles and filters
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [
+    {
+      type: "rain",
+      options: {
+        topDown: true,
+        splash: true,
+        density: 0.45
+      }
+    }
+  ],
+  filters: [
+    {
+      type: "bloom",
+      options: {
+        blur: 2,
+        bloomScale: 1,
+        threshold: 0.5
+      }
+    }
+  ]
+});
+```
+
+Leave `options` out entirely, or omit individual options, to use the effect's default values for anything not supplied.
+
+A successful call returns the IDs assigned to the new rows:
+
+```js
+{
+  particles: ["apiMacro_…_p"],
+  filters: ["apiMacro_…_f"]
+}
+```
+
+No active Scene returns `false`. An otherwise valid request with no entries returns empty arrays.
+
+### Preserve explicit stack order
+
+Use one ordered `effects` array when particles and filters must be interleaved. The supplied order is treated as the requested **top-to-bottom** order for the newly promoted rows.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  effects: [
+    {
+      kind: "filter",
+      type: "water",
+      options: {
+        opacity: 0.7,
+        waves: true,
+        caustics: true
+      }
+    },
+    {
+      kind: "particle",
+      type: "fish",
+      options: {
+        density: 0.25
+      }
+    }
+  ]
+});
+```
+
+When `effects` is supplied, separate `particles` and `filters` arrays are ignored.
+
+### Stable explicit IDs
+
+FXMaster generates independent IDs by default, so the same payload can be played more than once. A macro can instead provide a stable API-managed ID.
+
+The required format is:
+
+```text
+apiMacro_<unique name>_p
+apiMacro_<unique name>_f
+```
+
+Use `_p` for a particle and `_f` for a filter.
+
+```js
+await FXMASTER.api.effects.play({
+  particles: [
+    {
+      id: "apiMacro_dockRain_p",
+      type: "rain",
+      options: {
+        topDown: true,
+        density: 0.35
+      }
+    }
+  ]
+});
+```
+
+An explicit ID outside this namespace or with the wrong suffix is ignored and replaced with a generated ID.
+
+## Manage effects
+
+### Stop rows
+
+The safest stop input is the object returned by `play()`:
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{ type: "rain", options: { density: 0.35 } }]
+});
+
+await FXMASTER.api.effects.stop(created);
+```
+
+IDs can also be passed by kind:
+
+```js
+await FXMASTER.api.effects.particles.stop([
+  "apiMacro_dockRain_p"
+]);
+
+await FXMASTER.api.effects.filters.stop([
+  "apiMacro_ritualBloom_f"
+]);
+```
+
+`stop()` only removes matching API rows. It does not clear Scene effects added through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or <span class="fxm-control-label" data-control="filters">Filter Effects</span>.
+
+### Toggle a payload
+
+`toggle()` stores a group for the effect payload. The first call plays it; a later call with the same payload stops the created rows.
+
+```js
+const result = await FXMASTER.api.effects.toggle({
+  toggleKey: "harbor-storm",
+  particles: [
+    {
+      type: "rain",
+      options: {
+        topDown: true,
+        density: 0.45
+      }
+    }
+  ]
+});
+```
+
+The result identifies the action and active state:
+
+```js
+{
+  active: true,
+  action: "play",
+  particles: ["apiMacro_…_p"],
+  filters: []
+}
+```
+
+An explicit `toggleKey` is recommended when macros may evolve but should continue controlling the same logical group.
+
+## Targeting and transitions
+
+### Target another Scene
+
+Every direct method accepts a Scene document or Scene UUID:
+
+```js
+const scene = game.scenes.getName("Harbor");
+
+await FXMASTER.api.effects.play({
+  scene,
+  particles: [{ type: "fog", options: { density: 0.3 } }]
+});
+```
+
+### Skip fades
+
+Set `skipFading: true` for an immediate effect on or effect off transition. This option will completely skip the default fade in/fade out time for an effect:
+
+```js
+await FXMASTER.api.effects.stop({
+  particles: ["apiMacro_dockRain_p"],
+  skipFading: true
+});
+```

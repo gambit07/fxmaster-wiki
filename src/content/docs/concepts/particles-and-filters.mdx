@@ -1,0 +1,50 @@
+---
+title: Particles and Filters
+description: Learn the rendering and configuration differences between FXMaster particle effects and filter effects.
+---
+
+
+FXMaster divides environmental presentation into two broad effect kinds. Both can be Scene-wide, Region-local, layered, gated by darkness or Scene Levels, saved in macros, and controlled through the public API.
+
+## Particle effects
+
+Particles are visible objects or procedural elements moving through the scene. Examples include [Rain](../../reference/effects/details/rain/), [Snow](../../reference/effects/details/snow/), [Clouds](../../reference/effects/details/clouds/), [Bats](../../reference/effects/details/bats/), [Embers](../../reference/effects/details/embers/), [Fish](../../reference/effects/details/fish/), and [Autumn Leaves](../../reference/effects/details/autumnleaves/).
+
+Particles are the right choice when the viewer should perceive discrete moving subjects. Their common controls include:
+
+- Scale, speed, lifetime, density, and alpha.
+- Direction, spread, lateral movement, orbit, and synchronized direction.
+- Top-down rendering for overhead maps.
+- Shadows, token avoidance, token trails, or persistent background surfaces.
+- Layer placement below tokens, tiles, or foreground coverage.
+
+## Filter effects
+
+Filters process the rendered Scene or a masked portion of it. Examples include [Bloom](../../reference/effects/details/bloom/), [Color](../../reference/effects/details/color/), [Fog](../../reference/effects/details/fog-filter/), [Lightning](../../reference/effects/details/lightning/), [Water](../../reference/effects/details/water/), [Wind](../../reference/effects/details/wind/), [Fire](../../reference/effects/details/fire/), and [Aurora Borealis](../../reference/effects/details/auroraborealis/).
+
+Filters are the right choice when the scene itself should appear distorted, graded, illuminated, displaced, or covered by continuous environmental material.
+
+A filter’s options are more effect-specific, but commonly include:
+
+- Color, opacity, strength, dimensions, speed, and direction.
+- Procedural pattern controls such as turbulence, waves, streaks, noise, or refraction.
+- Audio awareness or token trails.
+- Region masking and stack position.
+
+## Combining both
+
+Particles and filters can be combined when both are needed:
+
+| Scene goal | Particle | Filter |
+|---|---|---|
+| Heavy storm | [Rain](../../reference/effects/details/rain/), [Clouds](../../reference/effects/details/clouds/), or [Hail](../../reference/effects/details/hail/) | [Lightning](../../reference/effects/details/lightning/), [Fog](../../reference/effects/details/fog-filter/), or [Duststorm](../../reference/effects/details/duststorm/) |
+| Underwater map | [Bubbles](../../reference/effects/details/bubbles/) or [Fish](../../reference/effects/details/fish/) | [Underwater](../../reference/effects/details/underwater/) or [Water](../../reference/effects/details/water/) |
+| Wildfire | [Embers](../../reference/effects/details/embers/) or [Fire](../../reference/effects/details/fireparticles/) particles | [Fire](../../reference/effects/details/fire/), [Color](../../reference/effects/details/color/), or [Bloom](../../reference/effects/details/bloom/) |
+| Frozen environment | [Snow](../../reference/effects/details/snow/) or [Snowstorm](../../reference/effects/details/snowstorm/) | [Ice](../../reference/effects/details/ice/) or [Color](../../reference/effects/details/color/) |
+| Magical anomaly | [Stars](../../reference/effects/details/stars/) or [Magic Crystals](../../reference/effects/details/magiccrystals/) | [Glitch](../../reference/effects/details/glitch/), [Bloom](../../reference/effects/details/bloom/), or [Aurora Borealis](../../reference/effects/details/auroraborealis/) |
+
+
+## Scene effects and Region effects
+
+A Scene effect covers the scene according to its normal canvas mask. A Region effect uses the Region’s shape and elevation rules. Suppression behaviors can remove Scene particles or filters only inside designated Regions.
+

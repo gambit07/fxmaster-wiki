@@ -1,0 +1,83 @@
+---
+title: "Fog"
+description: "Directional particle fog with synchronized direction, tint, scale, speed, density, and alpha controls."
+sidebar:
+  order: 17
+  badge:
+    text: "FXMaster · Particle"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Weather reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: fog</span>
+</div>
+
+Directional particle fog with synchronized direction, tint, scale, speed, density, and alpha controls.
+
+Weather effects can cover a full Scene or be limited to Regions. Configure the placement or movement controls exposed by the effect first, then tune its appearance, population, and optional background controls.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Weather |
+| Runtime type | `fog` |
+| Exposed parameters | 16 |
+
+## Important controls
+
+- **Direction:** Sets the primary travel direction for fog particles. Directional Spread can add variation around this angle.
+- **Synchronized Direction:** Uses the active Wind or Duststorm direction for Fog. When the source direction changes, this effect follows it.
+- **Scale:** Changes the rendered size of fog particles. It does not change how many particles are present.
+- **Density:** Changes how many fog particles are visible or spawned at once. It does not change their size.
+- **Opacity:** Controls the transparency of fog particles. Lower values allow more of the map to show through.
+
+## Setup notes
+
+- This is the particle Fog effect. The separate [Fog filter](../fog-filter/) applies continuous haze and includes token-trail controls.
+- Use particle Fog for visible moving banks. Use the [Fog filter](../fog-filter/) when the active area should have a continuous haze treatment.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Acid Rain | `acid-rain` | FXMaster | Normal, Top Down |
+| Hurricane | `hurricane` | FXMaster, FXMaster+ | Normal, Top Down |
+| Spore Cloud | `spore-cloud` | FXMaster | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="fog" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikifog_p",
+    "type": "fog",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "scale": 0.27,
+      "speed": 0.27,
+      "density": 0.51
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

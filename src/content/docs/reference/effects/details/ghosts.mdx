@@ -1,0 +1,97 @@
+---
+title: "Ghosts"
+description: "Cute or creepy ghosts with manual placement, directional drift, and configurable visual variants."
+sidebar:
+  order: 19
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Ambient reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: ghosts</span>
+</div>
+
+<EffectShowcase src="/videos/ghosts.mp4" title="Ghosts" description="Preview shows Ghosts enabled, limited to the Cute variant" mapName="Angela's Maps" mapUrl="https://angelamaps.com/" />
+
+Cute or creepy ghosts with manual placement, directional drift, and configurable visual variants.
+
+Ambient effects add visible movement without replacing the full weather setup. Use them on their own or layer them with another particle or filter.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Particle effect |
+| Category | Ambient |
+| Runtime type | `ghosts` |
+| Exposed parameters | 30 |
+
+## Manual Placement
+
+Enable **Manual Placement** to save individual Ghost positions instead of generating ghosts through **Density** and **Lifetime**. Use **Place** to add ghosts, **Undo** to remove the most recent placement, and **Clear** to remove the current placements.
+
+### Placement movement and appearance
+
+**Manual Float Radius** controls how far each placed ghost drifts from its saved point, while **Direction** controls its facing. **Variants**, **Scale**, **Speed**, **Opacity**, **Glow**, **Wobble**, **Displacement**, and **Blur** continue to define the appearance and movement of the placed ghosts.
+
+### Manual and automatic controls
+
+**Orbit** and **Manual Placement** are mutually exclusive. **Density**, **Lifetime**, and **Token Avoidance** are hidden in Manual Placement mode because placement count and saved positions replace automatic spawning and avoidance behavior.
+
+## Important controls
+
+- **Variants:** Selects which ghost sprite variants can appear. Multiple selections mix those designs within the same effect.
+- **Manual Placement:** Replaces automatic ghost distribution with exact positions placed on the current Scene.
+- **Wobble:** Controls the amount of side-to-side and shape movement in the ghost animation.
+- **Displacement:** Controls how strongly the ghost artwork warps and ripples while animating.
+- **Token Avoidance:** Makes ghosts steer away from eligible tokens instead of moving directly through them.
+
+## Setup notes
+
+- Manual Placement creates fixed ghost positions, while the normal particle controls create ghosts that move across the Scene.
+- Variants, Wobble, Displacement, Blur, and Glow provide the primary visual identity.
+- Token Avoidance can keep moving ghosts from passing directly through tokens when desired.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Gravewind | `gravewind` | FXMaster+ | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="ghosts" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikighosts_p",
+    "type": "ghosts",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "orbit": false,
+      "direction": 0,
+      "scale": 0.27
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

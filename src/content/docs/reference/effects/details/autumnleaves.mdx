@@ -1,0 +1,94 @@
+---
+title: "Autumn Leaves"
+description: "Layered falling leaves with variant selection, wind motion, spin, shadows, and persistent ground accumulation."
+sidebar:
+  order: 2
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Ambient reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: autumnleaves</span>
+</div>
+
+Layered falling leaves with variant selection, wind motion, spin, shadows, and persistent ground accumulation.
+
+Ambient effects add visible movement without replacing the full weather setup. Use them on their own or layer them with another particle or filter.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Particle effect |
+| Category | Ambient |
+| Runtime type | `autumnleaves` |
+| Exposed parameters | 46 |
+
+## Airborne and background leaves
+
+Within an enabled Autumn Leaves effect, airborne leaves and the persistent **Background** surface can be toggled and configured separately. **Background** is not a standalone effect; disabling Autumn Leaves disables both layers.
+
+### Airborne motion
+
+**Spawn Mode**, **Direction**, **Directional Spread**, **Scale**, **Speed**, **Density**, **Spin Speed**, **Turbulence**, **Gustiness**, **Depth Variation**, and **Ripple** shape the moving leaves. Set the travel pattern first, then use the rendering controls to keep repeated particles from looking uniform.
+
+### Ground coverage
+
+**Background** adds persistent leaf coverage with immediate or timed fill, opacity, coverage, variation, pile amount, pile size, and ground-particle size controls.
+
+### Token trails
+
+**Token Trails** disturbs the settled leaves. **Trail Width**, **Trail Strength**, and **Trail Swirl** define the movement around a token. **Trail Lift Chance** can return some leaves to the airborne layer, while **Settle Time (Seconds)** and **Settle Impact** control the return to rest.
+
+## Important controls
+
+- **Spawn Mode:** Chooses whether leaves spawn across the view, along the top edge, or along the edge facing into the selected wind direction.
+- **Direction:** Sets the primary travel direction for airborne leaves. Directional Spread can add variation around this angle.
+- **Turbulence:** Adds small independent changes to leaf travel direction.
+- **Background:** Render a persistent field of settled leaves behind the falling effect. The field follows the same stack placement, scene or Region mask, Levels selection, and below-token/tile settings.
+- **Token Trails:** Allow visible token trails to push, spin, and briefly lift nearby settled leaves while moving through them. Displaced leaves settle in their new positions for the current canvas session.
+
+## Setup notes
+
+- Trail Width controls the affected area; Trail Strength and Trail Swirl shape the response; Settle Time (Seconds) controls how quickly the surface returns.
+- Spawn Mode and Depth Variation help prevent the leaves from forming a uniform curtain.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Autumn Leaves | `autumn-leaves` | FXMaster | Normal, Top Down |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="autumnleaves" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikiautumnleaves_p",
+    "type": "autumnleaves",
+    "options": {
+      "topDown": true,
+      "direction": 225,
+      "synchronizedDirection": false,
+      "density": 0.35,
+      "backgroundEnabled": false
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

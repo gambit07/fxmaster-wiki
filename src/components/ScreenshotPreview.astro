@@ -1,0 +1,499 @@
+---
+import { withBase } from '../utils/links';
+
+interface ScreenshotItem {
+  src: string;
+  alt: string;
+  label: string;
+  caption?: string;
+  width: number;
+  height: number;
+  variant?: 'default' | 'wide' | 'tall';
+}
+
+interface Props {
+  id?: string;
+  title: string;
+  images: ScreenshotItem[];
+  label?: string;
+  variant?: 'default' | 'wide' | 'tall';
+  attachToHeading?: boolean;
+  attachToHeadingId?: string;
+}
+
+const {
+  id,
+  title,
+  images,
+  label = 'Screenshot',
+  variant = 'default',
+  attachToHeading = true,
+  attachToHeadingId,
+} = Astro.props;
+
+const slug = (id ?? `${title}-${images[0]?.src ?? 'preview'}`)
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-|-$/g, '');
+const panelId = `fxm-screenshot-${slug}`;
+const resolvedImages = images.map((image) => {
+  const aspectRatio = image.height > 0 ? image.width / image.height : 1;
+  const inferredVariant = aspectRatio >= 1.35 ? 'wide' : aspectRatio <= 0.9 ? 'tall' : variant;
+  return { ...image, src: withBase(image.src), variant: image.variant ?? inferredVariant };
+});
+const initialVariant = resolvedImages[0]?.variant ?? variant;
+---
+
+<div class="fxm-screenshot-preview" data-fxm-screenshot-preview data-fxm-attach-heading={attachToHeading ? 'true' : 'false'} data-fxm-attach-heading-id={attachToHeadingId} hidden={attachToHeading}>
+  <button
+    type="button"
+    class="fxm-screenshot-preview__trigger"
+    data-fxm-preview-trigger
+    aria-controls={panelId}
+    aria-expanded="false"
+    aria-haspopup="dialog"
+    aria-label={`Preview ${title}`}
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.25 4.75 10.4 3h3.2l1.15 1.75H18A3.25 3.25 0 0 1 21.25 8v8A3.25 3.25 0 0 1 18 19.25H6A3.25 3.25 0 0 1 2.75 16V8A3.25 3.25 0 0 1 6 4.75h3.25ZM12 8a4.25 4.25 0 1 0 0 8.5A4.25 4.25 0 0 0 12 8Zm0 1.75a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM17.75 7a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z" /></svg>
+    <span>{label}</span>
+  </button>
+
+  <section
+    id={panelId}
+    class="fxm-screenshot-panel"
+    data-fxm-preview-panel
+    data-fxm-preview-variant={initialVariant}
+    data-fxm-screenshot-portal
+    role="dialog"
+    aria-modal="false"
+    aria-label={`${title} screenshot preview`}
+    hidden
+  >
+    <header class="fxm-screenshot-panel__header">
+      <div>
+        <span class="fxm-screenshot-panel__eyebrow">Interface preview</span>
+        <h2>{title}</h2>
+      </div>
+      <div class="fxm-screenshot-panel__controls">
+        {resolvedImages.length > 1 && (
+          <>
+            <button type="button" data-fxm-preview-previous aria-label="Previous screenshot" title="Previous screenshot">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.7 5.3-1.4-1.4L5.2 12l8.1 8.1 1.4-1.4L8 12l6.7-6.7Z" /></svg>
+            </button>
+            <button type="button" data-fxm-preview-next aria-label="Next screenshot" title="Next screenshot">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.3 18.7 1.4 1.4 8.1-8.1-8.1-8.1-1.4 1.4L16 12l-6.7 6.7Z" /></svg>
+            </button>
+          </>
+        )}
+        <button type="button" data-fxm-preview-expand aria-pressed="false" aria-label="Expand screenshot preview" title="Expand screenshot preview">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v2H6v4H4V4Zm10 0h6v6h-2V6h-4V4ZM4 14h2v4h4v2H4v-6Zm14 0h2v6h-6v-2h4v-4Z" /></svg>
+        </button>
+        <button type="button" data-fxm-preview-close aria-label="Close screenshot preview" title="Close screenshot preview">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z" /></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="fxm-screenshot-panel__viewport" data-fxm-preview-viewport>
+      {resolvedImages.map((image, index) => (
+        <figure class="fxm-screenshot-panel__slide" data-fxm-preview-slide data-index={index} data-fxm-preview-variant={image.variant} hidden={index !== 0}>
+          <button type="button" class="fxm-screenshot-panel__image-button" data-fxm-preview-expand-image aria-label={`Expand ${image.label} screenshot`} title="Expand screenshot">
+            <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" />
+          </button>
+          {image.caption && <figcaption>{image.caption}</figcaption>}
+        </figure>
+      ))}
+    </div>
+
+    {resolvedImages.length > 1 && (
+      <div class="fxm-screenshot-panel__tabs" role="tablist" aria-label={`${title} screenshots`}>
+        {resolvedImages.map((image, index) => (
+          <button type="button" role="tab" data-fxm-preview-tab data-index={index} aria-selected={index === 0 ? 'true' : 'false'} tabindex={index === 0 ? 0 : -1}>
+            {image.label}
+          </button>
+        ))}
+      </div>
+    )}
+  </section>
+
+  <button type="button" class="fxm-screenshot-backdrop" data-fxm-preview-backdrop data-fxm-screenshot-portal aria-label={`Close ${title} screenshot preview`} hidden></button>
+</div>
+
+<script>
+  const screenshotRootSelector = '[data-fxm-screenshot-preview]';
+  const screenshotPanelSelector = '.fxm-screenshot-panel';
+
+  function closeOtherScreenshotPreviews(activePanel: HTMLElement): void {
+    document.querySelectorAll<HTMLElement>(`${screenshotPanelSelector}.is-open`).forEach((panel) => {
+      if (panel === activePanel) return;
+      panel.querySelector<HTMLButtonElement>('[data-fxm-preview-close]')?.click();
+    });
+  }
+
+  function initializeScreenshotPreview(root: HTMLElement): void {
+    if (root.dataset.fxmScreenshotInitialized === 'true') return;
+
+    const trigger = root.querySelector<HTMLButtonElement>('[data-fxm-preview-trigger]');
+    const panel = root.querySelector<HTMLElement>('[data-fxm-preview-panel]');
+    const backdrop = root.querySelector<HTMLButtonElement>('[data-fxm-preview-backdrop]');
+    const closeButton = panel?.querySelector<HTMLButtonElement>('[data-fxm-preview-close]');
+    const expandButton = panel?.querySelector<HTMLButtonElement>('[data-fxm-preview-expand]');
+    const imageExpandButtons = panel ? Array.from(panel.querySelectorAll<HTMLButtonElement>('[data-fxm-preview-expand-image]')) : [];
+    const previousButton = panel?.querySelector<HTMLButtonElement>('[data-fxm-preview-previous]');
+    const nextButton = panel?.querySelector<HTMLButtonElement>('[data-fxm-preview-next]');
+    const viewport = panel?.querySelector<HTMLElement>('[data-fxm-preview-viewport]');
+    const slides = panel ? Array.from(panel.querySelectorAll<HTMLElement>('[data-fxm-preview-slide]')) : [];
+    const tabs = panel ? Array.from(panel.querySelectorAll<HTMLButtonElement>('[data-fxm-preview-tab]')) : [];
+
+    if (!trigger || !panel || !backdrop || !closeButton || !expandButton || !viewport || slides.length === 0) return;
+
+    const triggerElement = trigger;
+    const panelElement = panel;
+    const backdropElement = backdrop;
+    const closeElement = closeButton;
+    const expandElement = expandButton;
+    const viewportElement = viewport;
+
+    let headingHost: HTMLElement | null = null;
+    const attachToHeading = root.dataset.fxmAttachHeading !== 'false';
+    const attachToHeadingId = root.dataset.fxmAttachHeadingId?.trim();
+
+    function findHeadingWrapper(element: Element | null): HTMLElement | null {
+      if (!(element instanceof HTMLElement)) return null;
+      if (element.matches('.sl-heading-wrapper')) return element;
+      return element.closest<HTMLElement>('.sl-heading-wrapper');
+    }
+
+    function findPreviousHeadingWrapper(start: Element | null): HTMLElement | null {
+      let candidate = start;
+      while (candidate) {
+        const directWrapper = findHeadingWrapper(candidate);
+        if (directWrapper) return directWrapper;
+        candidate = candidate.previousElementSibling;
+      }
+
+      return root.closest<HTMLElement>('.fxm-subsection-group')
+        ?.querySelector<HTMLElement>('.sl-heading-wrapper') ?? null;
+    }
+
+    if (attachToHeading) {
+      if (attachToHeadingId) headingHost = findHeadingWrapper(document.getElementById(attachToHeadingId));
+      if (!headingHost) headingHost = findPreviousHeadingWrapper(root.previousElementSibling);
+
+      if (headingHost) {
+        headingHost.classList.add('has-fxm-screenshot-preview');
+        headingHost.append(triggerElement);
+        root.hidden = true;
+      } else {
+        root.dataset.fxmAttachHeading = 'false';
+        root.hidden = false;
+      }
+    }
+
+    document.body.append(backdropElement, panelElement);
+
+    let currentIndex = 0;
+    let pinned = false;
+    let expanded = false;
+    let restoringTriggerFocus = false;
+    let zoomLevel = 1;
+    let zoomTouched = false;
+    let closeTimer: number | undefined;
+    let hideTimer: number | undefined;
+    let fitTimer: number | undefined;
+    const minimumZoom = 0.05;
+    const maximumZoom = 4;
+
+    const clearCloseTimer = (): void => {
+      if (closeTimer !== undefined) window.clearTimeout(closeTimer);
+      closeTimer = undefined;
+    };
+
+    const clearHideTimer = (): void => {
+      if (hideTimer !== undefined) window.clearTimeout(hideTimer);
+      hideTimer = undefined;
+    };
+
+    const clearFitTimer = (): void => {
+      if (fitTimer !== undefined) window.clearTimeout(fitTimer);
+      fitTimer = undefined;
+    };
+
+    function getActiveSlide(): HTMLElement | undefined {
+      return slides[currentIndex];
+    }
+
+    function getActiveImageButton(): HTMLButtonElement | null {
+      return getActiveSlide()?.querySelector<HTMLButtonElement>('[data-fxm-preview-expand-image]') ?? null;
+    }
+
+    function getActiveImage(): HTMLImageElement | null {
+      return getActiveImageButton()?.querySelector<HTMLImageElement>('img') ?? null;
+    }
+
+    function getContainZoom(): number {
+      const slide = getActiveSlide();
+      const image = getActiveImage();
+      if (!slide || !image) return 1;
+
+      const imageWidth = Number(image.getAttribute('width') ?? image.naturalWidth ?? 0);
+      const imageHeight = Number(image.getAttribute('height') ?? image.naturalHeight ?? 0);
+      const captionHeight = slide.querySelector<HTMLElement>('figcaption')?.getBoundingClientRect().height ?? 0;
+      const viewportWidth = Math.max(1, viewportElement.clientWidth - 32);
+      const viewportHeight = Math.max(1, viewportElement.clientHeight - captionHeight - 48);
+      const fitWidth = imageWidth > 0 ? viewportWidth / imageWidth : 1;
+      const fitHeight = imageHeight > 0 ? viewportHeight / imageHeight : 1;
+      return Math.min(1, Math.max(minimumZoom, Math.min(fitWidth, fitHeight)));
+    }
+
+    function applyZoom(): void {
+      slides.forEach((slide, slideIndex) => {
+        const button = slide.querySelector<HTMLButtonElement>('[data-fxm-preview-expand-image]');
+        const image = button?.querySelector<HTMLImageElement>('img');
+        if (!button || !image) return;
+
+        const active = slideIndex === currentIndex;
+        const imageWidth = Number(image.getAttribute('width') ?? image.naturalWidth ?? 0);
+        const imageHeight = Number(image.getAttribute('height') ?? image.naturalHeight ?? 0);
+
+        button.dataset.fxmZoomEnabled = expanded && active ? 'true' : 'false';
+        button.dataset.fxmZoomLevel = String(expanded && active ? zoomLevel : 1);
+        button.style.overflow = expanded && active ? 'auto' : 'hidden';
+
+        if (expanded && active) {
+          image.style.width = `${Math.max(1, Math.round(imageWidth * zoomLevel))}px`;
+          image.style.height = `${Math.max(1, Math.round(imageHeight * zoomLevel))}px`;
+          image.style.maxWidth = 'none';
+          image.style.maxHeight = 'none';
+        } else {
+          image.style.width = '';
+          image.style.height = '';
+          image.style.maxWidth = '';
+          image.style.maxHeight = '';
+          button.scrollLeft = 0;
+          button.scrollTop = 0;
+        }
+      });
+    }
+
+    function setZoomToFit(): void {
+      if (!expanded) return;
+      zoomLevel = getContainZoom();
+      const button = getActiveImageButton();
+      applyZoom();
+      if (button) {
+        button.scrollLeft = 0;
+        button.scrollTop = 0;
+      }
+    }
+
+    function scheduleZoomToFit(): void {
+      clearFitTimer();
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          if (expanded && !zoomTouched) setZoomToFit();
+        });
+      });
+      fitTimer = window.setTimeout(() => {
+        if (expanded && !zoomTouched) setZoomToFit();
+      }, 280);
+    }
+
+    function resetZoom(): void {
+      zoomTouched = false;
+      if (expanded) scheduleZoomToFit();
+      else {
+        zoomLevel = 1;
+        applyZoom();
+      }
+    }
+
+    function updateSlides(index: number): void {
+      currentIndex = (index + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => { slide.hidden = slideIndex !== currentIndex; });
+      tabs.forEach((tab, tabIndex) => {
+        const selected = tabIndex === currentIndex;
+        tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      resetZoom();
+    }
+
+    function updatePinnedState(): void {
+      panelElement.dataset.fxmPreviewPinned = pinned ? 'true' : 'false';
+      backdropElement.hidden = !pinned;
+      backdropElement.classList.toggle('is-open', pinned);
+    }
+
+    function openPreview(options: { pin?: boolean; focusPanel?: boolean } = {}): void {
+      clearCloseTimer();
+      clearHideTimer();
+      closeOtherScreenshotPreviews(panelElement);
+      if (options.pin) pinned = true;
+      panelElement.hidden = false;
+      triggerElement.setAttribute('aria-expanded', 'true');
+      headingHost?.classList.add('is-fxm-preview-open');
+      updatePinnedState();
+      window.requestAnimationFrame(() => panelElement.classList.add('is-open'));
+      if (options.focusPanel) closeElement.focus({ preventScroll: true });
+    }
+
+    function closePreview(force = false): void {
+      if (pinned && !force) return;
+      clearCloseTimer();
+      clearHideTimer();
+      clearFitTimer();
+      const restoreFocus = force && panelElement.contains(document.activeElement);
+      pinned = false;
+      expanded = false;
+      zoomLevel = 1;
+      zoomTouched = false;
+      panelElement.classList.remove('is-open', 'is-expanded');
+      panelElement.dataset.fxmPreviewPinned = 'false';
+      expandElement.setAttribute('aria-pressed', 'false');
+      expandElement.setAttribute('aria-label', 'Expand screenshot preview');
+      expandElement.title = 'Expand screenshot preview';
+      backdropElement.classList.remove('is-open');
+      backdropElement.hidden = true;
+      triggerElement.setAttribute('aria-expanded', 'false');
+      headingHost?.classList.remove('is-fxm-preview-open');
+      applyZoom();
+      hideTimer = window.setTimeout(() => {
+        if (!panelElement.classList.contains('is-open')) panelElement.hidden = true;
+      }, 220);
+      if (restoreFocus) {
+        restoringTriggerFocus = true;
+        triggerElement.focus({ preventScroll: true });
+        window.queueMicrotask(() => { restoringTriggerFocus = false; });
+      }
+    }
+
+    function scheduleClose(): void {
+      clearCloseTimer();
+      closeTimer = window.setTimeout(() => closePreview(), 420);
+    }
+
+    function togglePinnedPreview(): void {
+      if (panelElement.classList.contains('is-open') && pinned) return closePreview(true);
+      pinned = true;
+      openPreview({ pin: true, focusPanel: true });
+    }
+
+    function toggleExpanded(): void {
+      expanded = !expanded;
+      if (expanded) {
+        pinned = true;
+        zoomTouched = false;
+        openPreview({ pin: true });
+      } else {
+        zoomLevel = 1;
+        zoomTouched = false;
+      }
+      panelElement.classList.toggle('is-expanded', expanded);
+      expandElement.setAttribute('aria-pressed', expanded ? 'true' : 'false');
+      expandElement.setAttribute('aria-label', expanded ? 'Restore screenshot preview size' : 'Expand screenshot preview');
+      expandElement.title = expanded ? 'Restore screenshot preview size' : 'Expand screenshot preview';
+      updatePinnedState();
+      if (expanded) scheduleZoomToFit();
+      else applyZoom();
+    }
+
+    const hoverAvailable = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const hoverTarget = headingHost ?? triggerElement;
+    hoverTarget.addEventListener('pointerenter', () => { if (hoverAvailable.matches) openPreview(); });
+    hoverTarget.addEventListener('pointerleave', scheduleClose);
+    triggerElement.addEventListener('focus', () => { if (!restoringTriggerFocus) openPreview(); });
+    triggerElement.addEventListener('blur', scheduleClose);
+    triggerElement.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      togglePinnedPreview();
+    });
+    panelElement.addEventListener('pointerenter', clearCloseTimer);
+    panelElement.addEventListener('pointerleave', scheduleClose);
+    panelElement.addEventListener('focusin', clearCloseTimer);
+    panelElement.addEventListener('focusout', (event) => {
+      if (event.relatedTarget instanceof Node && panelElement.contains(event.relatedTarget)) return;
+      scheduleClose();
+    });
+    panelElement.addEventListener('transitionend', () => {
+      if (expanded && !zoomTouched) setZoomToFit();
+    });
+    closeElement.addEventListener('click', () => closePreview(true));
+    backdropElement.addEventListener('click', () => closePreview(true));
+    expandElement.addEventListener('click', toggleExpanded);
+    imageExpandButtons.forEach((button) => button.addEventListener('click', toggleExpanded));
+    previousButton?.addEventListener('click', () => updateSlides(currentIndex - 1));
+    nextButton?.addEventListener('click', () => updateSlides(currentIndex + 1));
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => updateSlides(Number(tab.dataset.index ?? 0)));
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        let nextIndex = currentIndex;
+        if (event.key === 'ArrowLeft') nextIndex -= 1;
+        if (event.key === 'ArrowRight') nextIndex += 1;
+        if (event.key === 'Home') nextIndex = 0;
+        if (event.key === 'End') nextIndex = tabs.length - 1;
+        updateSlides(nextIndex);
+        tabs[currentIndex]?.focus();
+      });
+    });
+
+    viewportElement.addEventListener('wheel', (event) => {
+      if (!expanded) return;
+      const button = getActiveImageButton();
+      const image = getActiveImage();
+      if (!button || !image || !button.contains(event.target as Node)) return;
+
+      event.preventDefault();
+      zoomTouched = true;
+      clearFitTimer();
+      const previousZoom = zoomLevel;
+      const delta = event.deltaY < 0 ? 0.18 : -0.18;
+      zoomLevel = Math.min(maximumZoom, Math.max(minimumZoom, Math.round((zoomLevel + delta) * 100) / 100));
+      if (zoomLevel === previousZoom) return;
+
+      const rect = button.getBoundingClientRect();
+      const relativeX = event.clientX - rect.left;
+      const relativeY = event.clientY - rect.top;
+      const focusX = relativeX + button.scrollLeft;
+      const focusY = relativeY + button.scrollTop;
+      applyZoom();
+      const ratio = zoomLevel / previousZoom;
+      button.scrollLeft = focusX * ratio - relativeX;
+      button.scrollTop = focusY * ratio - relativeY;
+    }, { passive: false });
+
+    window.addEventListener('resize', () => {
+      if (!expanded) return;
+      if (zoomTouched) applyZoom();
+      else scheduleZoomToFit();
+    });
+
+    imageExpandButtons.forEach((button) => {
+      button.querySelector<HTMLImageElement>('img')?.addEventListener('load', () => {
+        if (expanded && !zoomTouched) scheduleZoomToFit();
+      });
+    });
+
+    root.dataset.fxmScreenshotInitialized = 'true';
+  }
+
+  function initializeScreenshotPreviews(): void {
+    document.querySelectorAll<HTMLElement>(screenshotRootSelector).forEach(initializeScreenshotPreview);
+    if (document.documentElement.dataset.fxmScreenshotEvents === 'ready') return;
+    document.documentElement.dataset.fxmScreenshotEvents = 'ready';
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      const panels = Array.from(document.querySelectorAll<HTMLElement>(`${screenshotPanelSelector}.is-open`));
+      panels.at(-1)?.querySelector<HTMLButtonElement>('[data-fxm-preview-close]')?.click();
+    });
+    document.addEventListener('astro:before-swap', () => {
+      document.querySelectorAll<HTMLElement>('[data-fxm-screenshot-portal]').forEach((element) => element.remove());
+    });
+  }
+
+  initializeScreenshotPreviews();
+  document.addEventListener('astro:page-load', initializeScreenshotPreviews);
+</script>

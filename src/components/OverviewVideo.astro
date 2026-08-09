@@ -1,0 +1,106 @@
+---
+import { withBase } from '../utils/links';
+
+interface Props {
+  src: string;
+  title: string;
+}
+
+const { src, title } = Astro.props;
+const resolvedSrc = withBase(src);
+const dialogId = `fxm-overview-video-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+---
+
+<div class="fxm-overview-video" data-fxm-overview-video>
+  <button
+    type="button"
+    class="fxm-overview-video__open"
+    data-fxm-overview-video-open
+    aria-label={`Open ${title} in a larger view`}
+    aria-haspopup="dialog"
+    aria-controls={dialogId}
+    aria-expanded="false"
+  >
+    <video
+      class="fxm-overview-video__inline"
+      src={resolvedSrc}
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      aria-hidden="true"
+    ></video>
+    <span class="fxm-overview-video__expand" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M4 4h6v2H6v4H4V4Zm10 0h6v6h-2V6h-4V4ZM4 14h2v4h4v2H4v-6Zm14 0h2v6h-6v-2h4v-4Z" /></svg>
+    </span>
+  </button>
+
+  <dialog id={dialogId} class="fxm-overview-video__dialog" data-fxm-overview-video-dialog aria-label={`${title} larger preview`}>
+    <div class="fxm-overview-video__dialog-inner">
+      <button type="button" class="fxm-overview-video__close" data-fxm-overview-video-close aria-label="Close larger preview">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z" /></svg>
+      </button>
+      <video
+        class="fxm-overview-video__expanded"
+        src={resolvedSrc}
+        autoplay
+        muted
+        loop
+        playsinline
+        controls
+        preload="metadata"
+      ></video>
+    </div>
+  </dialog>
+</div>
+
+<script>
+  function initializeOverviewVideo(root: HTMLElement): void {
+    if (root.dataset.fxmOverviewVideoInitialized === 'true') return;
+
+    const openButton = root.querySelector<HTMLButtonElement>('[data-fxm-overview-video-open]');
+    const dialog = root.querySelector<HTMLDialogElement>('[data-fxm-overview-video-dialog]');
+    const closeButton = root.querySelector<HTMLButtonElement>('[data-fxm-overview-video-close]');
+    const inlineVideo = root.querySelector<HTMLVideoElement>('.fxm-overview-video__inline');
+    const expandedVideo = dialog?.querySelector<HTMLVideoElement>('.fxm-overview-video__expanded');
+    if (!openButton || !dialog || !closeButton || !inlineVideo || !expandedVideo) return;
+
+    const openDialog = (): void => {
+      if (!dialog.open) dialog.showModal();
+      openButton.setAttribute('aria-expanded', 'true');
+      expandedVideo.currentTime = Number.isFinite(inlineVideo.currentTime) ? inlineVideo.currentTime : 0;
+      inlineVideo.pause();
+      void expandedVideo.play().catch(() => undefined);
+    };
+
+    const closeDialog = (): void => {
+      if (Number.isFinite(expandedVideo.currentTime)) inlineVideo.currentTime = expandedVideo.currentTime;
+      expandedVideo.pause();
+      if (dialog.open) dialog.close();
+      openButton.setAttribute('aria-expanded', 'false');
+      void inlineVideo.play().catch(() => undefined);
+      openButton.focus({ preventScroll: true });
+    };
+
+    openButton.addEventListener('click', openDialog);
+    closeButton.addEventListener('click', closeDialog);
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) closeDialog();
+    });
+    dialog.addEventListener('close', () => {
+      expandedVideo.pause();
+      openButton.setAttribute('aria-expanded', 'false');
+      void inlineVideo.play().catch(() => undefined);
+    });
+
+    root.dataset.fxmOverviewVideoInitialized = 'true';
+  }
+
+  function initializeOverviewVideos(): void {
+    document.querySelectorAll<HTMLElement>('[data-fxm-overview-video]').forEach(initializeOverviewVideo);
+  }
+
+  initializeOverviewVideos();
+  document.addEventListener('astro:page-load', initializeOverviewVideos);
+</script>

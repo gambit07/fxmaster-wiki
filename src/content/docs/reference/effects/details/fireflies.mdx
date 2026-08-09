@@ -1,0 +1,82 @@
+---
+title: "Fireflies"
+description: "Glowing fireflies with ambient movement, light-like bloom, and configurable density."
+sidebar:
+  order: 15
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Animals reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: fireflies</span>
+</div>
+
+<EffectShowcase src="/videos/fireflies.mp4" title="Fireflies" description="Preview shows Fireflies enabled" />
+
+Glowing fireflies with ambient movement, light-like bloom, and configurable density.
+
+Animal effects add moving subjects to a Scene without creating tokens. Scale and Density control the population, while the available movement controls determine how they travel around the map. This effect also includes Token Avoidance controls for steering around eligible tokens.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Particle effect |
+| Category | Animals |
+| Runtime type | `fireflies` |
+| Exposed parameters | 24 |
+
+## Important controls
+
+- **Orbit:** Makes fireflies circulate around the effect area instead of only crossing the canvas in a straight or drifting path.
+- **Directional Movement:** Makes fireflies travel in the configured Direction instead of relying only on the effect's default random movement.
+- **Token Avoidance:** Makes fireflies steer away from eligible tokens instead of moving directly through them.
+- **Avoidance Radius:** Sets how far from an eligible token fireflies begin changing course.
+- **Density:** Changes how many fireflies are visible or spawned at once. It does not change their size.
+
+## Setup notes
+
+- Lower Density with a moderate Lifetime produces distinct points of light instead of visual noise.
+- Token Avoidance can make fireflies move away from approaching creatures, while Orbit creates a localized swarm.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="fireflies" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikifireflies_p",
+    "type": "fireflies",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "orbit": false,
+      "directionalMovement": false,
+      "scale": 0.27
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

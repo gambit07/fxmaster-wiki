@@ -1,0 +1,96 @@
+---
+title: "Fire"
+description: "Animated fire sprites with manual placement, optional light sources, glow, and token-burning visuals."
+sidebar:
+  order: 14
+  badge:
+    text: "FXMaster+ · Particle"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Weather reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: fireparticles</span>
+</div>
+
+<EffectShowcase src="/videos/fire-particle.mp4" title="Fire" description="Preview shows Fire in Manual Placement mode with Light Source enabled" />
+
+Animated fire sprites with manual placement, optional light sources, glow, and token-burning visuals.
+
+Weather effects can cover a full Scene or be limited to Regions. Configure the placement or movement controls exposed by the effect first, then tune its appearance, population, and optional background controls.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Particle effect |
+| Category | Weather |
+| Runtime type | `fireparticles` |
+| Exposed parameters | 35 |
+
+## Manual Placement
+
+Enable **Manual Placement** to place individual Fire particles instead of generating them through **Density**. Use **Place** to add flames, **Delete** to remove a selected placement, and **Clear** to remove the current placements.
+
+### Flame appearance
+
+**Variants**, **Direction**, **Scale**, **Opacity**, **Flicker**, **Glow**, and **Glow Radius** define the placed flames. **Horizontal Flip** mirrors the selected placement when the source image needs to face the opposite direction.
+
+### Optional light sources
+
+Enable **Light Source** to create illumination at each placed flame via a Foundry light source. **Light Color**, **Light Radius**, **Bright Radius**, **Light Intensity**, and **Light Flicker** control that illumination independently from the particle's visual Glow.
+
+### Manual and generated controls
+
+**Density** is hidden while Manual Placement is enabled because the saved placements determine how many flames appear. **Burn Tokens** remains available and can add the configured burning presentation when eligible tokens enter a flame's trigger radius.
+
+## Important controls
+
+- **Variants:** Selects which flame sprite variants can appear. Multiple selections mix different flame sizes and shapes within the same effect.
+- **Manual Placement:** Replaces automatic flame distribution with exact positions placed on the current Scene. Each placed flame can keep its own direction and optional light settings.
+- **Light Source:** Creates and manages Foundry ambient light sources for manually placed fire particles on the current Scene.
+- **Glow:** Controls the brightness of the glow applied around each flame sprite.
+- **Burn Tokens:** Applies a client-side token-shaped pulsing heat and smoke indicator to visible tokens that pass through this particle fire effect.
+
+## Setup notes
+
+- Manual Placement stores individual flame positions and supports per-placement direction, adjustment, flipping, and optional light sources.
+- Glow and Glow Radius affect the sprite presentation. Light Source controls create Scene illumination for manually placed flames.
+- Burn Tokens adds a temporary burning presentation when eligible tokens enter the flame area.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="fireparticles" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikifireparticles_p",
+    "type": "fireparticles",
+    "options": {
+      "manualPlacement": false,
+      "scale": 0.5,
+      "density": 0.35,
+      "alpha": 1,
+      "glow": 0.5
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

@@ -1,0 +1,100 @@
+---
+title: "Aurora Borealis"
+description: "Aurora curtains in side, top-down, or horizon presentations with palettes, haze, and motion controls."
+sidebar:
+  order: 1
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Environmental reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: auroraborealis</span>
+</div>
+
+<EffectShowcase src="/videos/aurora-borealis.mp4" title="Aurora Borealis" description="Preview shows Aurora Borealis being played in Horizon mode" mapName="Cze & Peku" mapUrl="https://www.czepeku.com/" />
+
+Aurora curtains in side, top-down, or horizon presentations with palettes, haze, and motion controls.
+
+Environmental filters change the Scene surface or atmosphere. They can cover the full Scene, be limited to Regions, and be moved within the effect stack.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Filter effect |
+| Category | Environmental |
+| Runtime type | `auroraborealis` |
+| Exposed parameters | 34 |
+
+## Presentation modes
+
+Aurora Borealis has three presentation modes. Choose the mode before tuning shared ribbon controls because each mode exposes a different placement group.
+
+| Mode | Presentation | Main placement controls |
+|---|---|---|
+| Side | A vertical curtain across a landscape or side-facing Scene | Curtain Height Position and Curtain Falloff |
+| Top Down | An overhead ribbon path | Path Angle, Depth Glow, and Haze Strength |
+| Horizon | A lower, distant aurora path | Start Anchor, Exit Anchor, Overhead Drop, Path Slant, Haze Strength, and Haze Height |
+
+## Palettes and ribbons
+
+Built-in palettes provide coordinated color sets. **Custom Colors** exposes five separate color controls plus **Mixed Colors**.
+
+The shared ribbon controls are **Aurora Count**, **Intensity**, **Speed**, **Ribbon Width**, **Waviness**, and **Softness**. Increase Aurora Count or Ribbon Width when more of the view should be filled, but raising both heavily can flatten the separation between ribbons.
+
+## Important controls
+
+- **Aurora Mode:** Selects the Side, Top-Down, or Horizon presentation. Each mode changes how the aurora is positioned and which controls are available.
+- **Aurora Palette:** Selects a built-in five-color aurora palette or enables the custom color controls.
+- **Aurora Count:** Sets how many separate aurora ribbons are rendered at once.
+- **Intensity:** Controls the brightness and opacity of the aurora ribbons.
+- **Ribbon Width:** Changes the width of each aurora ribbon.
+- **Waviness:** Controls how strongly the aurora ribbons bend and undulate along their length.
+- **Softness:** Controls how soft the ribbon edges and internal folds appear.
+
+## Setup notes
+
+- Aurora Mode selects Side, Top Down, or Horizon presentation, each with its own placement controls.
+- Built-in palettes provide coordinated colors. Custom Colors exposes five color slots and Mixed Colors.
+- Aurora Count, Intensity, Speed, Ribbon Width, Waviness, and Softness define the ribbons themselves.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Luminous Sky | `luminous-sky` | FXMaster+ | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="auroraborealis" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikiauroraborealis_f",
+    "type": "auroraborealis",
+    "options": {
+      "mode": "side",
+      "palette": "aurora",
+      "intensity": 0.65,
+      "speed": 0.35,
+      "auroraCount": 3
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

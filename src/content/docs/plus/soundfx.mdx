@@ -1,0 +1,220 @@
+---
+title: Sound Effects Manager
+description: Create FXMaster+ environmental and token-movement sound rules with Scene scope, Regions, walls, muffling, delays, and playback modes.
+---
+
+import ScreenshotPreview from '../../../components/ScreenshotPreview.astro';
+
+Select <span class="fxm-control-label" data-control="soundfx-manager">Manage Sound Effects</span> from <span class="fxm-control-label" data-control="effects">FXMaster Controls</span> to open the **Sound Effects Manager**. SoundFX rules link active particle or filter effects to audio and can represent broad environmental ambience or sounds produced by tokens moving through an active effect area.
+
+## Sound Effects Manager window
+
+<ScreenshotPreview
+  id="sound-effects-manager"
+  title="Sound Effects Manager"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/sound-effects-manager.webp',
+      alt: 'Sound Effects Manager showing several ambient weather rules with controls to enable, edit, duplicate, or delete each rule.',
+      label: 'Rule list',
+      caption: 'The Sound Effects Manager lists saved rules and provides controls to enable, edit, duplicate, or delete each one.',
+      width: 713,
+      height: 906,
+    },
+  ]}
+/>
+
+The window lists saved rules, their matching effects, selected playback mode, delay and wall badges when applicable, and the sounds assigned to each rule.
+
+## Import and Export Rules
+
+<ScreenshotPreview
+  id="sound-effects-import-export"
+  title="Import and Export Rules"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/sound-effects-manager-menu-highlight.webp',
+      alt: 'Sound Effects Manager with the overflow menu location highlighted at the top-right of the window.',
+      label: 'Overflow menu',
+      caption: 'Use the overflow menu in the Sound Effects Manager to access rule import and export actions.',
+      width: 713,
+      height: 906,
+    },
+  ]}
+/>
+
+Use the overflow menu in **Sound Effects Manager** to open **Import Rules** or **Export Rules**. These options are useful for backing up a rule set, moving rules between worlds, or sharing a known working configuration.
+
+- **Export Rules** creates a portable copy of the current rules.
+- **Import Rules** loads previously exported rules into the current world.
+
+After importing, review the imported rules, their enabled state, and any referenced sound files before relying on them in play.
+
+## Rule types
+
+The **Rule Type** field provides two options.
+
+### Environmental
+
+<ScreenshotPreview
+  id="sound-rule-environmental"
+  title="Environmental Sound Rule"
+  variant="tall"
+  attachToHeadingId="environmental"
+  images={[
+    {
+      src: '/images/screenshots/sound-rule-environmental.webp',
+      alt: 'Sound Rule form showing the Environmental rule type selected and the Region Sound Options section available.',
+      label: 'Environmental rule',
+      caption: 'Environmental rules are suited to continuous ambience and expose Region Sound Options for Scene and Region playback.',
+      width: 690,
+      height: 1243,
+    },
+  ]}
+/>
+
+**Environmental** rules play while matching effects are active. They can be Scene-wide, limited to matching Region bounds, or extended outward from a Region through **Region Radius**.
+
+### Token Movement
+
+<ScreenshotPreview
+  id="sound-rule-token-movement"
+  title="Token Movement Sound Rule"
+  variant="tall"
+  attachToHeadingId="token-movement"
+  images={[
+    {
+      src: '/images/screenshots/sound-rule-tokenmovement.webp',
+      alt: 'Sound Rule form showing the Token Movement rule type selected and the movement-specific options available.',
+      label: 'Token Movement rule',
+      caption: 'Token Movement rules are suited to movement-triggered audio and expose movement delay, listener radius, and related token movement options.',
+      width: 687,
+      height: 1241,
+    },
+  ]}
+/>
+
+**Token Movement** rules trigger from eligible token movement through matching effects. They add **Movement Delay**, **Token Elevation Threshold**, **Token Radius**, easing, wall handling, and muffling options.
+
+## Build a rule
+
+1. Select <span class="fxm-control-label" data-control="soundfx-manager">Manage Sound Effects</span> from <span class="fxm-control-label" data-control="effects">FXMaster Controls</span>.
+2. Select **Add Sound Rule**.
+3. Enter a **Rule Name**.
+4. Use **Rule Type** to choose **Environmental** or **Token Movement**.
+5. Use **Scenes** when the rule should be limited to specific Scenes.
+6. Select the **Effects** dropdown and choose one or more particle and filter effects.
+7. Configure **Fade Time** and any applicable **Region Sound Options** or **Token Movement Options**.
+8. Open **Sounds**, select **Add Sound**, choose a **Sound File**, and set its **Level**.
+9. Choose a **Multi-Sound Mode** when the rule contains more than one sound.
+10. Select **Save**, then confirm the rule is **Enabled** in the **Sound Effects Manager**.
+
+A rule can apply to both Scene and Region effect rows. The **Sound FX** toggle must be enabled on each effect row that should activate the rule. Region effects are configured through **FXMaster: Particle Effects** or **FXMaster: Filter Effects** on the Region; playback then follows the location of the enabled matching effect.
+
+When the **Effects** dropdown contains more than one effect, every selected effect must be active for the rule to match. The selections are **AND** conditions, not **OR** alternatives. A rule that requires more matching effects is a more specific rule and takes priority over a broader rule involving the same active effects.
+
+The sections below cover the fields that refine playback after the target effects and sound files have been selected.
+
+### Playback modes
+
+Use **Multi-Sound Mode** to choose how multiple sound entries are handled:
+
+| Option | Behavior |
+|---|---|
+| Parallel | Plays all configured sounds simultaneously. |
+| Sequential | Plays one sound at a time in priority order. |
+| Random | Plays one sound at a time, selected randomly from the rule. |
+| Manual | Uses only the sounds selected through **Manual Sounds** on each matching effect row. |
+
+Manual mode can offer light, moderate, and heavy variants from one rule while allowing each effect instance to choose which sounds are available.
+
+### Region modes
+
+**Region Sound Options** uses the following fields:
+
+| Field | What it changes |
+|---|---|
+| Region Radius | Sets the Region expansion from 0% to 500% of each disconnected Region component’s size. |
+| Play within Region bounds | Keeps activation tied to the drawn Region footprint before radius or easing expansion. |
+| Use easing | Fades volume across the configured Region padding instead of changing abruptly. |
+| Constrained by walls | Allows walls and surface occlusion to block the sound. |
+| Muffled by walls | Applies the selected **Muffled Effect** and **Muffled Effect Intensity** when walls or surfaces occlude the sound. |
+
+The combination of **Play within Region bounds** and **Region Radius** determines the playback mode:
+
+- **Play within Region bounds** enabled with **Region Radius** at 0: audible within the matching Region.
+- **Play within Region bounds** enabled with **Region Radius** above 0: full volume in the Region with optional padding beyond its boundary.
+- **Play within Region bounds** disabled with **Region Radius** above 0: each disconnected Region component acts as a point source from its center.
+- **Play within Region bounds** disabled with **Region Radius** at 0: the Region rule plays Scene-wide. It remains a Region rule and is separate from sounds configured directly on the Scene.
+
+**Constrained by walls** and **Muffled by walls** are mutually exclusive.
+
+### Token Movement Options
+
+Token Movement rules can configure:
+
+- **Movement Delay**, with **Min** and **Max** values from 0 to 30,000 milliseconds.
+- **Token Elevation Threshold**, including an unlimited value.
+- **Token Radius** around the moving token.
+- **Use easing** for the token radius.
+- **Constrained by walls** or **Muffled by walls** for token-radius playback.
+
+Use a **Movement Delay** range to avoid a rigid sound on every movement update.
+
+### Effect-level controls
+
+A particle or filter displays **Sound FX** only when an active rule matches that effect. When the matching rule uses Manual mode and contains multiple sounds, the effect row also displays **Manual Sounds**.
+
+## PSFX Ambience defaults
+
+When the `psfx-ambience` module is present, FXMaster+ can install default rules for [Rain](../../reference/effects/details/rain/), [Wind](../../reference/effects/details/wind/), [Lightning](../../reference/effects/details/lightning/), and [Lightning Bolts](../../reference/effects/details/lightningbolts/). Use **Reset PSFX Rules to Default** from the **Sound Effects Manager** overflow menu to restore those built-in rules while preserving custom rules. The module is available through [PeriSFX on Patreon](https://www.patreon.com/PeriSFX).
+
+The default rule set uses versioned identifiers, so restoring defaults does not overwrite unrelated custom rules.
+
+## Suppression
+
+<ScreenshotPreview
+  id="suppress-scene-sounds"
+  title="Suppress Scene Sounds"
+  variant="tall"
+  attachToHeadingId="suppression"
+  images={[
+    {
+      src: '/images/screenshots/suppress-scene-sounds.webp',
+      alt: 'FXMaster Suppress Scene Sounds Region behavior showing independent Environmental Sounds and Token Movement Sounds controls, easing, and muffling options.',
+      label: 'Suppression behavior',
+      caption: 'FXMaster: Suppress Scene Sounds provides independent controls for Environmental and Token Movement rules, along with easing and muffling options.',
+      width: 650,
+      height: 911,
+    },
+  ]}
+/>
+
+Add **FXMaster: Suppress Scene Sounds** to a Region to suppress selected Scene-level SoundFX rule types for listeners inside that Region. **Environmental Sounds** and **Token Movement Sounds** are independent controls, and both are enabled by default.
+
+| Parameter | What it changes |
+|---|---|
+| Environmental Sounds | Suppresses Scene-level **Environmental** rules inside the Region when enabled. |
+| Token Movement Sounds | Suppresses Scene-level **Token Movement** rules inside the Region when enabled. |
+| Enable easing | Fades the selected Scene-level sound types as the listener moves through the Region boundary instead of changing them immediately. |
+| Enable muffling | Applies a muffled treatment to the selected sound types instead of fully suppressing them. |
+| Muffled Effect | Selects **Lowpass Filter**, **Highpass Filter**, or **Reverb** while muffling is enabled. |
+| Muffled Effect Intensity | Sets the strength of the selected muffled effect from 1 to 10. |
+
+Disable either sound-type control when the Region should affect only Environmental or only Token Movement rules. The sound behavior is independent from particle and filter suppression. Add the corresponding suppression behaviors when the Scene’s visual effects should also be removed inside the Region.
+
+## Hooks
+
+Integrations can observe the runtime without modifying it:
+
+```js
+Hooks.on('fxmasterPlusSoundFxPlayingChanged', ({ active }) => {
+  console.log('Any FXMaster+ SoundFX playing:', active);
+});
+
+Hooks.on('fxmasterPlusSoundFxActiveRulesChanged', ({ rules }) => {
+  console.log('Active SoundFX rule payloads:', rules);
+});
+```

@@ -1,0 +1,113 @@
+---
+title: Suppression and Restrictions
+description: Use suppression Regions, Restricts Weather, and FXMaster particle/filter tile restriction flags.
+---
+
+import ScreenshotPreview from '../../../components/ScreenshotPreview.astro';
+
+FXMaster supports two complementary masking systems:
+
+- **Region suppression** removes Scene-level effects inside a Region.
+- **Overhead tile restrictions** hide particles or filters beneath tile artwork.
+
+## Suppression Regions
+
+<ScreenshotPreview
+  id="suppression-region-behaviors"
+  title="Suppression Region behaviors"
+  variant="tall"
+  images={[
+    {
+      src: '/images/screenshots/particle-effects-region-suppression.webp',
+      alt: 'FXMaster Suppress Scene Particles behavior showing elevation constraints and fade controls.',
+      label: 'Suppress Scene Particles',
+      caption: 'FXMaster: Suppress Scene Particles removes Scene-level particle effects inside the Region while still allowing more local Region effects if desired.',
+      width: 650,
+      height: 650,
+    },
+    {
+      src: '/images/screenshots/filter-effects-region-suppression.webp',
+      alt: 'FXMaster Suppress Scene Filters behavior showing elevation constraints and fade controls.',
+      label: 'Suppress Scene Filters',
+      caption: 'FXMaster: Suppress Scene Filters removes Scene-level filter effects inside the Region while still allowing more local Region effects if desired.',
+      width: 651,
+      height: 647,
+    },
+    {
+      src: '/images/screenshots/suppress-scene-sounds.webp',
+      alt: 'FXMaster Suppress Scene Sounds behavior showing independent Environmental Sounds and Token Movement Sounds controls.',
+      label: 'Suppress Scene Sounds',
+      caption: 'FXMaster: Suppress Scene Sounds independently controls Scene-level Environmental and Token Movement SoundFX suppression inside the Region.',
+      width: 650,
+      height: 911,
+    },
+  ]}
+/>
+
+Add one or more suppression behaviors to a Region:
+
+- **FXMaster: Suppress Scene Particles**
+- **FXMaster: Suppress Scene Filters**
+- **FXMaster: Suppress Scene Sounds** with FXMaster+
+
+Suppression affects Scene-level content. Region-local effects can remain active inside the same area, allowing a Region to replace a broad Scene effect with a more specific local effect.
+
+### Optional elevation constraints and edge fade
+
+**FXMaster: Suppress Scene Particles** and **FXMaster: Suppress Scene Filters** can optionally use **Elevation Constraints** and **Edge Fade %**:
+
+- **Elevation Constraints** limits suppression to the selected controlled-token point of view. Leave it set to **None** when suppression should not depend on token elevation, or use **Tokens POV** or **Specific Tokens POV** when the Region’s elevation range should determine whether suppression is presented.
+- **Edge Fade %** softens the edge of the suppressed area. A value of `0` creates a hard Region boundary; higher values create a wider transition between suppressed and unsuppressed portions of the Scene.
+
+These options apply to particle and filter suppression. **FXMaster: Suppress Scene Sounds** uses its own SoundFX suppression controls instead.
+
+### Sound suppression options
+
+**FXMaster: Suppress Scene Sounds** can suppress Environmental and Token Movement rules independently. Both sound-type controls are enabled by default:
+
+| Parameter | What it changes |
+|---|---|
+| Environmental Sounds | Suppresses Scene-level **Environmental** SoundFX rules for listeners inside the Region. |
+| Token Movement Sounds | Suppresses Scene-level **Token Movement** SoundFX rules for listeners inside the Region. |
+| Enable easing | Fades the selected Scene-level sound types as the listener moves through the Region boundary instead of changing them immediately. |
+| Enable muffling | Applies a muffled treatment to the selected sound types instead of fully suppressing them. |
+| Muffled Effect | Selects **Lowpass Filter**, **Highpass Filter**, or **Reverb** while muffling is enabled. |
+| Muffled Effect Intensity | Sets the strength of the selected muffled effect from 1 to 10. |
+
+Disable **Environmental Sounds** or **Token Movement Sounds** when only one rule type should be affected by the Region.
+
+### Example: interior room during rain
+
+1. Run [Rain](../../reference/effects/details/rain/) as a Scene particle.
+2. Add a Region covering the room interior.
+3. Add **FXMaster: Suppress Scene Particles** to remove the rain indoors.
+4. Add a subtle local [Fog](../../reference/effects/details/fog/) or [Duststorm](../../reference/effects/details/duststorm/) effect if desired.
+5. With FXMaster+, add **FXMaster: Suppress Scene Sounds** so outdoor rain audio is also removed for listeners inside.
+
+## Restricts Weather
+
+Foundry’s **Restricts Weather** overhead-tile option remains authoritative for both FXMaster particles and filters. A restricting roof or overhead tile suppresses the effects under its footprint, including during hover or reveal behavior.
+
+## FXMaster-specific tile restrictions
+
+FXMaster adds two overhead tile options beneath the standard Restricts Weather control:
+
+- **FXMaster: Restricts Particles**
+- **FXMaster: Restricts Filters**
+
+Use these when an overhead tile should block only one pipeline. For example, a glass roof might block [Rain](../../reference/effects/details/rain/) particles while allowing [Color](../../reference/effects/details/color/) grading or a [Sunlight](../../reference/effects/details/sunlight/) filter to remain visible.
+
+## Displaying effects above vision
+
+When **Display Effects Above Fog/Vision** is enabled, restrictions and suppression can still produce silhouettes or gaps in the raised effect. Always test from a non-GM player view because the authoring view may not represent fog-of-war masking.
+
+## Troubleshooting masks
+
+When an effect appears where it should be suppressed:
+
+1. Confirm that the effect is Scene-level rather than another Region effect.
+2. Confirm the Region behavior is enabled and the Region shape is valid.
+3. Confirm the Scene Level assignment and **Elevation Constraints** fields.
+4. Check whether the effect is above or below tiles.
+5. Check the tile’s standard and FXMaster-specific restriction flags.
+6. Reload the Scene after changing global presentation settings.

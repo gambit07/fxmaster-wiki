@@ -1,0 +1,116 @@
+---
+title: "Water"
+description: "Water refraction, caustics, flow, waves, vortices, region-path steering, and token trails."
+sidebar:
+  order: 41
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Environmental reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: water</span>
+</div>
+
+<EffectShowcase src="/videos/water.mp4" title="Water" description="Preview shows Water enabled for a Region with Flowing Water and Follow Region Path enabled" mapName="Angela's Maps" mapUrl="https://angelamaps.com/" />
+
+Water refraction, caustics, flow, waves, vortices, region-path steering, and token trails.
+
+Environmental filters change the Scene surface or atmosphere. They can cover the full Scene, be limited to Regions, and be moved within the effect stack.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Filter effect |
+| Category | Environmental |
+| Runtime type | `water` |
+| Exposed parameters | 38 |
+
+## Major systems
+
+Water is built from several independent systems. They can be combined, but each can also be tuned or disabled without changing the others.
+
+### Base surface
+
+**Water Tint**, **Opacity**, **Scale**, **Turbulence**, and **Still Water Speed** define the underlying surface before directional movement is added.
+
+### Flow and Region paths
+
+Enable **Flowing Water** for a directional current. **Flow Speed**, **Flow Direction**, and **Flow Strength** control that movement. In a Region Water effect, **Follow Region Path** allows a river or channel drawn as a Region to bend the current, while **Path Influence** controls how strongly the Region path overrides the base direction. These two controls are not shown on Scene Water effects.
+
+### Waves and vortex
+
+**Waves** adds a second directional layer with its own speed, direction, and strength. The wave direction can differ from the flow direction, which can work well for wind-driven surface movement over a current.
+
+**Vortex Water** adds circular movement. Vortex Center Size controls the affected center, while Vortex Speed, Vortex Strength, and Clockwise Rotation control the spin.
+
+### Caustics and refraction
+
+**Caustics** adds moving light patterns with separate strength and tint. **Refraction** controls how strongly the underlying Scene is displaced. Raise them separately because both can affect map, grid, and text readability.
+
+### Token trails
+
+Token Trails temporarily alter the surface around moving tokens. Trail Width defines the path, Trail Strength defines the disturbance, and Settle Time (Seconds) controls recovery.
+
+:::note[Water module settings]
+Some Water controls are hidden when their world-level feature is disabled. Enable the required group in [Water Module Settings](../../../../plus/water-module-settings/) before configuring it on an effect row.
+:::
+
+## Important controls
+
+- **Flowing Water:** Enables continuous directional water flow. This moves the surface pattern without enabling waves or a vortex.
+- **Follow Region Path:** Uses the Region path as the local flow direction so rivers and channels can bend through the Region instead of moving in one global direction. Tweak the Flow Strength and Path Influence parameters to achieve natural bending motion for the water based on your specific region path.
+- **Waves:** Enables a separate directional wave layer over the water surface.
+- **Vortex Water:** Enables rotating water around a central vortex area.
+- **Caustics:** Controls how visible the animated light patterns are on the water surface. Set it to 0 to remove caustics.
+- **Refraction:** Controls how strongly the Water filter bends and distorts the map beneath it.
+- **Token Trails:** Create temporary swimming-style ripples, side displacement, and a slight wake where visible tokens move through the Water filter.
+
+## Setup notes
+
+- Flow, Waves, Vortex, Turbulence, Caustics, and Refraction are independent systems.
+- Follow Region Path and Path Influence are useful for rivers or channels drawn as Regions.
+- Token Trails can temporarily calm or part the surface and settle over a configured interval.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="filters">Filter Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="water" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikiwater_f",
+    "type": "water",
+    "options": {
+      "tint": {
+        "apply": true,
+        "value": "#3276c4"
+      },
+      "flow": true,
+      "flowDirection": 180,
+      "flowStrength": 0.4,
+      "waves": true,
+      "caustics": true
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

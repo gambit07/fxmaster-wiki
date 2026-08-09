@@ -1,0 +1,84 @@
+---
+title: "Fish"
+description: "Animated koi, betta, manta ray, and spirit variants with orbit, directional movement, glow, trails, and token avoidance."
+sidebar:
+  order: 16
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Animals reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: fish</span>
+</div>
+
+<EffectShowcase src="/videos/fish.mp4" title="Fish" description="Preview shows Fish and Underwater enabled together, Fish are limited to Betta Fish Type variants" mapName="Moonlight Maps" mapUrl="https://moonlight-maps.com/" />
+
+Animated koi, betta, manta ray, and spirit variants with orbit, directional movement, glow, trails, and token avoidance.
+
+Animal effects add moving subjects to a Scene without creating tokens. Scale and Density control the population, while the available movement controls determine how they travel around the map. This effect also includes Token Avoidance controls for steering around eligible tokens.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Particle effect |
+| Category | Animals |
+| Runtime type | `fish` |
+| Exposed parameters | 30 |
+
+## Important controls
+
+- **Fish Type:** Selects which fish families are allowed to appear, such as koi, betta, manta rays, or spirit variants.
+- **Animations:** Selects the animation variants that can be used for the chosen fish population.
+- **Directional Movement:** Makes fish travel in the configured Direction instead of relying only on the effect's default random movement.
+- **Token Avoidance:** Makes fish steer away from eligible tokens instead of moving directly through them.
+- **Glow:** Controls the direct glow added around each fish sprite.
+- **Trail:** Controls the length and visibility of the motion trail behind moving fish.
+
+## Setup notes
+
+- Fish Type and Animations define the visual population, while movement and Token Avoidance define how the school behaves.
+- Token Avoidance works well when tokens should pass through or around the school without fish swimming directly through them.
+- Glow, Bloom, and Trail can be used for bioluminescent, spirit, or other stylized fish variants.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="fish" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikifish_p",
+    "type": "fish",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "orbit": false,
+      "directionalMovement": false,
+      "direction": 0
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

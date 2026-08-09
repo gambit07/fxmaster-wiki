@@ -1,0 +1,774 @@
+---
+import reference from '../data/reference.json';
+
+interface Props {
+  effectId: string;
+}
+
+type ParameterCondition = string | Record<string, unknown> | Array<string | Record<string, unknown>>;
+
+interface ParameterDefinition {
+  id: string;
+  label: string;
+  type: string;
+  default?: unknown;
+  description: string;
+  tooltip?: string;
+  sceneOnly?: boolean;
+  regionOnly?: boolean;
+  options?: Record<string, string>;
+  allowEmpty?: boolean;
+  showWhen?: ParameterCondition;
+  hideWhen?: ParameterCondition;
+  min?: number;
+  max?: number | string;
+  step?: number;
+  labelOutput?: string;
+  availabilityDetail?: string;
+}
+
+interface EffectDefinition {
+  id: string;
+  label: string;
+  parameterCount: number;
+  referenceType?: string;
+  parameters: ParameterDefinition[];
+}
+
+const { effectId } = Astro.props;
+const customParticleBases = ((reference as unknown as { customParticleBases?: EffectDefinition[] }).customParticleBases ?? []);
+const effects = [
+  ...(reference.effects as unknown as EffectDefinition[]),
+  ...customParticleBases,
+];
+const effect = effects.find((entry) => entry.id === effectId);
+const effectLabel = effect?.label ?? effectId;
+const regionOnlyCount = effect?.parameters.filter((parameter) => parameter.regionOnly).length ?? 0;
+const sceneOnlyCount = effect?.parameters.filter((parameter) => parameter.sceneOnly).length ?? 0;
+const parameterDefinitions = new Map(
+  (effect?.parameters ?? []).map((parameter) => [parameter.id, parameter] as const),
+);
+
+function formatValue(value: unknown): string {
+  if (value === undefined) return '—';
+  if (value === null) return 'None';
+  if (typeof value === 'boolean') return value ? 'On' : 'Off';
+  if (Array.isArray(value)) return value.length ? value.join(', ') : 'None';
+  if (typeof value === 'object') {
+    const color = value as { value?: unknown; apply?: unknown };
+    if ('value' in color && 'apply' in color) return `${String(color.value)} (${color.apply ? 'enabled' : 'disabled'})`;
+    return JSON.stringify(value);
+  }
+  return String(value);
+}
+
+function formatDefault(parameter: ParameterDefinition): string {
+  if (Array.isArray(parameter.default) && parameter.default.length === 0) {
+    if (parameter.id === 'levels') return 'All Levels';
+    if (parameter.id === 'soundFxManualSoundIds') return 'Rule default';
+    if (effectId === 'fish' && parameter.id === 'fishType') return 'All';
+    if (effectId === 'custom-manual-placement' && parameter.id === 'spritesheets') return 'All images';
+    return 'None';
+  }
+  if (Array.isArray(parameter.default) && parameter.options) {
+    return parameter.default
+      .map((value) => parameter.options?.[String(value)] ?? String(value))
+      .join(', ');
+  }
+  return formatValue(parameter.default);
+}
+
+function formatRange(parameter: ParameterDefinition): string {
+  if (parameter.min === undefined && parameter.max === undefined) return '—';
+  const min = parameter.min ?? '…';
+  const max = parameter.max ?? '…';
+  const step = parameter.step !== undefined ? ` · step ${parameter.step}` : '';
+  return `${min}–${max}${step}`;
+}
+
+function humanizeIdentifier(value: string): string {
+  return value
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
+function parameterLabel(parameterId: string): string {
+  return parameterDefinitions.get(parameterId)?.label ?? humanizeIdentifier(parameterId);
+}
+
+function formatConditionValue(parameterId: string, value: unknown): string {
+  const options = parameterDefinitions.get(parameterId)?.options;
+  if (typeof value === 'string' && options && value in options) return options[value];
+  if (Array.isArray(value)) return value.map((entry) => formatConditionValue(parameterId, entry)).join(', ');
+  return formatValue(value);
+}
+
+function isConditionOperator(value: unknown): value is { operator: string; value?: unknown } {
+  return Boolean(value && typeof value === 'object' && !Array.isArray(value) && typeof (value as { operator?: unknown }).operator === 'string');
+}
+
+function formatConditionEntry(parameterId: string, expected: unknown): string {
+  const label = parameterLabel(parameterId);
+  if (!isConditionOperator(expected)) return `${label} = ${formatConditionValue(parameterId, expected)}`;
+
+  const formattedValue = formatConditionValue(parameterId, expected.value);
+  switch (expected.operator) {
+    case '>':
+    case '>=':
+    case '<':
+    case '<=':
+      return `${label} ${expected.operator} ${formattedValue}`;
+    case '!=':
+      return `${label} ≠ ${formattedValue}`;
+    case 'contains':
+      return `${label} includes ${formattedValue}`;
+    case 'notContains':
+      return `${label} does not include ${formattedValue}`;
+    case 'isEmpty':
+      return `${label} is empty`;
+    case 'notEmpty':
+      return `${label} is not empty`;
+    default:
+      return `${label} ${expected.operator} ${formattedValue}`.trim();
+  }
+}
+
+function formatCondition(value: unknown): string {
+  if (!value) return '';
+  if (typeof value === 'string') return value;
+  if (Array.isArray(value)) return value.map(formatCondition).filter(Boolean).join(' or ');
+  if (typeof value === 'object') {
+    return Object.entries(value as Record<string, unknown>)
+      .map(([key, expected]) => formatConditionEntry(key, expected))
+      .join(' and ');
+  }
+  return String(value);
+}
+
+function formatAvailability(value: unknown, mode: 'show' | 'hide'): string {
+  const condition = formatCondition(value);
+  return `${mode === 'show' ? 'Shown' : 'Hidden'} when ${condition}`;
+}
+
+function conditionTargets(value: unknown): string[] {
+  if (!value) return [];
+  if (Array.isArray(value)) return [...new Set(value.flatMap(conditionTargets))];
+  if (typeof value === 'object') return Object.keys(value as Record<string, unknown>);
+  return [];
+}
+
+function parameterRowId(parameterId: string): string {
+  return `fxm-parameter-${effectId}-${parameterId}`;
+}
+
+
+function parameterContext(parameter: ParameterDefinition): string {
+  if (parameter.regionOnly) return 'Region only';
+  if (parameter.sceneOnly) return 'Scene only';
+  return 'Scene and Region';
+}
+---
+
+{effect ? (
+  <div class="parameter-wrap">
+    <div class="table-summary">
+      <span><strong>{effect.parameterCount}</strong> exposed parameters</span>
+      {sceneOnlyCount > 0 && <span><strong>{sceneOnlyCount}</strong> Scene-only</span>}
+      {regionOnlyCount > 0 && <span><strong>{regionOnlyCount}</strong> Region-only</span>}
+      <span>
+        {effect.referenceType === 'custom-base'
+          ? <><strong>Generated custom ID</strong> API type</>
+          : <><code>{effect.id === 'fog-filter' ? 'fog' : effect.id}</code> API type</>}
+      </span>
+    </div>
+    <p class="parameter-guide">
+      <span class="parameter-guide__icon" aria-hidden="true">i</span>
+      Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Context badges identify Scene-only and Region-only controls; unbadged parameters are available in both. Hover or focus an availability condition to highlight the parameter that controls it.
+    </p>
+    <div class="table-scroll">
+      <table class="parameters">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Control</th>
+            <th>Default</th>
+            <th>Range or choices</th>
+            <th>Availability</th>
+          </tr>
+        </thead>
+        <tbody>
+          {effect.parameters.map((parameter) => {
+            const description = parameter.description;
+            const choices = parameter.options && typeof parameter.options === 'object' && Object.keys(parameter.options).length > 0
+              ? Object.values(parameter.options).join(', ')
+              : formatRange(parameter);
+            const availabilityRules: string[] = [];
+            const availabilityDetail = parameter.availabilityDetail?.trim() ?? '';
+            const baseShowAvailability = parameter.showWhen ? formatAvailability(parameter.showWhen, 'show') : '';
+            const showAvailability = baseShowAvailability && availabilityDetail
+              ? `${baseShowAvailability} and ${availabilityDetail}`
+              : baseShowAvailability || (availabilityDetail ? `Shown when ${availabilityDetail}` : '');
+            const hideAvailability = parameter.hideWhen ? formatAvailability(parameter.hideWhen, 'hide') : '';
+            const showTargets = conditionTargets(parameter.showWhen);
+            const hideTargets = conditionTargets(parameter.hideWhen);
+            if (showAvailability) availabilityRules.push(showAvailability);
+            if (hideAvailability) availabilityRules.push(hideAvailability);
+            const availability = availabilityRules.length ? availabilityRules.join('; ') : 'Always';
+            return (
+              <tr id={parameterRowId(parameter.id)} data-fxm-parameter-key={parameter.id}>
+                <td>
+                  <div class="parameter-title">
+                    <strong>{parameter.label}</strong>
+                    <button
+                      type="button"
+                      class="parameter-info"
+                      aria-label={`About ${parameter.label} for ${effectLabel}`}
+                      aria-expanded="false"
+                      aria-controls="fxm-parameter-help-panel"
+                      aria-haspopup="dialog"
+                      data-fxm-parameter-help
+                      data-fxm-effect={effectLabel}
+                      data-fxm-label={parameter.label}
+                      data-fxm-key={parameter.id}
+                      data-fxm-control={parameter.type}
+                      data-fxm-description={description}
+                      data-fxm-default={formatDefault(parameter)}
+                      data-fxm-range={choices}
+                      data-fxm-availability={availability}
+                      data-fxm-context={parameterContext(parameter)}
+                    >
+                      <span aria-hidden="true">i</span>
+                    </button>
+                  </div>
+                  <code>{parameter.id}</code>
+                  {(parameter.sceneOnly || parameter.regionOnly) && (
+                    <span class={`parameter-context ${parameter.regionOnly ? 'parameter-context--region' : 'parameter-context--scene'}`}>
+                      {parameterContext(parameter)}
+                    </span>
+                  )}
+                </td>
+                <td><span class="control-type">{parameter.type}</span></td>
+                <td><code>{formatDefault(parameter)}</code></td>
+                <td>
+                  {parameter.options && typeof parameter.options === 'object' && Object.keys(parameter.options).length > 0
+                    ? <span class="choices">{Object.values(parameter.options).join(', ')}</span>
+                    : <span>{formatRange(parameter)}</span>}
+                </td>
+                <td>
+                  {showAvailability && showTargets.length > 0 && (
+                    <button
+                      type="button"
+                      class="condition"
+                      aria-controls={showTargets.map(parameterRowId).join(' ') || undefined}
+                      aria-label={`${showAvailability}. Highlights ${showTargets.map(parameterLabel).join(' and ') || 'the controlling parameter'}.`}
+                      data-fxm-condition-targets={showTargets.join(' ')}
+                    >
+                      {showAvailability}
+                    </button>
+                  )}
+                  {showAvailability && showTargets.length === 0 && <span class="condition">{showAvailability}</span>}
+                  {parameter.hideWhen && hideTargets.length > 0 && (
+                    <button
+                      type="button"
+                      class="condition muted"
+                      aria-controls={hideTargets.map(parameterRowId).join(' ') || undefined}
+                      aria-label={`${hideAvailability}. Highlights ${hideTargets.map(parameterLabel).join(' and ') || 'the controlling parameter'}.`}
+                      data-fxm-condition-targets={hideTargets.join(' ')}
+                    >
+                      {hideAvailability}
+                    </button>
+                  )}
+                  {parameter.hideWhen && hideTargets.length === 0 && <span class="condition muted">{hideAvailability}</span>}
+                  {!showAvailability && !parameter.hideWhen && <span class="always">Always</span>}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </div>
+) : (
+  <p class="fxm-note">Parameter data is unavailable for <code>{effectId}</code>.</p>
+)}
+
+<script>
+  interface ParameterHelpState {
+    button: HTMLButtonElement | null;
+    panel: HTMLElement | null;
+    pinned: boolean;
+    hideTimer: number | null;
+  }
+
+  interface FxmWindow extends Window {
+    __fxmParameterHelpState?: ParameterHelpState;
+  }
+
+  const globalScope = window as FxmWindow;
+
+  function createParameterHelpPanel(): HTMLElement {
+    const panel = document.createElement('aside');
+    panel.id = 'fxm-parameter-help-panel';
+    panel.className = 'fxm-parameter-help-panel';
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-modal', 'false');
+    panel.setAttribute('aria-hidden', 'true');
+    panel.setAttribute('aria-labelledby', 'fxm-parameter-help-title');
+    panel.setAttribute('aria-live', 'polite');
+    panel.innerHTML = `
+      <div class="fxm-parameter-help-panel__header">
+        <div>
+          <span class="fxm-parameter-help-panel__kicker">What it changes</span>
+          <h3 id="fxm-parameter-help-title" data-fxm-help-title></h3>
+          <p data-fxm-help-context></p>
+        </div>
+        <button type="button" class="fxm-parameter-help-panel__close" aria-label="Close parameter information">×</button>
+      </div>
+      <p class="fxm-parameter-help-panel__description" data-fxm-help-description></p>
+      <dl class="fxm-parameter-help-panel__meta">
+        <div><dt>Default</dt><dd><code data-fxm-help-default></code></dd></div>
+        <div><dt>Range or choices</dt><dd data-fxm-help-range></dd></div>
+        <div><dt>Context</dt><dd data-fxm-help-context-scope></dd></div>
+        <div class="fxm-parameter-help-panel__availability"><dt>Availability</dt><dd data-fxm-help-availability></dd></div>
+        <div><dt>API key</dt><dd><code data-fxm-help-key></code></dd></div>
+        <div><dt>Control</dt><dd data-fxm-help-control></dd></div>
+      </dl>
+    `;
+    document.body.append(panel);
+    return panel;
+  }
+
+  function state(): ParameterHelpState {
+    const existing = globalScope.__fxmParameterHelpState;
+    if (!existing || !existing.panel?.isConnected) {
+      const panel = createParameterHelpPanel();
+      globalScope.__fxmParameterHelpState = { button: null, panel, pinned: false, hideTimer: null };
+    }
+    return globalScope.__fxmParameterHelpState!;
+  }
+
+  function clearHideTimer(current: ParameterHelpState): void {
+    if (current.hideTimer === null) return;
+    window.clearTimeout(current.hideTimer);
+    current.hideTimer = null;
+  }
+
+  function setExpanded(button: HTMLButtonElement | null, expanded: boolean): void {
+    button?.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  }
+
+  function positionPanel(current: ParameterHelpState): void {
+    if (!current.panel || !current.button || current.panel.dataset.visible !== 'true') return;
+    const buttonRect = current.button.getBoundingClientRect();
+    const panelRect = current.panel.getBoundingClientRect();
+    const gap = 10;
+    const edge = 12;
+    const availableBelow = window.innerHeight - buttonRect.bottom;
+    const top = availableBelow >= panelRect.height + gap
+      ? buttonRect.bottom + gap
+      : Math.max(edge, buttonRect.top - panelRect.height - gap);
+    const preferredLeft = buttonRect.left - 18;
+    const left = Math.min(
+      Math.max(edge, preferredLeft),
+      Math.max(edge, window.innerWidth - panelRect.width - edge),
+    );
+    current.panel.style.top = `${Math.round(top)}px`;
+    current.panel.style.left = `${Math.round(left)}px`;
+  }
+
+  function populatePanel(current: ParameterHelpState, button: HTMLButtonElement): void {
+    if (!current.panel) return;
+    const setText = (selector: string, value: string): void => {
+      const element = current.panel?.querySelector<HTMLElement>(selector);
+      if (element) element.textContent = value;
+    };
+    setText('[data-fxm-help-title]', button.dataset.fxmLabel || 'Parameter');
+    setText('[data-fxm-help-context]', `${button.dataset.fxmEffect || 'Effect'} parameter`);
+    setText('[data-fxm-help-description]', button.dataset.fxmDescription || 'No description is available.');
+    setText('[data-fxm-help-key]', button.dataset.fxmKey || '—');
+    setText('[data-fxm-help-control]', button.dataset.fxmControl || '—');
+    setText('[data-fxm-help-default]', button.dataset.fxmDefault || '—');
+    setText('[data-fxm-help-range]', button.dataset.fxmRange || '—');
+    setText('[data-fxm-help-context-scope]', button.dataset.fxmContext || 'Scene and Region');
+    setText('[data-fxm-help-availability]', button.dataset.fxmAvailability || 'Always');
+  }
+
+  function showPanel(button: HTMLButtonElement, pinned = false): void {
+    const current = state();
+    clearHideTimer(current);
+    if (current.button && current.button !== button) setExpanded(current.button, false);
+    current.button = button;
+    current.pinned = pinned;
+    populatePanel(current, button);
+    setExpanded(button, true);
+    if (!current.panel) return;
+    current.panel.dataset.visible = 'true';
+    current.panel.dataset.pinned = pinned ? 'true' : 'false';
+    current.panel.setAttribute('aria-hidden', 'false');
+    requestAnimationFrame(() => positionPanel(current));
+  }
+
+  function hidePanel(returnFocus = false): void {
+    const current = state();
+    const button = current.button;
+    clearHideTimer(current);
+    setExpanded(button, false);
+    current.button = null;
+    current.pinned = false;
+    if (current.panel) {
+      current.panel.dataset.visible = 'false';
+      current.panel.dataset.pinned = 'false';
+      current.panel.setAttribute('aria-hidden', 'true');
+    }
+    if (returnFocus && button?.isConnected) button.focus();
+  }
+
+  function scheduleHide(): void {
+    const current = state();
+    if (current.pinned) return;
+    clearHideTimer(current);
+    current.hideTimer = window.setTimeout(() => {
+      const panelHovered = current.panel?.matches(':hover');
+      const panelFocused = Boolean(current.panel?.contains(document.activeElement));
+      const buttonFocused = current.button === document.activeElement;
+      if (!panelHovered && !panelFocused && !buttonFocused) hidePanel();
+    }, 140);
+  }
+
+  function initializeParameterHelp(): void {
+    const current = state();
+    if (current.panel && current.panel.dataset.fxmHelpReady !== 'true') {
+      current.panel.dataset.fxmHelpReady = 'true';
+      current.panel.querySelector<HTMLButtonElement>('.fxm-parameter-help-panel__close')?.addEventListener('click', () => hidePanel(true));
+      current.panel.addEventListener('pointerenter', () => clearHideTimer(current));
+      current.panel.addEventListener('pointerleave', scheduleHide);
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('[data-fxm-parameter-help]').forEach((button) => {
+      if (button.dataset.fxmHelpReady === 'true') return;
+      button.dataset.fxmHelpReady = 'true';
+      button.addEventListener('pointerenter', () => showPanel(button, false));
+      button.addEventListener('pointerleave', scheduleHide);
+      button.addEventListener('focus', () => showPanel(button, false));
+      button.addEventListener('blur', scheduleHide);
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const active = current.button === button && current.pinned;
+        if (active) hidePanel();
+        else showPanel(button, true);
+      });
+    });
+  }
+
+  function clearConditionHighlight(container: ParentNode = document): void {
+    container.querySelectorAll<HTMLElement>('[data-fxm-condition-active="true"]').forEach((trigger) => {
+      delete trigger.dataset.fxmConditionActive;
+    });
+    container.querySelectorAll<HTMLTableRowElement>('[data-fxm-condition-highlight="true"]').forEach((row) => {
+      delete row.dataset.fxmConditionHighlight;
+    });
+  }
+
+  function showConditionHighlight(trigger: HTMLElement): void {
+    const container = trigger.closest<HTMLElement>('.parameter-wrap');
+    if (!container) return;
+    clearConditionHighlight(container);
+    const targets = new Set((trigger.dataset.fxmConditionTargets || '').split(/\s+/).filter(Boolean));
+    if (!targets.size) return;
+    trigger.dataset.fxmConditionActive = 'true';
+    container.querySelectorAll<HTMLTableRowElement>('[data-fxm-parameter-key]').forEach((row) => {
+      if (row.dataset.fxmParameterKey && targets.has(row.dataset.fxmParameterKey)) {
+        row.dataset.fxmConditionHighlight = 'true';
+      }
+    });
+  }
+
+  function releaseConditionHighlight(trigger: HTMLElement): void {
+    if (trigger.matches(':hover') || document.activeElement === trigger) return;
+    const container = trigger.closest<HTMLElement>('.parameter-wrap');
+    if (container) clearConditionHighlight(container);
+  }
+
+  function initializeConditionHighlights(): void {
+    document.querySelectorAll<HTMLElement>('[data-fxm-condition-targets]').forEach((trigger) => {
+      if (trigger.dataset.fxmConditionReady === 'true') return;
+      trigger.dataset.fxmConditionReady = 'true';
+      trigger.addEventListener('pointerenter', () => showConditionHighlight(trigger));
+      trigger.addEventListener('pointerleave', () => releaseConditionHighlight(trigger));
+      trigger.addEventListener('focus', () => showConditionHighlight(trigger));
+      trigger.addEventListener('blur', () => releaseConditionHighlight(trigger));
+    });
+  }
+
+  if (!document.documentElement.dataset.fxmParameterHelpGlobal) {
+    document.documentElement.dataset.fxmParameterHelpGlobal = 'true';
+    document.addEventListener('pointerdown', (event) => {
+      const current = state();
+      if (!current.pinned || !current.panel || !current.button) return;
+      const target = event.target as Node;
+      if (current.panel.contains(target) || current.button.contains(target)) return;
+      hidePanel();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') hidePanel(true);
+    });
+    window.addEventListener('resize', () => positionPanel(state()));
+    window.addEventListener('scroll', () => {
+      const current = state();
+      if (current.pinned) positionPanel(current);
+      else hidePanel();
+    }, true);
+    document.addEventListener('astro:before-swap', () => {
+      hidePanel();
+      clearConditionHighlight();
+    });
+  }
+
+  initializeParameterHelp();
+  initializeConditionHighlights();
+  document.addEventListener('astro:page-load', () => {
+    initializeParameterHelp();
+    initializeConditionHighlights();
+  });
+</script>
+
+<style>
+  .parameter-wrap {
+    margin-block: 1.25rem 2rem;
+  }
+
+  .table-summary {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.55rem;
+    color: var(--sl-color-gray-3);
+    font-size: 0.76rem;
+  }
+
+  .table-summary strong {
+    color: var(--sl-color-white);
+  }
+
+  .parameter-guide {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.65rem;
+    color: var(--sl-color-gray-3);
+    font-size: 0.76rem;
+  }
+
+  .parameter-guide__icon,
+  .parameter-info {
+    display: inline-grid;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--fxm-cyan) 40%, var(--sl-color-hairline));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--fxm-cyan) 9%, var(--sl-color-bg-sidebar));
+    color: var(--fxm-cyan);
+    font-family: Georgia, serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.85rem;
+  }
+
+  table {
+    width: 100%;
+    min-width: 52rem;
+    border-collapse: collapse;
+    background: color-mix(in srgb, var(--sl-color-bg-sidebar) 76%, transparent);
+    font-size: 0.79rem;
+  }
+
+  th,
+  td {
+    padding: 0.72rem 0.75rem;
+    border-bottom: 1px solid var(--sl-color-hairline-light);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background: var(--sl-color-bg-sidebar);
+    color: var(--sl-color-gray-2);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  tr:last-child td {
+    border-bottom: 0;
+  }
+
+  td:first-child {
+    min-width: 12.5rem;
+  }
+
+  .parameter-title {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.18rem;
+  }
+
+  td strong,
+  td code {
+    display: block;
+  }
+
+  td strong {
+    color: var(--sl-color-white);
+  }
+
+  .parameter-info {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin: 0;
+    padding: 0;
+    cursor: help;
+    transition: border-color 120ms ease, background 120ms ease, transform 120ms ease;
+  }
+
+  .parameter-info:hover,
+  .parameter-info:focus-visible,
+  .parameter-info[aria-expanded='true'] {
+    border-color: var(--fxm-cyan);
+    background: color-mix(in srgb, var(--fxm-cyan) 18%, var(--sl-color-bg-sidebar));
+    outline: none;
+    transform: translateY(-1px);
+  }
+
+  .parameter-info:focus-visible {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--fxm-cyan) 30%, transparent);
+  }
+
+  td code {
+    width: fit-content;
+    color: var(--sl-color-accent-high);
+    font-size: 0.72rem;
+  }
+
+  .parameter-context {
+    display: inline-flex;
+    width: fit-content;
+    margin-top: 0.34rem;
+    padding: 0.18rem 0.42rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 999px;
+    font-size: 0.66rem;
+    font-weight: 720;
+    line-height: 1.2;
+  }
+
+  .parameter-context--scene {
+    border-color: color-mix(in srgb, var(--fxm-cyan) 32%, var(--sl-color-hairline));
+    background: color-mix(in srgb, var(--fxm-cyan) 8%, transparent);
+    color: var(--fxm-cyan);
+  }
+
+  .parameter-context--region {
+    border-color: color-mix(in srgb, var(--fxm-pink) 38%, var(--sl-color-hairline));
+    background: color-mix(in srgb, var(--fxm-pink) 10%, transparent);
+    color: var(--fxm-pink-strong);
+  }
+
+  .control-type,
+  .condition,
+  .always {
+    display: inline-flex;
+    padding: 0.18rem 0.38rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 0.35rem;
+    background: color-mix(in srgb, var(--sl-color-accent-low) 25%, transparent);
+    color: var(--sl-color-gray-2);
+    font-size: 0.68rem;
+  }
+
+  .condition {
+    display: flex;
+    width: fit-content;
+    margin-bottom: 0.3rem;
+    border-color: rgba(147, 128, 255, 0.22);
+    color: var(--sl-color-accent-high);
+    font-size: 0.68rem;
+    line-height: 1.35;
+    transition: border-color 120ms ease, background 120ms ease, color 120ms ease, transform 120ms ease;
+  }
+
+  button.condition {
+    appearance: none;
+    cursor: help;
+    font-family: inherit;
+    text-align: start;
+  }
+
+  .condition.muted {
+    border-color: var(--sl-color-hairline);
+    background: transparent;
+    color: var(--sl-color-gray-3);
+  }
+
+  button.condition:hover,
+  button.condition:focus-visible,
+  button.condition[data-fxm-condition-active='true'] {
+    border-color: color-mix(in srgb, var(--fxm-pink) 62%, var(--sl-color-hairline));
+    background: color-mix(in srgb, var(--fxm-pink) 13%, var(--sl-color-bg-sidebar));
+    color: var(--fxm-pink-strong);
+    outline: none;
+    transform: translateY(-1px);
+  }
+
+  button.condition:focus-visible {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--fxm-pink) 24%, transparent);
+  }
+
+  .always {
+    background: transparent;
+    color: var(--sl-color-gray-3);
+  }
+
+  tbody tr {
+    transition: background 130ms ease, box-shadow 130ms ease;
+  }
+
+  tbody tr[data-fxm-condition-highlight='true'] > td {
+    background: color-mix(in srgb, var(--fxm-pink) 10%, var(--sl-color-bg-sidebar));
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--fxm-pink) 18%, transparent),
+      inset 0 -1px 0 color-mix(in srgb, var(--fxm-pink) 18%, transparent);
+  }
+
+  tbody tr[data-fxm-condition-highlight='true'] > td:first-child {
+    box-shadow:
+      inset 3px 0 0 var(--fxm-pink),
+      inset 0 1px 0 color-mix(in srgb, var(--fxm-pink) 18%, transparent),
+      inset 0 -1px 0 color-mix(in srgb, var(--fxm-pink) 18%, transparent);
+  }
+
+  tbody tr[data-fxm-condition-highlight='true'] td strong {
+    color: var(--fxm-pink-strong);
+  }
+
+  .choices {
+    display: block;
+    max-width: 20rem;
+    color: var(--sl-color-gray-2);
+    line-height: 1.45;
+  }
+</style>

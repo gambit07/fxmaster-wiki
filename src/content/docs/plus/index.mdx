@@ -1,0 +1,45 @@
+---
+title: FXMaster+
+description: Overview of the additional effects and features included with FXMaster+.
+---
+import EffectCatalog from '../../../components/EffectCatalog.astro';
+import OverviewVideo from '../../../components/OverviewVideo.astro';
+
+<OverviewVideo src="/videos/gambitslounge-fxm.mp4" title="Gambit's Lounge FXMaster+ overview" />
+
+FXMaster+ is an expansion module installed on top of FXMaster. It adds more particle effects, filter effects, and features, including custom user-selected particles and Sound Effect automation rules.
+
+<div class="fxm-callout-grid">
+  <div class="fxm-callout-card">
+    <h3>Access FXMaster+</h3>
+    <p>Subscribe through <a class="fxm-lounge-link" href="https://www.patreon.com/cw/GambitsLounge">Gambit’s Lounge</a>, link Patreon directly to the Foundry VTT account, restart the server, and install FXMaster+ through Foundry.</p>
+    <p><a href="./access/">View the access steps →</a></p>
+  </div>
+  <div class="fxm-callout-card fxm-lounge-card">
+    <h3><a class="fxm-lounge-link" href="https://www.patreon.com/cw/GambitsLounge">Gambit’s Lounge on Patreon</a></h3>
+    <p>Visit Patreon to subscribe and gain access to <a href="https://foundryvtt.com/packages/fxmaster-plus"><strong>Gambit’s FXMaster+</strong></a>, <a href="https://foundryvtt.com/packages/gambitsGames"><strong>Gambit’s Games</strong></a>, <a href="https://foundryvtt.com/packages/gambitsAssetPreviewer"><strong>Gambit’s Asset Previewer</strong></a>, and <a href="https://foundryvtt.com/packages/gambitsImageViewer"><strong>Gambit’s Image Viewer</strong></a>.</p>
+    <p><a class="fxm-lounge-link" href="https://www.patreon.com/cw/GambitsLounge">Open Patreon →</a></p>
+  </div>
+</div>
+
+## FXMaster+ particle effects
+
+<EffectCatalog kind="particle" packageName="plus" />
+
+## FXMaster+ filter effects
+
+<EffectCatalog kind="filter" packageName="plus" />
+
+## Additional features
+
+| Feature | What it adds |
+|---|---|
+| Custom Particle Effects | Creates user-defined effects from [Directional Drift](../reference/effects/details/custom-directional-drift/), [Ambient Float](../reference/effects/details/custom-ambient-float/), [Manual Placement](../reference/effects/details/custom-manual-placement/), or [Sound Only](../reference/effects/details/custom-sound-only/) bases. |
+| Sound Effects Manager | Connects effects to environmental or token-movement sounds. |
+| Water Module Settings | Removes unused [Water](../reference/effects/details/water/) feature groups from the Water shader. |
+| Wind Painting | Paints the areas where the [Wind](../reference/effects/details/wind/) filter should affect the Scene or Region. |
+| Suppress Scene Sounds | Adds a Region behavior with independent controls for suppressing Scene-level Environmental and Token Movement SoundFX rules. |
+
+## How FXMaster+ fits in
+
+FXMaster+ effects appear in the same particle, filter, Region, layer, preset, macro, and API tools used by FXMaster. It does not replace the core module or create a separate effect stack; it adds more options to the existing FXMaster setup.

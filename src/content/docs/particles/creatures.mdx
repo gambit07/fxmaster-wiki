@@ -1,0 +1,23 @@
+---
+title: Animal Effects
+description: Configure birds, bats, crows, eagles, rats, spiders, fish, fireflies, and other particle effects assigned to Animals.
+---
+
+import EffectCatalog from '../../../components/EffectCatalog.astro';
+
+Animal effects are particle systems rather than tokens. They provide flocks, swarms, schools, and other animated subjects without requiring initiative, collision, or actor data.
+
+## Flying animals
+
+[Birds](../../reference/effects/details/birds/), [Bats](../../reference/effects/details/bats/), [Crows](../../reference/effects/details/crows/), and [Eagles](../../reference/effects/details/eagles/) can orbit or travel directionally. Shadow controls can render a matching drop shadow or a shadow-only pass, which works well for creatures flying above the camera.
+
+## Ground animals
+
+[Rats](../../reference/effects/details/rats/) and [Spiders](../../reference/effects/details/spiders/) support token avoidance. Enable it when creatures should move around nearby tokens, then choose the dispositions that matter for the scene. Avoidance can be applied while tokens move, while they are at rest, or both, depending on the effect controls.
+
+
+## Other animal effects
+
+[Fish](../../reference/effects/details/fish/) and [Fireflies](../../reference/effects/details/fireflies/) also use the Animals grouping. Both include Token Avoidance controls, while their remaining movement and presentation options are specific to the effect.
+
+<EffectCatalog kind="particle" group="creatures" interactive={false} />

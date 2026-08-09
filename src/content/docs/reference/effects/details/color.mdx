@@ -1,0 +1,85 @@
+---
+title: "Color"
+description: "Adjusts scene color balance, saturation, gamma, brightness, contrast, tint, and opacity."
+sidebar:
+  order: 8
+  badge:
+    text: "FXMaster"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Visual reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: color</span>
+</div>
+
+Adjusts scene color balance, saturation, gamma, brightness, contrast, tint, and opacity.
+
+Visual filters change the rendered Scene. Check map, token, and text visibility after changing their strength or opacity.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Filter effect |
+| Category | Visual |
+| Runtime type | `color` |
+| Exposed parameters | 15 |
+
+## Important controls
+
+- **Tint:** Applies the selected tint across the scene before the blend mode and color adjustments are calculated. Disable Apply to leave the original hue unchanged.
+- **Blend Mode:** How the adjusted color result blends with the sampled scene color.
+- **Saturation:** Changes the amount of color in the scene. Lower values move toward grayscale; higher values make colors more vivid.
+- **Contrast:** Changes the separation between dark and bright values. Higher values deepen shadows and strengthen highlights.
+- **Brightness:** Raises or lowers the overall scene brightness after the tint and blend mode are applied.
+- **Gamma:** Adjusts midtone brightness without moving the darkest and brightest values as aggressively as Brightness.
+
+## Setup notes
+
+- Use Tint and Blend Mode for broad grading, then make smaller Saturation, Contrast, Brightness, and Gamma adjustments.
+- Color is often most useful near the end of the filter stack because it can grade the output of earlier particles and filters together.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Black Sun | `black-sun` | FXMaster+ | Normal |
+| Sakura Bloom | `sakura-bloom` | FXMaster+ | Normal, Top Down |
+| Sunshower | `sunshower` | FXMaster | Normal, Top Down |
+| Veilfall | `veilfall` | FXMaster+ | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="color" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikicolor_f",
+    "type": "color",
+    "options": {
+      "color": {
+        "apply": true,
+        "value": "#7c75aa"
+      },
+      "saturation": 1,
+      "contrast": 1,
+      "brightness": 1,
+      "gamma": 1
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

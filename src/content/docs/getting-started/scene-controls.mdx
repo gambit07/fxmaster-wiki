@@ -1,0 +1,59 @@
+---
+title: Scene Controls
+description: Reference for the FXMaster Scene Controls tools and the actions available to a GM.
+---
+
+import ScreenshotPreview from '../../../components/ScreenshotPreview.astro';
+
+FXMaster creates an <span class="fxm-control-label" data-control="effects">FXMaster Controls</span> Scene Controls group for GMs. The Tool column below uses the labels and icons shown in Foundry.
+
+## <span class="fxm-control-label" data-control="activation">FXMaster Tools Overview</span>
+
+<ScreenshotPreview
+  id="fxmaster-tools-overview"
+  title="FXMaster Tools Overview"
+  variant="wide"
+  images={[
+    {
+      src: '/images/screenshots/fxmaster-tools-overview.webp',
+      alt: 'FXMaster Tools Overview showing descriptions and quick-reference help for the available FXMaster tools.',
+      label: 'Overview window',
+      caption: 'FXMaster Tools Overview provides a quick in-app reference for the available Scene controls and common FXMaster workflows.',
+      width: 1207,
+      height: 1121,
+    },
+  ]}
+/>
+
+| Tool | Purpose |
+|---|---|
+| <span class="fxm-control-label" data-control="activation">FXMaster Tools Overview</span> | Opens the module overview with descriptions and videos for common tasks. |
+| <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> | Opens **Particle Effects Management** to add, edit, duplicate, hide, and remove Scene particle rows. |
+| <span class="fxm-control-label" data-control="filters">Filter Effects</span> | Opens **Filter Effects Management** to add, edit, duplicate, hide, and remove Scene filter rows. |
+| <span class="fxm-control-label" data-control="layers">Manage Layers</span> | Opens **Manage Layers** to reorder Scene, Region, and API effects in the FXMaster compositing stack. |
+| <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span> | Opens **Manage API Effects** to inspect and manage rows created by macros, presets, and integrations. |
+| <span class="fxm-control-label" data-control="save">Save Particle and Filter Effects as Macro</span> | Captures the current Scene particle and filter configuration as an executable macro. |
+| <span class="fxm-control-label" data-control="clearfx">Clear Scene Particle and Filter Effects (Right-click: Disable Region Effects)</span> | Left-click clears Scene effects; right-click disables Region effects after confirmation. |
+| <span class="fxm-control-label" data-control="user-particles">Manage User Particle Effects</span> | <span class="fxm-plus-only">FXMaster+ only</span> Opens **User Particle Effects** to create and edit custom particle definitions. |
+| <span class="fxm-control-label" data-control="soundfx-manager">Manage Sound Effects</span> | <span class="fxm-plus-only">FXMaster+ only</span> Opens **Sound Effects Manager** for environmental and token-movement sound rules. |
+
+## Active-state indicators
+
+The controls can indicate that Scene, Region, API, or SoundFX content is active. A control highlight means that the related runtime has an active effect.
+
+## Permissions
+
+The management tools are GM-facing. Players receive rendered effects according to their client setting and the world-wide safeguards configured by a GM.
+
+## <span class="fxm-control-label" data-control="clearfx">Clear Scene Particle and Filter Effects (Right-click: Disable Region Effects)</span>
+
+The <span class="fxm-control-label" data-control="clearfx">Clear Scene Particle and Filter Effects (Right-click: Disable Region Effects)</span> control has two actions:
+
+- **Left-click:** Permanently deletes active Scene particle and filter rows after confirmation.
+- **Right-click:** Disables Region particle and filter effects without deleting the Region behavior definitions.
+
+The global **Disable Effects For Everybody** setting is a recovery safeguard, not the normal way to clear a Scene.
+
+## Keeping windows open while tuning
+
+**Particle Effects Management**, **Filter Effects Management**, **Manage API Effects**, **Manage Layers**, **User Particle Effects**, and **Sound Effects Manager** are separate applications. Keeping **Manage Layers** open beside the window that owns an effect can make a complex Scene easier to tune.

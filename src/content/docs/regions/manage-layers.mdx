@@ -1,0 +1,121 @@
+---
+title: Manage Layers
+description: Reorder Scene, Region, and API effects in FXMaster’s global compositing stack.
+---
+
+import ScreenshotPreview from '../../../components/ScreenshotPreview.astro';
+
+<span class="fxm-control-label" data-control="layers">Manage Layers</span> presents active Scene, Region, and API effects in the order FXMaster composites them. **Order** 1 is the highest FXMaster row; larger numbers are processed beneath it.
+
+Tokens, tiles, Scene artwork, lighting, darkness, fog, and vision do not appear as rows. Use each effect’s **Below Tokens**, **Below Tiles**, **Below Foreground**, Scene Level, and vision-related settings to control how the FXMaster stack interacts with those Scene elements.
+
+## Columns
+
+<ScreenshotPreview
+  id="manage-layers-window"
+  title="Manage Layers"
+  variant="wide"
+  images={[
+    {
+      src: '/images/screenshots/manage-layers.webp',
+      alt: 'Manage Layers showing Rain, Color, and Foundry Grid rows with order, source, owner, and move actions.',
+      label: 'Layer rows',
+      caption: 'Manage Layers shows the current FXMaster stack order and provides Move up and Move down actions for each row. When Include Foundry Grid in FX Stack is enabled, Foundry Grid appears as its own row and can be reordered like the other FXMaster rows.',
+      width: 790,
+      height: 426,
+    },
+  ]}
+/>
+
+| Column | What it shows |
+|---|---|
+| Order | The row’s current position in the FXMaster stack. Order 1 is the top FXMaster row. |
+| Effect | The effect’s display name. The smaller line beneath it identifies the row as a Particle, Filter, Suppression, or Grid entry and shows its effect type. |
+| Source | Where the row came from: **Scene**, **Region**, **API**, **API - Macro**, or **API - Preset**. |
+| Owner | The Scene name for Scene and API rows, or the Region name for Region effects and suppression rows. |
+| Level | The Scene Level selection for the row. This column appears in Foundry v14 when the Scene contains more than one Level. **All Levels** means the row is not limited to a smaller selection. |
+| Actions | The **Move up** and **Move down** buttons used to change the row’s position one step at a time. |
+
+When a row uses more than one selected Level, the **Level** column shows the first Level and an ellipsis. Hover the ellipsis to see the additional Levels.
+
+The optional **Foundry Grid** row appears when the grid is included in the FXMaster stack through its related setting.
+
+## Masking and performance
+
+**Manage Layers** only changes the order of FXMaster rows. Masking options such as **Below Tokens**, **Below Tiles**, **Below Foreground**, suppression Regions, and other Region or tile restrictions are configured on the effect or Region that owns the row. These masks require additional rendering work, so use them where they are needed and account for some added performance cost.
+
+## Include Foundry Grid in FX Stack
+
+Open **Configure Settings → Module Settings** under **Gambit’s FXMaster** and enable **Include Foundry Grid in FX Stack** to add the normal Foundry grid lines to FXMaster’s compositor input. The setting is client-specific, so each user can choose whether the grid participates in their FXMaster stack.
+
+When enabled, **Foundry Grid** appears as a row in <span class="fxm-control-label" data-control="layers">Manage Layers</span> and can be moved with the same **Move up** and **Move down** actions as an effect row:
+
+- Effects above **Foundry Grid** can render over the normal grid lines.
+- Effects below **Foundry Grid** remain behind the normal grid lines.
+- Grid highlights and controls remain above FXMaster and are not moved into the stack. The **Disable Grid Movement Highlighting** world setting can hide token movement grid-space highlights separately.
+
+## Find where a row is configured
+
+Use **Source** and **Owner** together:
+
+- **Scene:** Edit the row through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or <span class="fxm-control-label" data-control="filters">Filter Effects</span> for the Scene named in **Owner**.
+- **API**, **API - Macro**, or **API - Preset:** Review the row through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. **Owner** identifies the Scene receiving it.
+- **Region:** Open the Region named in **Owner** and edit the FXMaster behavior that created the row.
+
+Suppression rows are also owned by Regions and are configured through the Region behavior rather than an effect management window.
+
+## Reordering
+
+<ScreenshotPreview
+  id="manage-layers-reordering"
+  title="Manage Layers reordering"
+  variant="wide"
+  images={[
+    {
+      src: '/images/screenshots/manage-layers-grid-highlight.webp',
+      alt: 'Manage Layers with the Reset Order control highlighted in the upper-right corner of the window.',
+      label: 'Reset order',
+      caption: 'Select Reset Order to clear the stored custom order and return the FXMaster stack to its default arrangement.',
+      width: 790,
+      height: 426,
+    },
+  ]}
+/>
+
+Use **Move up** and **Move down** in the **Actions** column to move a row one position at a time. Select **Reset order** from the window controls to clear the stored custom order and return to the default stack arrangement.
+
+Effects created by the Direct Effect API can also request an order. Entries in an `effects` array are treated as the requested top-to-bottom order for newly created rows.
+
+```js
+await FXMASTER.api.effects.play({
+  effects: [
+    { kind: 'filter', type: 'color', options: { saturation: 0.8 } },
+    { kind: 'particle', type: 'rain', options: { topDown: true } },
+    { kind: 'filter', type: 'fog', options: { density: 0.3 } },
+  ],
+});
+```
+
+## A useful environmental order
+
+For a rainy map, a sensible starting point is:
+
+1. [Lightning](../../reference/effects/details/lightning/) or [Screen Shake](../../reference/effects/details/screenshake/).
+2. [Bloom](../../reference/effects/details/bloom/).
+3. [Color](../../reference/effects/details/color/) grading.
+4. [Rain](../../reference/effects/details/rain/) particles.
+5. [Fog](../../reference/effects/details/fog-filter/) filter.
+6. Wet-ground background below tokens.
+
+There is no universal correct order. The intended visual relationship determines the stack.
+
+## Diagnosing an unexpected result
+
+1. Use **Source** and **Owner** to locate the interface responsible for the row.
+2. Disable the suspected row through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span>, <span class="fxm-control-label" data-control="filters">Filter Effects</span>, the owning Region behavior, or <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>, then confirm whether the result changes.
+3. Re-enable it and use **Move up** or **Move down** to compare it with adjacent FXMaster rows.
+4. Confirm **Below Tokens**, **Below Tiles**, and **Below Foreground**.
+5. Confirm the Region, **Level**, and tile masks.
+6. Confirm vision and darkness settings.
+
+The owning interface defines and edits a row; **Manage Layers** controls where that row sits relative to the other FXMaster rows.

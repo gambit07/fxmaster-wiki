@@ -1,0 +1,48 @@
+---
+import { withBase } from '../utils/links';
+
+interface Props {
+  src: string;
+  title: string;
+  description: string;
+  mapName?: string;
+  mapUrl?: string;
+}
+
+const { src, title, description, mapName, mapUrl } = Astro.props;
+const resolvedSrc = withBase(src);
+---
+
+<section class="fxm-effect-showcase" aria-label={`${title} video preview`}>
+  <div class="fxm-effect-showcase__video-wrap">
+    <video
+      class="fxm-effect-showcase__video"
+      src={resolvedSrc}
+      autoplay
+      muted
+      loop
+      playsinline
+      controls
+      preload="metadata"
+    >
+      Sorry, the video preview could not be loaded.
+    </video>
+  </div>
+  <div class="fxm-effect-showcase__meta">
+    <div class="fxm-effect-showcase__meta-item fxm-effect-showcase__preview-credit">
+      <button type="button" class="fxm-effect-showcase__meta-trigger fxm-effect-showcase__preview-trigger">Preview</button>
+      <div class="fxm-effect-showcase__meta-panel fxm-effect-showcase__preview-panel" role="note" aria-label={`${title} preview description`}>
+        <span>{description}</span>
+      </div>
+    </div>
+    {mapName && mapUrl && (
+      <div class="fxm-effect-showcase__meta-item fxm-effect-showcase__map-credit">
+        <button type="button" class="fxm-effect-showcase__meta-trigger fxm-effect-showcase__map-trigger">Map maker</button>
+        <div class="fxm-effect-showcase__meta-panel fxm-effect-showcase__map-panel" role="note" aria-label={`Map credit for ${title}`}>
+          <span>Map:</span>
+          <a href={mapUrl} target="_blank" rel="noopener noreferrer">{mapName}</a>
+        </div>
+      </div>
+    )}
+  </div>
+</section>

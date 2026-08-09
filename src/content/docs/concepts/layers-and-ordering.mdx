@@ -1,0 +1,49 @@
+---
+title: Layers and Ordering
+description: Control FXMaster stack order, place effects below Scene elements, and choose how effects interact with vision and lighting.
+---
+
+FXMaster combines active Scene, Region, and API effects in one ordered stack. The stack controls the order of FXMaster effects relative to one another. Separate placement controls determine whether an effect is masked below tokens, tiles, foreground artwork, or presented above fog and vision.
+
+## What each layer control changes
+
+| Control | What it changes |
+|---|---|
+| <span class="fxm-control-label" data-control="layers">Manage Layers</span> | Sets which FXMaster effect rows are processed above or below other FXMaster effect rows. |
+| Below Tokens | Prevents the effect from drawing over token artwork. |
+| Below Tiles | Prevents the effect from drawing over tile artwork where the effect supports the option. |
+| Below Foreground | Keeps the effect beneath foreground coverage. |
+| Display Effects Above Fog/Vision | Raises eligible effects above fog of war and token vision while preserving hidden artwork masking. |
+
+Tokens, tiles, Scene artwork, lighting, and vision are not rows in **Manage Layers**. Their relationship to an effect is controlled by the placement options above.
+
+## Masking and performance
+
+Masking features such as **Below Tokens**, **Below Tiles**, **Below Foreground**, suppression Regions, and other Region or tile restrictions require additional rendering work. Use them where the visual result needs them, but expect some added performance cost compared with an effect that does not use those masks.
+
+## <span class="fxm-control-label" data-control="layers">Manage Layers</span>
+
+The **Manage Layers** window combines Scene, Region, and API rows in their current FXMaster compositing order. The top row is the highest FXMaster layer. Use the window to:
+
+1. Identify a row through its **Effect**, **Source**, **Owner**, and **Level** columns.
+2. Move it one position at a time with the **Move up** and **Move down** buttons in **Actions**.
+3. Compare its **Order** with the other active FXMaster rows.
+4. Select **Reset order** from the window controls when the stack needs to return to its default arrangement.
+
+Edit or hide a row through the interface that owns it: <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span>, <span class="fxm-control-label" data-control="filters">Filter Effects</span>, the owning Region behavior, or <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. **Manage Layers** only changes stack order.
+
+See [Manage Layers](../../regions/manage-layers/) for a column-by-column reference.
+
+## Why order matters
+
+Consider [Bloom](../../reference/effects/details/bloom/) and [Color](../../reference/effects/details/color/):
+
+- **[Bloom](../../reference/effects/details/bloom/) above [Color](../../reference/effects/details/color/):** Bloom receives the color-graded image.
+- **[Color](../../reference/effects/details/color/) above [Bloom](../../reference/effects/details/bloom/):** Color grades the image after Bloom has been applied.
+
+Particle rows follow the same stack order. Consider [Rain](../../reference/effects/details/rain/) and the [Fog filter](../../reference/effects/details/fog-filter/):
+
+- **[Rain](../../reference/effects/details/rain/) above [Fog](../../reference/effects/details/fog-filter/):** Rain is rendered above the Fog filter, keeping the rain more distinct through the haze.
+- **[Fog](../../reference/effects/details/fog-filter/) above [Rain](../../reference/effects/details/rain/):** Fog is rendered above Rain, so the haze also softens the rain particles.
+
+The same type of difference applies when [Underwater](../../reference/effects/details/underwater/), [Water](../../reference/effects/details/water/), [Fire](../../reference/effects/details/fire/), [Ice](../../reference/effects/details/ice/), [Glitch](../../reference/effects/details/glitch/), and other particle or filter rows overlap.

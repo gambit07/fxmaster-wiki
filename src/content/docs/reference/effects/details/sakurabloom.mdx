@@ -1,0 +1,96 @@
+---
+title: "Sakura Bloom"
+description: "Sakura bloom particles with top-down and orbit modes, rotation, synchronized direction, and persistent background accumulation."
+sidebar:
+  order: 30
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Ambient reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: sakurabloom</span>
+</div>
+
+<EffectShowcase src="/videos/sakura-bloom.mp4" title="Sakura Bloom" description="Preview shows Sakura Bloom enabled for a Region" />
+
+Sakura bloom particles with top-down and orbit modes, rotation, synchronized direction, and persistent background accumulation.
+
+Ambient effects add visible movement without replacing the full weather setup. Use them on their own or layer them with another particle or filter.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Particle effect |
+| Category | Ambient |
+| Runtime type | `sakurabloom` |
+| Exposed parameters | 36 |
+
+## Airborne petals and accumulation
+
+Within an enabled Sakura Bloom effect, directional or Top Down petals and optional **Background** accumulation are configured separately. Disabling Sakura Bloom disables both layers. Choose **Top Down** before adjusting **Rotation Strength**, **Direction**, **Scale**, **Speed**, and **Density**.
+
+### Background petals
+
+**Background** adds persistent coverage with immediate or timed fill, opacity, coverage, variation, pile amount, pile size, and a separate **Ground Particle Size**.
+
+### Token trails
+
+**Token Trails** disturbs the accumulated petals. **Trail Width**, **Trail Strength**, and **Trail Swirl** define the path, **Trail Lift Chance** returns some petals to the airborne layer, and the settle controls determine how the surface returns.
+
+## Important controls
+
+- **Top Down:** Switches Sakura Bloom to the overhead presentation intended for top-down maps. This changes particle projection and movement, so set it before finalizing scale and direction.
+- **Rotation Strength:** Controls how strongly sakura bloom particles rotate while moving. Higher values produce more visible turning and spin.
+- **Direction:** Sets the primary travel direction for sakura bloom particles. Directional Spread can add variation around this angle.
+- **Background:** Render a persistent field of settled particles behind the active effect. The field follows the same stack placement, scene or Region mask, Levels selection, and below-token/tile settings.
+- **Token Trails:** Allows moving tokens to disturb the persistent background and leave visible trails through it.
+
+## Setup notes
+
+- Top Down controls the airborne presentation, while Background and Token Trails control accumulated petals.
+- Tune Ground Particle Size separately from the airborne Scale.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Sakura Bloom | `sakura-bloom` | FXMaster+ | Normal, Top Down |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="sakurabloom" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikisakurabloom_p",
+    "type": "sakurabloom",
+    "options": {
+      "belowTokens": false,
+      "tint": {
+        "value": "#FFFFFF",
+        "apply": false
+      },
+      "topDown": false,
+      "orbit": false,
+      "scale": 0.15
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

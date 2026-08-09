@@ -1,0 +1,186 @@
+---
+import reference from '../data/reference.json';
+import { withBase } from '../utils/links';
+import { modulePackagePage } from '../data/module-links.mjs';
+
+interface Props {
+  tier?: 'all' | 'free' | 'plus';
+  interactive?: boolean;
+}
+
+const { tier = 'all', interactive = true } = Astro.props;
+const showTierFilter = interactive && tier === 'all';
+const variantsById = new Map<string, typeof reference.presets>();
+for (const preset of reference.presets) {
+  if (tier !== 'all' && preset.tier !== tier) continue;
+  const variants = variantsById.get(preset.id) ?? [];
+  variants.push(preset);
+  variantsById.set(preset.id, variants);
+}
+
+type PresetTier = 'free' | 'plus';
+const tierOrder: Record<PresetTier, number> = { free: 0, plus: 1 };
+const presets = Array.from(variantsById, ([id, variants]) => {
+  const tiers = Array.from(new Set(variants.map((entry) => entry.tier as PresetTier))).sort((a, b) => tierOrder[a] - tierOrder[b]);
+  const versions = tiers.map((versionTier) => {
+    const versionVariants = variants.filter((entry) => entry.tier === versionTier);
+    return {
+      tier: versionTier,
+      hasTopDown: versionVariants.some((entry) => entry.variant === 'topDown'),
+      particles: Array.from(new Set(versionVariants.flatMap((entry) => entry.particles))),
+      filters: Array.from(new Set(versionVariants.flatMap((entry) => entry.filters))),
+    };
+  });
+
+  return {
+    id,
+    label: variants[0].label,
+    tiers,
+    versions,
+  };
+}).sort((a, b) => a.label.localeCompare(b.label));
+
+const effectReference = (kind: 'particle' | 'filter', id: string) => {
+  const referenceId = kind === 'filter' && id === 'fog' ? 'fog-filter' : id;
+  const effect = reference.effects.find((entry) => entry.kind === kind && entry.id === referenceId);
+  return effect
+    ? { href: withBase(`/reference/effects/details/${effect.id}/`), label: effect.label }
+    : { href: null, label: id };
+};
+---
+
+<section class="fxm-preset-catalog" data-fxm-preset-catalog>
+  {interactive && (
+    <div class="fxm-catalog-controls fxm-catalog-controls--presets" role="search" aria-label="Filter the preset catalog">
+      <label class="fxm-catalog-search">
+        <span>Search presets</span>
+        <input type="search" placeholder="Blizzard, gravewind, aurora…" autocomplete="off" data-fxm-preset-search />
+      </label>
+      {showTierFilter && (
+        <label>
+          <span>Availability</span>
+          <select data-fxm-preset-tier>
+            <option value="all">All presets</option>
+            <option value="free">Has a free version</option>
+            <option value="plus">Has an FXMaster+ version</option>
+          </select>
+        </label>
+      )}
+    </div>
+  )}
+
+  {interactive && <p class="fxm-catalog-count" aria-live="polite" data-fxm-preset-count>Showing {presets.length} presets</p>}
+
+  <div class="fxm-preset-grid">
+    {presets.map((preset) => (
+      <article
+        id={preset.id}
+        class="fxm-preset-card"
+        data-fxm-preset-card
+        data-tiers={preset.tiers.join(' ')}
+        data-search={`${preset.label} ${preset.id} ${preset.tiers.join(' ')} ${preset.versions.flatMap((version) => [version.hasTopDown ? 'top down' : '', ...version.particles, ...version.filters]).join(' ')}`.toLowerCase()}
+      >
+        <div class="fxm-preset-card__heading">
+          <div>
+            <span class="fxm-kicker">Preset</span>
+            <h3>{preset.label}</h3>
+          </div>
+        </div>
+
+        <div class="fxm-preset-versions">
+          {preset.versions.map((version) => (
+            <section class="fxm-preset-version" aria-label={`${version.tier === 'plus' ? 'FXMaster+' : 'Free'} version`}>
+              <div class="fxm-preset-version__heading">
+                {version.tier === 'plus' ? (
+                  <a
+                    class="fxm-badge"
+                    data-tier="plus"
+                    href={modulePackagePage('plus')}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="Open Gambit's FXMaster+ on Foundry VTT"
+                  >
+                    FXMaster+
+                  </a>
+                ) : (
+                  <span class="fxm-badge" data-tier="core">Free</span>
+                )}
+                {version.hasTopDown && <span class="fxm-preset-top-down">Includes Top Down</span>}
+              </div>
+
+              <div class="fxm-preset-version__effects">
+                {version.particles.length > 0 && (
+                  <div>
+                    <strong>Particles</strong>
+                    <div class="fxm-chip-list">
+                      {version.particles.map((effectId) => {
+                        const effect = effectReference('particle', effectId);
+                        return effect.href ? <a class="fxm-chip" href={effect.href}>{effect.label}</a> : <span class="fxm-chip">{effect.label}</span>;
+                      })}
+                    </div>
+                  </div>
+                )}
+                {version.filters.length > 0 && (
+                  <div>
+                    <strong>Filters</strong>
+                    <div class="fxm-chip-list">
+                      {version.filters.map((effectId) => {
+                        const effect = effectReference('filter', effectId);
+                        return effect.href ? <a class="fxm-chip" href={effect.href}>{effect.label}</a> : <span class="fxm-chip">{effect.label}</span>;
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+          ))}
+        </div>
+
+        <code class="fxm-preset-command">await FXMASTER.api.presets.play("{preset.id}");</code>
+      </article>
+    ))}
+  </div>
+
+  {interactive && <p class="fxm-empty-state" hidden data-fxm-preset-empty>No presets match those filters.</p>}
+</section>
+
+<script>
+  const normalizePresetValue = (value: unknown): string => String(value ?? '').trim().toLowerCase();
+
+  function initializePresetCatalog(catalog: HTMLElement): void {
+    if (catalog.dataset.fxmReady === 'true') return;
+    catalog.dataset.fxmReady = 'true';
+
+    const search = catalog.querySelector<HTMLInputElement>('[data-fxm-preset-search]');
+    const tier = catalog.querySelector<HTMLSelectElement>('[data-fxm-preset-tier]');
+    const cards = [...catalog.querySelectorAll<HTMLElement>('[data-fxm-preset-card]')];
+    const count = catalog.querySelector<HTMLElement>('[data-fxm-preset-count]');
+    const empty = catalog.querySelector<HTMLElement>('[data-fxm-preset-empty]');
+
+    const refresh = (): void => {
+      const query = normalizePresetValue(search?.value);
+      const tierValue = normalizePresetValue(tier?.value || 'all');
+      let visible = 0;
+      for (const card of cards) {
+        const tiers = normalizePresetValue(card.dataset.tiers).split(/\s+/).filter(Boolean);
+        const matchesTier = tierValue === 'all' || tiers.includes(tierValue);
+        const show = (!query || normalizePresetValue(card.dataset.search).includes(query)) && matchesTier;
+        card.hidden = !show;
+        if (show) visible += 1;
+      }
+      if (count) count.textContent = `Showing ${visible} ${visible === 1 ? 'preset' : 'presets'}`;
+      if (empty) empty.hidden = visible !== 0;
+    };
+
+    search?.addEventListener('input', refresh);
+    tier?.addEventListener('change', refresh);
+    refresh();
+  }
+
+  const initializePresetCatalogs = (): void => {
+    document.querySelectorAll<HTMLElement>('[data-fxm-preset-catalog]').forEach(initializePresetCatalog);
+  };
+
+  initializePresetCatalogs();
+  document.addEventListener('astro:page-load', initializePresetCatalogs);
+</script>

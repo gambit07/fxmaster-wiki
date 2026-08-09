@@ -1,0 +1,49 @@
+---
+title: FXMaster vs. FXMaster+
+description: See which effects and features are included with FXMaster and which are added by FXMaster+.
+---
+import FeatureMatrix from '../../../components/FeatureMatrix.astro';
+
+FXMaster is the core module that provides the effect managers, Region support, layer controls, presets, and API. FXMaster+ is installed on top of FXMaster and adds more effects and features through the same controls.
+
+<FeatureMatrix />
+
+## FXMaster
+
+FXMaster includes 24 built-in effects:
+
+- 16 particle effects covering creatures, ambient motion, foliage, and weather.
+- 8 filter effects covering color, fog, lightning, screen movement, and environmental distortion.
+- Scene-wide and Region-based particle and filter management.
+- Effect stack ordering, suppression Regions, and Scene Level controls.
+- Preset and Direct Effect APIs, saved macros, and the <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span> window.
+- 24 preset families with a Free FXMaster definition.
+
+## FXMaster+
+
+FXMaster+ adds 19 more effects:
+
+- 10 particle effects, including [Fire](../../reference/effects/details/fireparticles/), [Fish](../../reference/effects/details/fish/), [Fireflies](../../reference/effects/details/fireflies/), [Ghosts](../../reference/effects/details/ghosts/), [Magic Crystals](../../reference/effects/details/magiccrystals/), [Sakura Bloom](../../reference/effects/details/sakurabloom/), [Sakura Blossoms](../../reference/effects/details/sakurablossoms/), [Sandstorm](../../reference/effects/details/sandstorm/), [Summer Leaves](../../reference/effects/details/summerleaves/), and [Wind Wisps](../../reference/effects/details/windwisps/).
+- 9 filters, including [Aurora Borealis](../../reference/effects/details/auroraborealis/), [Duststorm](../../reference/effects/details/duststorm/), [Fire](../../reference/effects/details/fire/), [Glitch](../../reference/effects/details/glitch/), [Ice](../../reference/effects/details/ice/), [Lightning Bolts](../../reference/effects/details/lightningbolts/), [Sunlight](../../reference/effects/details/sunlight/), [Water](../../reference/effects/details/water/), and [Wind](../../reference/effects/details/wind/).
+- **Custom Particle Effects**, including the **Sound Only** custom-effect type.
+- The **Sound Effects Manager**, opened through <span class="fxm-control-label" data-control="soundfx-manager">Manage Sound Effects</span>, for environmental effects and token movement.
+- Manual placement for supported flames, ghosts, and custom particles.
+- Wind painting and Water feature options.
+- 22 preset families with an FXMaster+ definition, including four that also have a Free FXMaster version.
+
+## Check which module is active
+
+Macros and integrations can check availability before using an FXMaster+ effect or preset:
+
+```js
+const hasCore = FXMASTER.api.presets.hasFxmaster();
+const hasPlus = FXMASTER.api.presets.hasFxmasterPlus();
+
+const presets = FXMASTER.api.presets.listValid();
+```
+
+`listValid()` returns the presets that can run with the effect types currently registered in the world.
+
+## Module badges
+
+Use the **FXMaster** and **FXMaster+** badges to identify which module provides an effect. Select either badge to open that module’s Foundry VTT package page. Preset entries identify whether a Free version, an FXMaster+ version, or both are available.

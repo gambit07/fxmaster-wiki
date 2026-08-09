@@ -1,0 +1,84 @@
+---
+title: "Fog"
+description: "Shader-based fog with configurable color, scale, speed, density, and directional movement."
+sidebar:
+  order: 18
+  badge:
+    text: "FXMaster · Filter"
+    variant: tip
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+
+<div class="fxm-kicker">Environmental reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="core" href="https://foundryvtt.com/packages/fxmaster/" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster on Foundry VTT">FXMaster</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: fog</span>
+</div>
+
+Shader-based fog with configurable color, scale, speed, density, and directional movement.
+
+Environmental filters change the Scene surface or atmosphere. They can cover the full Scene, be limited to Regions, and be moved within the effect stack.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster |
+| Effect kind | Filter effect |
+| Category | Environmental |
+| Runtime type | `fog` |
+| Exposed parameters | 19 |
+
+## Important controls
+
+- **Scale:** Changes the size of the fog pattern. Lower values create smaller, tighter detail; higher values create broader fog banks.
+- **Opacity:** Changes how opaque the continuous fog layer appears. Higher values hide more of the underlying map.
+- **Direction:** Sets the direction the fog layer travels across the canvas.
+- **Synchronized Direction:** Uses the active Wind or Duststorm direction for Fog. When the source direction changes, this effect follows it.
+- **Token Trails:** Moving visible tokens temporarily lower fog opacity along their path. The cleared area fades smoothly back to normal fog opacity.
+
+## Setup notes
+
+- This is the Fog filter. The [particle Fog effect](../fog/) creates separate moving banks instead.
+- Token Trails can temporarily clear haze around moving tokens and settle back over time.
+- Synchronized Direction allows the filter to follow compatible [Wind](../wind/) or [Duststorm](../duststorm/) effects.
+
+## Bundled preset usage
+
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Aether Haze | `aether-haze` | FXMaster+ | Normal |
+| Fog | `fog` | FXMaster | Normal |
+| Heat Wave | `heat-wave` | FXMaster | Normal |
+| Luminous Sky | `luminous-sky` | FXMaster+ | Normal |
+| Mist | `mist` | FXMaster | Normal |
+| Rolling Fog | `rolling-fog` | FXMaster | Normal |
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="fog-filter" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikifogfilter_f",
+    "type": "fog",
+    "options": {
+      "color": "#b9c4c9",
+      "speed": 0.3,
+      "density": 0.45,
+      "direction": 180,
+      "tokenTrailsEnabled": false
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.
