@@ -1153,6 +1153,16 @@ if (environmentalFiltersSource.includes('several high-strength filters are stack
 }
 
 const homeSource = read(path.join(docsRoot, 'index.mdx'));
+const expectedHeroActions = [
+  'link: ./getting-started/installation/',
+  'link: ./reference/effects/',
+];
+for (const actionLink of expectedHeroActions) {
+  if (!homeSource.includes(actionLink)) fail(`The home-page hero is missing its repository-safe action link: ${actionLink}`);
+}
+if (/^\s+link:\s+\/(?!\/)/m.test(homeSource)) {
+  fail('The home-page hero contains a root-absolute action link that will bypass the GitHub Pages base path.');
+}
 const popularEffectOrder = "ids={['fireparticles', 'water', 'fish', 'clouds', 'fog-filter', 'snowstorm', 'lightning', 'screenshake']}";
 if (!homeSource.includes(popularEffectOrder)) fail('The home page popular effects are missing or out of order.');
 if (!homeSource.includes('Add FXMaster+ features')) fail('The home page is missing the Add FXMaster+ features section.');
