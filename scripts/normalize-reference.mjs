@@ -44,6 +44,7 @@ const labels = {
   soundFxManualSoundIds: 'Sound FX Sounds',
   tokenAvoidanceDispositions: 'Token Dispositions',
   fadePercent: 'Edge Fade %',
+  aboveDarkness: 'Above Darkness',
 };
 
 const tooltips = {
@@ -56,6 +57,7 @@ const tooltips = {
   soundFxManualSoundIds: 'Choose which sounds are eligible when a matching manual SoundFX rule supplies multiple sounds.',
   tokenAvoidanceDispositions: 'Choose which token dispositions this effect should avoid.',
   fadePercent: 'Softens the edge of this filter inside a Region. A value of 0 creates a hard edge; higher values create a wider transition.',
+  aboveDarkness: "Presents the filter's luminous contribution above scene darkness.",
 };
 
 const manualSoundAvailabilityDetail = 'the matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds';
@@ -183,6 +185,37 @@ function patchConditionalVisibility(effect, parameter) {
   if (effect.id === 'water' && ['causticStrength', 'causticsTint'].includes(parameter.id)) {
     parameter.showWhen = { caustics: conditionOperator('>', 0) };
   }
+
+
+  if (effect.id === 'neon') {
+    const familyModes = [{ sourceColorMode: 'families' }, { sourceColorMode: 'combined' }];
+    const customModes = [{ sourceColorMode: 'custom' }, { sourceColorMode: 'combined' }];
+    const outlineModes = [{ mode: 'outline' }, { mode: 'fillOutline' }];
+
+    if (['detectionMode', 'colorFamilies', 'threshold', 'smoothness'].includes(parameter.id)) {
+      parameter.showWhen = clone(familyModes);
+    }
+    if ([
+      'customSourceColor1', 'customSourceColor2', 'customSourceColor3',
+      'customSourceColor4', 'customSourceColor5', 'customColorRange', 'customShadeRange',
+    ].includes(parameter.id)) {
+      parameter.showWhen = clone(customModes);
+    }
+    if (['edgeDefinition', 'outlineWidth', 'outlineStrength', 'outlinePosition'].includes(parameter.id)) {
+      parameter.showWhen = clone(outlineModes);
+    }
+    if (parameter.id === 'pulseEnabled') parameter.hideWhen = { slideEnabled: true };
+    if (['pulseSpeed', 'pulseOnDuration', 'pulseOffDuration', 'pulseFadeDuration'].includes(parameter.id)) {
+      parameter.showWhen = { pulseEnabled: true };
+    }
+    if (parameter.id === 'slideEnabled') parameter.hideWhen = { pulseEnabled: true };
+    if (['slideDirection', 'slideSpeed', 'slideDuration', 'slidePauseDuration', 'slideWidth', 'slideSoftness'].includes(parameter.id)) {
+      parameter.showWhen = { slideEnabled: true };
+    }
+    if (['flickerSpeed', 'flickerAmount'].includes(parameter.id)) {
+      parameter.showWhen = { flickerEnabled: true };
+    }
+  }
 }
 
 function insertedParameter(id) {
@@ -252,6 +285,9 @@ function patchExpressionValues(effect, parameter, alreadyNormalized) {
     parameter.regionOnly = true;
     parameter.availabilityDetail = 'the Follow Region Path feature is enabled in Water Module Settings';
   }
+
+
+  if (effect.id === 'lightningbolts' && parameter.id === 'thickness') parameter.max = 3;
 
   if (parameter.id === 'fadePercent') parameter.regionOnly = true;
 

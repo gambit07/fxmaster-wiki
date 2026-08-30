@@ -63,6 +63,7 @@ A preset operation returns `false` when no compatible definition can be resolved
 | `tokenTrails` | Boolean | Enables supported token trail interactions |
 | `belowTiles` | Boolean | Moves supported rows beneath overhead tiles |
 | `belowForeground` | Boolean | Moves supported rows beneath foreground coverage |
+| `aboveDarkness` | Boolean | Presents compatible luminous filter contributions above Foundry scene darkness. Defaults to `true` when omitted. |
 | `darknessActivationEnabled` | Boolean | Explicitly enables or disables darkness gating |
 | `darknessActivationMin` | Number from 0 to 1 | Sets the minimum active darkness |
 | `darknessActivationMax` | Number from 0 to 1 | Sets the maximum active darkness |
@@ -72,6 +73,18 @@ A preset operation returns `false` when no compatible definition can be resolved
 | `scene` | Scene document or UUID | Targets another scene |
 | `silent` | Boolean | Controls missing-preset and invalid-override warnings |
 | `skipFading` | Boolean | Bypasses transition fades |
+
+### Above Darkness
+
+`aboveDarkness` applies only to filters that expose the **Above Darkness** parameter. It currently supports [Lightning](../../reference/effects/details/lightning/), [Lightning Bolts](../../reference/effects/details/lightningbolts/), [Fire](../../reference/effects/details/fire/), [Sunlight](../../reference/effects/details/sunlight/), [Aurora Borealis](../../reference/effects/details/auroraborealis/), and [Neon](../../reference/effects/details/neon/).
+
+Preset API calls default this override to `true`. Set it to `false` when those luminous contributions should remain beneath Foundry scene darkness:
+
+```js
+await FXMASTER.api.presets.play("hurricane", {
+  aboveDarkness: false
+});
+```
 
 ### Direction convention
 

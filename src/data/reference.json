@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-05T14:24:36.405Z",
+  "generatedAt": "2026-08-30T19:30:00.000Z",
   "sourceVersions": {
     "core": "8.3.4",
-    "plus": "1.1.11"
+    "plus": "1.1.13"
   },
   "effects": [
     {
@@ -5450,7 +5450,7 @@
       "label": "Lightning",
       "group": "environmental",
       "description": "Full-scene lightning flashes with timing, tint, duration, and audio-aware controls.",
-      "parameterCount": 16,
+      "parameterCount": 17,
       "parameters": [
         {
           "id": "belowTokens",
@@ -5586,6 +5586,14 @@
           },
           "tooltip": "Bass level required to trigger Audio Aware reactions. Higher = less sensitive.",
           "description": "Sets how strong a bass peak must be before Audio Aware triggers Lightning. Higher values make the trigger less sensitive."
+        },
+        {
+          "id": "aboveDarkness",
+          "label": "Above Darkness",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Presents the filter's luminous contribution above scene darkness.",
+          "description": "Presents the luminous contribution from Lightning above Foundry scene darkness. This option is available only on compatible luminous filters."
         },
         {
           "id": "darknessActivationEnabled",
@@ -5782,8 +5790,8 @@
       "package": "core",
       "label": "Predator",
       "group": "visual",
-      "description": "Applies animated refractive noise with a chromatic edge treatment.",
-      "parameterCount": 12,
+      "description": "World-locked thermal scan treatment with false-color heat mapping, edge definition, scanlines, and sensor noise.",
+      "parameterCount": 16,
       "parameters": [
         {
           "id": "belowTokens",
@@ -5817,34 +5825,82 @@
           "description": "Limits Predator to the selected Scene Levels. Leave All Levels selected when the effect should appear at every elevation."
         },
         {
-          "id": "noise",
-          "label": "Noise Density",
+          "id": "thermalStrength",
+          "label": "Thermal Strength",
           "type": "range",
-          "default": 0.1,
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "tooltip": "Blends the false-color thermal palette into the source image. 0 retains source colors; 1 uses full thermal color.",
+          "description": "Blends the false-color thermal palette into the source image. 0 retains the original scene colors; 1 uses the full thermal treatment."
+        },
+        {
+          "id": "thermalContrast",
+          "label": "Thermal Contrast",
+          "type": "range",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "tooltip": "Separates cool and hot values in the thermal palette. Higher values create stronger temperature differences.",
+          "description": "Separates cool and hot values in the thermal palette. Higher values create stronger temperature differences across the scene."
+        },
+        {
+          "id": "edgeDefinition",
+          "label": "Edge Definition",
+          "type": "range",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "tooltip": "Highlights local temperature boundaries for sharper thermal silhouettes.",
+          "description": "Highlights local temperature boundaries so creatures, objects, and terrain produce sharper thermal silhouettes."
+        },
+        {
+          "id": "scanlineStrength",
+          "label": "Scanline Strength",
+          "type": "range",
+          "default": 1,
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "tooltip": "Controls scanline brightness variation. Set to 0 to hide the scanline pattern.",
+          "description": "Controls the brightness variation of the moving scanline pattern. Set it to 0 to hide the scanlines while keeping the other Predator systems active."
+        },
+        {
+          "id": "noise",
+          "label": "Sensor Noise",
+          "type": "range",
+          "default": 0,
           "min": 0,
           "max": 1,
           "step": 0.1,
-          "description": "Controls the amount of animated refractive noise inside the Predator-style distortion."
+          "tooltip": "Adds animated sensor grain.",
+          "description": "Adds animated sensor grain across the thermal image. Higher values create a noisier and less stable sensor presentation."
         },
         {
-          "id": "period",
-          "label": "Speed",
+          "id": "speed",
+          "label": "Scanline Speed",
           "type": "range",
-          "default": 0.001,
+          "default": 0.3,
           "min": 0,
-          "max": 0.1,
-          "step": 0.001,
-          "description": "Changes how quickly the distortion pattern evolves and moves across the scene."
+          "max": 1,
+          "step": 0.01,
+          "tooltip": "Controls scanline movement speed. 0 stops movement; 1 applies the maximum configured speed.",
+          "description": "Controls how quickly the scanline pattern travels across the scene. 0 stops the scanline movement."
         },
         {
           "id": "lineWidth",
-          "label": "Line Width",
+          "label": "Scanline Width",
           "type": "range",
-          "default": 3,
-          "min": 0.5,
-          "max": 10,
-          "step": 0.5,
-          "description": "Changes the width of the bright refractive outline around distorted areas."
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "decimals": 2,
+          "tooltip": "Controls scanline width.",
+          "description": "Controls the width of the moving scanlines. Higher values create broader bands across the thermal image."
         },
         {
           "id": "soundFxEnabled",
@@ -5863,9 +5919,9 @@
           "showWhen": {
             "soundFxEnabled": true
           },
+          "availabilityDetail": "the matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds",
           "tooltip": "Choose which sounds are eligible when a matching manual SoundFX rule supplies multiple sounds.",
-          "description": "Limits Predator to selected sounds when a matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds. Leave the selection empty to use the rule's normal sound selection.",
-          "availabilityDetail": "the matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds"
+          "description": "Limits Predator to selected sounds when a matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds. Leave the selection empty to use the rule's normal sound selection."
         },
         {
           "id": "darknessActivationEnabled",
@@ -10008,7 +10064,7 @@
       "label": "Sunlight",
       "group": "environmental",
       "description": "Directional sunlight rays with beam, color, edge fade, and intensity controls.",
-      "parameterCount": 17,
+      "parameterCount": 18,
       "parameters": [
         {
           "id": "belowTokens",
@@ -10139,6 +10195,14 @@
           "max": 1,
           "step": 0.01,
           "description": "Changes how quickly the sunlight texture shifts and shimmers within the rays."
+        },
+        {
+          "id": "aboveDarkness",
+          "label": "Above Darkness",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Presents the filter's luminous contribution above scene darkness.",
+          "description": "Presents the luminous contribution from Sunlight above Foundry scene darkness. This option is available only on compatible luminous filters."
         },
         {
           "id": "darknessActivationEnabled",
@@ -11257,7 +11321,7 @@
       "label": "Lightning Bolts",
       "group": "environmental",
       "description": "Animated horizontal or top-down lightning bolts with branching and flash synchronization.",
-      "parameterCount": 31,
+      "parameterCount": 32,
       "parameters": [
         {
           "id": "belowTokens",
@@ -11388,7 +11452,7 @@
           "type": "range",
           "default": 2.2,
           "min": 1,
-          "max": 5,
+          "max": 3,
           "step": 0.1,
           "showWhen": [
             {
@@ -11591,6 +11655,14 @@
           },
           "tooltip": "Bass level required to trigger Audio Aware reactions. Higher = less sensitive.",
           "description": "Sets how strong a bass peak must be before Audio Aware triggers Lightning Bolts. Higher values make the trigger less sensitive."
+        },
+        {
+          "id": "aboveDarkness",
+          "label": "Above Darkness",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Presents the filter's luminous contribution above scene darkness.",
+          "description": "Presents the luminous contribution from Lightning Bolts above Foundry scene darkness. This option is available only on compatible luminous filters."
         },
         {
           "id": "directionalMovement",
@@ -12477,7 +12549,7 @@
       "label": "Aurora Borealis",
       "group": "environmental",
       "description": "Aurora curtains in side, top-down, or horizon presentations with palettes, haze, and motion controls.",
-      "parameterCount": 34,
+      "parameterCount": 35,
       "parameters": [
         {
           "id": "belowTokens",
@@ -12821,6 +12893,14 @@
           "description": "Controls how far the horizon haze extends vertically from the aurora path."
         },
         {
+          "id": "aboveDarkness",
+          "label": "Above Darkness",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Presents the filter's luminous contribution above scene darkness.",
+          "description": "Presents the luminous contribution from Aurora Borealis above Foundry scene darkness. This option is available only on compatible luminous filters."
+        },
+        {
           "id": "darknessActivationEnabled",
           "label": "Darkness Activation",
           "type": "checkbox",
@@ -12866,7 +12946,7 @@
       "label": "Fire",
       "group": "environmental",
       "description": "Procedural top-down fire with flame spread, turbulence, glow, smoke, heat, and distortion.",
-      "parameterCount": 26,
+      "parameterCount": 27,
       "parameters": [
         {
           "id": "belowTokens",
@@ -13103,6 +13183,14 @@
           "availabilityDetail": "the matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds"
         },
         {
+          "id": "aboveDarkness",
+          "label": "Above Darkness",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Presents the filter's luminous contribution above scene darkness.",
+          "description": "Presents the luminous contribution from Fire above Foundry scene darkness. This option is available only on compatible luminous filters."
+        },
+        {
           "id": "darknessActivationEnabled",
           "label": "Darkness Activation",
           "type": "checkbox",
@@ -13138,6 +13226,696 @@
           "regionOnly": true,
           "tooltip": "Softens the edge of this filter inside a Region. A value of 0 creates a hard edge; higher values create a wider transition.",
           "description": "Controls the edge fade for Fire when it is used in an FXMaster: Filter Effects Region behavior. A value of 0 creates a hard Region boundary; higher values soften the transition between filtered and unfiltered areas."
+        }
+      ]
+    },
+    {
+      "id": "neon",
+      "kind": "filter",
+      "package": "plus",
+      "label": "Neon",
+      "group": "visual",
+      "description": "Selective neon fill, outlines, halo, source-color matching, pulse, slide, flicker, and above-darkness presentation.",
+      "parameterCount": 48,
+      "parameters": [
+        {
+          "id": "belowTokens",
+          "label": "Below Tokens",
+          "type": "checkbox",
+          "default": false,
+          "description": "Places Neon behind token artwork in the effect stack. This changes whether tokens appear in front of the effect; it does not change where the effect is generated."
+        },
+        {
+          "id": "belowTiles",
+          "label": "Below Tiles",
+          "type": "checkbox",
+          "default": false,
+          "description": "Places Neon below overhead tile artwork. Enable it when roofs, canopies, or other overhead tiles should cover the effect."
+        },
+        {
+          "id": "belowForeground",
+          "label": "Below Foreground",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Renders effects underneath foreground coverage visually.",
+          "description": "Places Neon below foreground coverage so foreground artwork can visually cover the effect."
+        },
+        {
+          "id": "levels",
+          "label": "Levels",
+          "type": "scene-levels",
+          "default": [],
+          "tooltip": "Limit this scene effect to selected scene levels. Leave All Levels selected to render everywhere.",
+          "sceneOnly": true,
+          "description": "Limits Neon to the selected Scene Levels. Leave All Levels selected when the effect should appear at every elevation."
+        },
+        {
+          "id": "color",
+          "label": "Core Color",
+          "type": "color",
+          "default": {
+            "value": "#00eaff",
+            "apply": true
+          },
+          "description": "Sets the Fill and Outline color. Disable Apply to retain the matched source colors instead of replacing them."
+        },
+        {
+          "id": "soundFxEnabled",
+          "label": "Sound FX",
+          "type": "checkbox",
+          "default": false,
+          "description": "Enables audio for Neon when a matching active FXMaster+ SoundFX rule is available. This setting does not create sound by itself."
+        },
+        {
+          "id": "soundFxManualSoundIds",
+          "label": "Sound FX Sounds",
+          "type": "multi-select",
+          "default": [],
+          "options": {},
+          "allowEmpty": true,
+          "showWhen": {
+            "soundFxEnabled": true
+          },
+          "availabilityDetail": "the matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds",
+          "tooltip": "Choose which sounds are eligible when a matching manual SoundFX rule supplies multiple sounds.",
+          "description": "Limits Neon to selected sounds when a matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds. Leave the selection empty to use the rule's normal sound selection."
+        },
+        {
+          "id": "haloColor",
+          "label": "Halo Color",
+          "type": "color",
+          "default": {
+            "value": "#7dffff",
+            "apply": true
+          },
+          "description": "Sets the Halo color. Disable Apply to derive the halo color from the matched source artwork."
+        },
+        {
+          "id": "mode",
+          "label": "Neon Style",
+          "type": "select",
+          "default": "fill",
+          "options": {
+            "fill": "Fill",
+            "outline": "Outline",
+            "fillOutline": "Fill + Outline"
+          },
+          "description": "Selects Fill, Outline, or Fill + Outline for the matched parts of the scene."
+        },
+        {
+          "id": "sourceColorMode",
+          "label": "Source Color Matching",
+          "type": "select",
+          "default": "families",
+          "options": {
+            "families": "Color Families",
+            "custom": "Custom Colors",
+            "combined": "Families + Custom Colors"
+          },
+          "description": "Chooses whether Neon matches Color Families, Custom Colors, or both."
+        },
+        {
+          "id": "detectionMode",
+          "label": "Detection Mode",
+          "type": "select",
+          "default": "combined",
+          "options": {
+            "brightness": "Brightness",
+            "saturation": "Saturation",
+            "combined": "Combined"
+          },
+          "showWhen": [
+            {
+              "sourceColorMode": "families"
+            },
+            {
+              "sourceColorMode": "combined"
+            }
+          ],
+          "description": "Chooses the brightness, saturation, or combined signal used while matching Color Families."
+        },
+        {
+          "id": "colorFamilies",
+          "label": "Affected Source Colors",
+          "type": "multi-select",
+          "default": [
+            "all"
+          ],
+          "options": {
+            "all": "All",
+            "red": "Red",
+            "orange": "Orange",
+            "yellow": "Yellow",
+            "lime": "Lime / Yellow-Green",
+            "green": "Green",
+            "teal": "Teal",
+            "cyan": "Cyan",
+            "blue": "Blue",
+            "indigo": "Indigo",
+            "purple": "Purple",
+            "magenta": "Magenta",
+            "pink": "Pink",
+            "brown": "Brown",
+            "tan": "Tan / Beige",
+            "neutral": "White / Gray"
+          },
+          "allowEmpty": false,
+          "showWhen": [
+            {
+              "sourceColorMode": "families"
+            },
+            {
+              "sourceColorMode": "combined"
+            }
+          ],
+          "description": "Selects which source color families are eligible for Neon. All includes every available family."
+        },
+        {
+          "id": "threshold",
+          "label": "Threshold",
+          "type": "range",
+          "default": 0.42,
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "showWhen": [
+            {
+              "sourceColorMode": "families"
+            },
+            {
+              "sourceColorMode": "combined"
+            }
+          ],
+          "tooltip": "Sets the minimum Color Family match signal. Lower values include more source pixels.",
+          "description": "Sets the minimum Color Family match signal. Lower values include more source pixels; higher values restrict the match."
+        },
+        {
+          "id": "smoothness",
+          "label": "Smoothness",
+          "type": "range",
+          "default": 0.36,
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "showWhen": [
+            {
+              "sourceColorMode": "families"
+            },
+            {
+              "sourceColorMode": "combined"
+            }
+          ],
+          "tooltip": "Softens the Threshold edge. 0 is hard; higher values broaden the transition.",
+          "description": "Softens the Threshold boundary. 0 creates a hard cutoff; higher values broaden the transition around matched pixels."
+        },
+        {
+          "id": "customSourceColor1",
+          "label": "Custom Source Color 1",
+          "type": "color",
+          "default": {
+            "value": "#ffffff",
+            "apply": true
+          },
+          "showWhen": [
+            {
+              "sourceColorMode": "custom"
+            },
+            {
+              "sourceColorMode": "combined"
+            }
+          ],
+          "description": "Selects the first custom source color to match. Disable Apply to ignore this slot."
+        },
+        {
+          "id": "customSourceColor2",
+          "label": "Custom Source Color 2",
+          "type": "color",
+          "default": {
+            "value": "#ff0000",
+            "apply": false
+          },
+          "showWhen": [
+            {
+              "sourceColorMode": "custom"
+            },
+            {
+              "sourceColorMode": "combined"
+            }
+          ],
+          "description": "Selects the second custom source color to match. Disable Apply to ignore this slot."
+        },
+        {
+          "id": "customSourceColor3",
+          "label": "Custom Source Color 3",
+          "type": "color",
+          "default": {
+            "value": "#00ff00",
+            "apply": false
+          },
+          "showWhen": [
+            {
+              "sourceColorMode": "custom"
+            },
+            {
+              "sourceColorMode": "combined"
+            }
+          ],
+          "description": "Selects the third custom source color to match. Disable Apply to ignore this slot."
+        },
+        {
+          "id": "customSourceColor4",
+          "label": "Custom Source Color 4",
+          "type": "color",
+          "default": {
+            "value": "#0000ff",
+            "apply": false
+          },
+          "showWhen": [
+            {
+              "sourceColorMode": "custom"
+            },
+            {
+              "sourceColorMode": "combined"
+            }
+          ],
+          "description": "Selects the fourth custom source color to match. Disable Apply to ignore this slot."
+        },
+        {
+          "id": "customSourceColor5",
+          "label": "Custom Source Color 5",
+          "type": "color",
+          "default": {
+            "value": "#ffff00",
+            "apply": false
+          },
+          "showWhen": [
+            {
+              "sourceColorMode": "custom"
+            },
+            {
+              "sourceColorMode": "combined"
+            }
+          ],
+          "description": "Selects the fifth custom source color to match. Disable Apply to ignore this slot."
+        },
+        {
+          "id": "customColorRange",
+          "label": "Custom Color Range",
+          "type": "range",
+          "default": 0.15,
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "showWhen": [
+            {
+              "sourceColorMode": "custom"
+            },
+            {
+              "sourceColorMode": "combined"
+            }
+          ],
+          "tooltip": "Sets allowed color variation. Shade variation is controlled separately.",
+          "description": "Controls how much hue variation around each enabled custom source color is accepted. Shade variation is controlled separately."
+        },
+        {
+          "id": "customShadeRange",
+          "label": "Custom Shade Range",
+          "type": "range",
+          "default": 0.25,
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "showWhen": [
+            {
+              "sourceColorMode": "custom"
+            },
+            {
+              "sourceColorMode": "combined"
+            }
+          ],
+          "tooltip": "Sets allowed lighter and darker shade variation.",
+          "description": "Controls how much lighter or darker a source color can be while still matching an enabled custom source color."
+        },
+        {
+          "id": "intensity",
+          "label": "Intensity",
+          "type": "range",
+          "default": 0.43,
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "tooltip": "Controls overall Neon strength. Values above 0.5 boost Fill brightness more strongly; 1 applies the maximum configured intensity.",
+          "description": "Controls the overall Neon strength. Higher values increase the visible Fill and Outline contribution."
+        },
+        {
+          "id": "glow",
+          "label": "Halo Strength",
+          "type": "range",
+          "default": 0.45,
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "tooltip": "Controls halo brightness. 0 disables the halo.",
+          "description": "Controls Halo brightness. 0 disables the halo; higher values make it more prominent around matched areas."
+        },
+        {
+          "id": "glowRadius",
+          "label": "Halo Radius",
+          "type": "range",
+          "default": 5,
+          "min": 0,
+          "max": 12,
+          "step": 0.5,
+          "tooltip": "Controls halo spread. 0 disables the halo; larger values cost more to render.",
+          "description": "Controls how far the Halo spreads beyond matched areas. Larger values require more rendering work."
+        },
+        {
+          "id": "edgeDefinition",
+          "label": "Outline Definition",
+          "type": "range",
+          "default": 0.25,
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "showWhen": [
+            {
+              "mode": "outline"
+            },
+            {
+              "mode": "fillOutline"
+            }
+          ],
+          "tooltip": "Sharpens the matched boundary. Higher values create a firmer outline.",
+          "description": "Sharpens the matched boundary used by Outline. Higher values produce a firmer and more clearly defined edge."
+        },
+        {
+          "id": "outlineWidth",
+          "label": "Outline Width",
+          "type": "range",
+          "default": 2,
+          "min": 0.5,
+          "max": 8,
+          "step": 0.5,
+          "decimals": 1,
+          "showWhen": [
+            {
+              "mode": "outline"
+            },
+            {
+              "mode": "fillOutline"
+            }
+          ],
+          "description": "Controls the rendered width of the Outline around matched areas."
+        },
+        {
+          "id": "outlineStrength",
+          "label": "Outline Strength",
+          "type": "range",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "decimals": 2,
+          "showWhen": [
+            {
+              "mode": "outline"
+            },
+            {
+              "mode": "fillOutline"
+            }
+          ],
+          "tooltip": "Controls outline brightness. 0 disables the outline; 1 applies the maximum configured strength.",
+          "description": "Controls Outline brightness. 0 disables the outline; higher values make it more prominent."
+        },
+        {
+          "id": "outlinePosition",
+          "label": "Outline Position",
+          "type": "select",
+          "default": "outside",
+          "options": {
+            "outside": "Outside",
+            "centered": "Centered",
+            "inside": "Inside"
+          },
+          "showWhen": [
+            {
+              "mode": "outline"
+            },
+            {
+              "mode": "fillOutline"
+            }
+          ],
+          "description": "Places the Outline outside, centered on, or inside the matched boundary."
+        },
+        {
+          "id": "saturation",
+          "label": "Saturation",
+          "type": "range",
+          "default": 1.35,
+          "min": 0,
+          "max": 2.5,
+          "step": 0.05,
+          "description": "Controls the color saturation of the Neon result after source matching and color application."
+        },
+        {
+          "id": "pulseEnabled",
+          "label": "Pulse",
+          "type": "checkbox",
+          "default": false,
+          "hideWhen": {
+            "slideEnabled": true
+          },
+          "description": "Cycles Neon between on and off states. Pulse and Slide are mutually exclusive."
+        },
+        {
+          "id": "pulseSpeed",
+          "label": "Pulse Speed",
+          "type": "range",
+          "default": 0.27,
+          "min": 0.1,
+          "max": 1,
+          "step": 0.01,
+          "decimals": 2,
+          "showWhen": {
+            "pulseEnabled": true
+          },
+          "description": "Scales the complete Pulse cycle speed without changing the configured on, off, and fade proportions."
+        },
+        {
+          "id": "pulseOnDuration",
+          "label": "Pulse On Duration (Seconds)",
+          "type": "range",
+          "default": 0.75,
+          "min": 0.05,
+          "max": 10,
+          "step": 0.05,
+          "decimals": 2,
+          "showWhen": {
+            "pulseEnabled": true
+          },
+          "description": "Sets how long Neon remains fully on during each Pulse cycle."
+        },
+        {
+          "id": "pulseOffDuration",
+          "label": "Pulse Off Duration (Seconds)",
+          "type": "range",
+          "default": 0.75,
+          "min": 0.05,
+          "max": 10,
+          "step": 0.05,
+          "decimals": 2,
+          "showWhen": {
+            "pulseEnabled": true
+          },
+          "description": "Sets how long Neon remains fully off during each Pulse cycle."
+        },
+        {
+          "id": "pulseFadeDuration",
+          "label": "Pulse Fade Duration (Seconds)",
+          "type": "range",
+          "default": 0.15,
+          "min": 0,
+          "max": 2,
+          "step": 0.05,
+          "decimals": 2,
+          "showWhen": {
+            "pulseEnabled": true
+          },
+          "description": "Sets the transition time between Pulse states. 0 switches immediately."
+        },
+        {
+          "id": "slideEnabled",
+          "label": "Slide",
+          "type": "checkbox",
+          "default": false,
+          "hideWhen": {
+            "pulseEnabled": true
+          },
+          "description": "Sweeps an active Neon band across the effect area. Slide and Pulse are mutually exclusive."
+        },
+        {
+          "id": "slideDirection",
+          "label": "Slide Direction",
+          "type": "range",
+          "default": 0,
+          "min": 0,
+          "max": 360,
+          "step": 5,
+          "decimals": 0,
+          "showWhen": {
+            "slideEnabled": true
+          },
+          "description": "Sets the sweep direction: 0° right, 90° up, 180° left, and 270° down."
+        },
+        {
+          "id": "slideSpeed",
+          "label": "Slide Speed",
+          "type": "range",
+          "default": 0.27,
+          "min": 0.1,
+          "max": 1,
+          "step": 0.01,
+          "decimals": 2,
+          "showWhen": {
+            "slideEnabled": true
+          },
+          "description": "Scales the complete Slide cycle speed."
+        },
+        {
+          "id": "slideDuration",
+          "label": "Slide Travel Duration (Seconds)",
+          "type": "range",
+          "default": 3,
+          "min": 0.25,
+          "max": 20,
+          "step": 0.25,
+          "decimals": 2,
+          "showWhen": {
+            "slideEnabled": true
+          },
+          "description": "Sets the base time required for the active Slide band to cross the effect area."
+        },
+        {
+          "id": "slidePauseDuration",
+          "label": "Slide Pause Duration (Seconds)",
+          "type": "range",
+          "default": 0.5,
+          "min": 0,
+          "max": 10,
+          "step": 0.25,
+          "decimals": 2,
+          "showWhen": {
+            "slideEnabled": true
+          },
+          "description": "Sets the base pause between completed Slide sweeps."
+        },
+        {
+          "id": "slideWidth",
+          "label": "Slide Width",
+          "type": "range",
+          "default": 0.3,
+          "min": 0.05,
+          "max": 1,
+          "step": 0.05,
+          "decimals": 2,
+          "showWhen": {
+            "slideEnabled": true
+          },
+          "description": "Controls the width of the active Slide band as it crosses the effect area."
+        },
+        {
+          "id": "slideSoftness",
+          "label": "Slide Softness",
+          "type": "range",
+          "default": 0.25,
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "decimals": 2,
+          "showWhen": {
+            "slideEnabled": true
+          },
+          "description": "Softens the leading and trailing edges of the Slide band. 0 is hard; higher values create a wider feather."
+        },
+        {
+          "id": "flickerEnabled",
+          "label": "Flicker",
+          "type": "checkbox",
+          "default": false,
+          "description": "Adds irregular brightness variation to Fill, Outline, and Halo. Flicker can be used with either Pulse or Slide."
+        },
+        {
+          "id": "flickerSpeed",
+          "label": "Flicker Speed",
+          "type": "range",
+          "default": 0.27,
+          "min": 0.1,
+          "max": 1,
+          "step": 0.01,
+          "decimals": 2,
+          "showWhen": {
+            "flickerEnabled": true
+          },
+          "description": "Controls how quickly the Flicker pattern changes."
+        },
+        {
+          "id": "flickerAmount",
+          "label": "Flicker Amount",
+          "type": "range",
+          "default": 0.35,
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "decimals": 2,
+          "showWhen": {
+            "flickerEnabled": true
+          },
+          "description": "Controls Flicker depth. 0 disables variation; higher values produce stronger dimming."
+        },
+        {
+          "id": "aboveDarkness",
+          "label": "Above Darkness",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Presents the filter's luminous contribution above scene darkness.",
+          "description": "Presents the luminous contribution from Neon above Foundry scene darkness. This option is available only on compatible luminous filters."
+        },
+        {
+          "id": "darknessActivationEnabled",
+          "label": "Darkness Activation",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Only render the effect while scene darkness is within the configured range.",
+          "description": "Restricts Neon to a configured Scene Darkness range instead of rendering at every darkness level."
+        },
+        {
+          "id": "darknessActivationRange",
+          "label": "Darkness Activation Range",
+          "type": "range-dual",
+          "default": {
+            "min": 0,
+            "max": 1
+          },
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "showWhen": {
+            "darknessActivationEnabled": true
+          },
+          "tooltip": "Minimum and maximum scene darkness values where the effect remains active.",
+          "description": "Sets the minimum and maximum Scene Darkness values where Neon remains visible."
+        },
+        {
+          "id": "fadePercent",
+          "label": "Edge Fade %",
+          "type": "range",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "regionOnly": true,
+          "tooltip": "Softens the edge of this filter inside a Region. A value of 0 creates a hard edge; higher values create a wider transition.",
+          "description": "Controls the edge fade for Neon when it is used in an FXMaster: Filter Effects Region behavior. A value of 0 creates a hard Region boundary; higher values soften the transition between filtered and unfiltered areas."
         }
       ]
     }
@@ -13921,7 +14699,7 @@
     }
   ],
   "referenceFormat": 3,
-  "normalizedAt": "2026-08-09T17:31:36.329Z",
+  "normalizedAt": "2026-08-30T19:23:34.153Z",
   "customParticleBases": [
     {
       "id": "custom-directional-drift",

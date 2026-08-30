@@ -29,7 +29,7 @@ Environmental filters change the Scene surface or atmosphere. They can cover the
 | Effect kind | Filter effect |
 | Category | Environmental |
 | Runtime type | `lightningbolts` |
-| Exposed parameters | 31 |
+| Exposed parameters | 32 |
 
 ## Important controls
 
@@ -39,12 +39,14 @@ Environmental filters change the Scene surface or atmosphere. They can cover the
 - **Branchiness:** Controls how many secondary branches split away from the main bolt.
 - **Sync with Lightning Flash:** Triggers the core Lightning flash at the same time as a bolt so the scene brightens with the strike.
 - **Audio Aware:** Allows bass-heavy audio peaks to trigger Lightning Bolts. Use Audio Channels to choose what it listens to and Audio Bass Threshold to control sensitivity.
+- **Above Darkness:** Presents the luminous contribution from Lightning Bolts above Foundry scene darkness. This option is available only on compatible luminous filters.
 
 ## Setup notes
 
 - Lightning Mode selects the bolt presentation; Top Down controls become available for overhead strikes.
 - Trigger Chance and Period control occurrence, while Line Width, Branchiness, Bolt Length, Jitter, Glow, and Brightness shape each bolt.
 - Sync with Lightning Flash coordinates the bolt with the core [Lightning filter](../lightning/).
+- Above Darkness presents the luminous bolt contribution above Foundry scene darkness.
 
 ## Bundled preset usage
 

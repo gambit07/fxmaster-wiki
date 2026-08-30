@@ -2,7 +2,7 @@
 title: "Sunlight"
 description: "Directional sunlight rays with beam, color, edge fade, and intensity controls."
 sidebar:
-  order: 39
+  order: 40
   badge:
     text: "FXMaster+"
     variant: caution
@@ -29,7 +29,7 @@ Environmental filters change the Scene surface or atmosphere. They can cover the
 | Effect kind | Filter effect |
 | Category | Environmental |
 | Runtime type | `sunlight` |
-| Exposed parameters | 17 |
+| Exposed parameters | 18 |
 
 ## Important controls
 
@@ -39,11 +39,13 @@ Environmental filters change the Scene surface or atmosphere. They can cover the
 - **Ray Volume:** Controls how much ray detail and variation fills the beam area. Higher values create a fuller, more textured light volume.
 - **Ray Length:** Controls how far each sunlight ray extends across the canvas.
 - **Opacity:** Controls the overall opacity of the sunlight rays.
+- **Above Darkness:** Presents the luminous contribution from Sunlight above Foundry scene darkness. This option is available only on compatible luminous filters.
 
 ## Setup notes
 
 - Ray Direction and Ray Length establish the beam geometry, while Ray Intensity, Opacity, and Tint establish visibility.
 - Parallel Rays works well for broad sunlight. Disabling it makes the rays converge toward a more localized source point.
+- Above Darkness presents the luminous ray contribution above Foundry scene darkness.
 
 ## Bundled preset usage
 

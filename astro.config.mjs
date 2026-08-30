@@ -28,7 +28,7 @@ const base = isCodespaces ? '/' : process.env.BASE_PATH || inferredBase;
 const repositoryUrl = `https://github.com/${owner}/${repositoryName}`;
 const basePrefix = base === '/' ? '' : base.replace(/\/$/, '');
 const faviconPath = `${basePrefix}/favicon.svg`;
-const ogImageUrl = new URL(`${basePrefix}/og-image.png`, site).href;
+const ogImageUrl = new URL(`${basePrefix}/og-image-1.0.4.png`, site).href;
 const soundEffectsManagerLabel = 'Sound Effects Manager';
 
 export default defineConfig({
@@ -70,7 +70,12 @@ export default defineConfig({
         { tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
         { tag: 'meta', attrs: { property: 'og:site_name', content: 'FXMaster Wiki' } },
         { tag: 'meta', attrs: { property: 'og:image', content: ogImageUrl } },
+        { tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
+        { tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
+        { tag: 'meta', attrs: { property: 'og:image:alt', content: 'FXMaster documentation — Bring your scenes to life!' } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
+        { tag: 'meta', attrs: { name: 'twitter:image', content: ogImageUrl } },
+        { tag: 'meta', attrs: { name: 'twitter:image:alt', content: 'FXMaster documentation — Bring your scenes to life!' } },
       ],
       sidebar: [
         { label: 'FXMaster', link: '/' },

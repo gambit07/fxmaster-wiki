@@ -14,8 +14,15 @@ FXMaster combines active Scene, Region, and API effects in one ordered stack. Th
 | Below Tiles | Prevents the effect from drawing over tile artwork where the effect supports the option. |
 | Below Foreground | Keeps the effect beneath foreground coverage. |
 | Display Effects Above Fog/Vision | Raises eligible effects above fog of war and token vision while preserving hidden artwork masking. |
+| Above Darkness | Presents the luminous contribution from a compatible filter above Foundry scene darkness without changing the filter’s position among other FXMaster rows. |
 
 Tokens, tiles, Scene artwork, lighting, and vision are not rows in **Manage Layers**. Their relationship to an effect is controlled by the placement options above.
+
+## Above Darkness
+
+Compatible luminous filters expose **Above Darkness** as an effect-level option. Enable it when the filter’s luminous contribution should remain visible over Foundry scene darkness. It currently applies to [Lightning](../../reference/effects/details/lightning/), [Lightning Bolts](../../reference/effects/details/lightningbolts/), [Fire](../../reference/effects/details/fire/), [Sunlight](../../reference/effects/details/sunlight/), [Aurora Borealis](../../reference/effects/details/auroraborealis/), and [Neon](../../reference/effects/details/neon/).
+
+This option does not move the filter above other FXMaster rows and is separate from **Display Effects Above Fog/Vision**. The latter changes presentation relative to fog of war and token vision, while **Above Darkness** affects only the filter’s luminous contribution relative to scene darkness.
 
 ## Masking and performance
 

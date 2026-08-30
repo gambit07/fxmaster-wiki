@@ -105,6 +105,10 @@ const effectShowcases = {
     mapName: 'Zach Moeller',
     mapUrl: 'https://www.patreon.com/zachmoeller',
   },
+  neon: {
+    src: '/videos/neon.mp4',
+    description: 'Preview shows Neon in Fill + Outline mode using custom source color matching',
+  },
   rain: {
     src: '/videos/rain.mp4',
     description: 'Preview shows Rain in Top Down mode with Background and Token Trails enabled',
@@ -266,14 +270,20 @@ const specialNotes = {
     'Period controls the spacing between automatic events, while Duration controls each flash.',
     'Audio Aware can trigger from selected audio channels when the bass threshold is met.',
     'Keep Brightness conservative on already bright maps to avoid washing out large portions of the Scene.',
+    'Above Darkness presents the luminous flash contribution above Foundry scene darkness.',
   ],
   oldfilm: [
     'Balance Sepia, Noise Density, and Scratch Density instead of maximizing all three at once.',
     'Higher values can work well for a short transition, while lower values are easier to leave active for a complete Scene.',
   ],
   predator: [
-    'Noise Density and Line Width define the refractive silhouette, while Speed controls the animation cadence.',
-    'Use a Region to limit the filter to one part of the Scene, or a timed macro when it should appear only briefly.',
+    'Thermal Strength blends the false-color palette into the original scene, while Thermal Contrast separates cool and hot values.',
+    'Edge Definition sharpens temperature boundaries. Scanline Strength, Sensor Noise, Scanline Speed, and Scanline Width shape the sensor presentation independently.',
+  ],
+  neon: [
+    'Choose Source Color Matching before tuning Threshold, Smoothness, or the custom color ranges so the filter is matching the intended artwork.',
+    'Pulse and Slide are mutually exclusive. Flicker can be combined with either animation mode.',
+    'Halo Radius can be visually expensive at higher values, especially when Neon covers a large portion of the Scene.',
   ],
   screenshake: [
     'Timed automatically ends the effect after the configured Duration.',
@@ -326,12 +336,13 @@ const specialNotes = {
     'Sandstorm particles can be paired with [Duststorm](../duststorm/) for a denser treatment, but their Density and Opacity compound where they overlap.',
   ],
   windwisps: [
-    'Windwisps provide visible particle streaks and pair naturally with the [Wind filter](../wind/).',
+    'Wind Wisps provide visible particle streaks and pair naturally with the [Wind filter](../wind/).',
     'Turbulence, Gustiness, and Distortion make the wisps less uniform without changing the base Direction.',
   ],
   sunlight: [
     'Ray Direction and Ray Length establish the beam geometry, while Ray Intensity, Opacity, and Tint establish visibility.',
     'Parallel Rays works well for broad sunlight. Disabling it makes the rays converge toward a more localized source point.',
+    'Above Darkness presents the luminous ray contribution above Foundry scene darkness.',
   ],
   duststorm: [
     'Within an enabled Duststorm effect, the airborne dust and persistent sand **Background** can be toggled and configured separately. Disabling Duststorm disables both.',
@@ -352,6 +363,7 @@ const specialNotes = {
     'Lightning Mode selects the bolt presentation; Top Down controls become available for overhead strikes.',
     'Trigger Chance and Period control occurrence, while Line Width, Branchiness, Bolt Length, Jitter, Glow, and Brightness shape each bolt.',
     'Sync with Lightning Flash coordinates the bolt with the core [Lightning filter](../lightning/).',
+    'Above Darkness presents the luminous bolt contribution above Foundry scene darkness.',
   ],
   water: [
     'Flow, Waves, Vortex, Turbulence, Caustics, and Refraction are independent systems.',
@@ -367,11 +379,13 @@ const specialNotes = {
     'Aurora Mode selects Side, Top Down, or Horizon presentation, each with its own placement controls.',
     'Built-in palettes provide coordinated colors. Custom Colors exposes five color slots and Mixed Colors.',
     'Aurora Count, Intensity, Speed, Ribbon Width, Waviness, and Softness define the ribbons themselves.',
+    'Above Darkness presents the luminous ribbon contribution above Foundry scene darkness.',
   ],
   fire: [
     'Scale and Flame Spread establish the flame field before Density and Speed are tuned.',
     'Inner Flame, Outer Flame, Core Flame, and Smoke Color can be adjusted independently for ordinary or stylized fire palettes.',
     'Glow, Smoke, Heat, and Heat Distortion are separate layers and should be raised incrementally.',
+    'Above Darkness presents the luminous flame contribution above Foundry scene darkness.',
   ],
 };
 
@@ -395,9 +409,9 @@ const importantControlIds = {
   bloom: ['threshold', 'bloomScale', 'blur'],
   color: ['color', 'blendMode', 'saturation', 'contrast', 'brightness', 'gamma'],
   'fog-filter': ['dimensions', 'density', 'direction', 'synchronizedDirection', 'tokenTrailsEnabled'],
-  lightning: ['frequency', 'spark_duration', 'brightness', 'audioAware'],
+  lightning: ['frequency', 'spark_duration', 'brightness', 'audioAware', 'aboveDarkness'],
   oldfilm: ['sepia', 'noise', 'noiseSize', 'scratchDensity', 'scratch'],
-  predator: ['noise', 'period', 'lineWidth'],
+  predator: ['thermalStrength', 'thermalContrast', 'edgeDefinition', 'scanlineStrength', 'noise', 'speed', 'lineWidth'],
   screenshake: ['timed', 'strength', 'speed', 'smoothness', 'decay', 'edgeProtection', 'audioAware'],
   underwater: ['scale', 'speed'],
   sakurabloom: ['topDown', 'rotationStrength', 'direction', 'backgroundEnabled', 'backgroundInteractionEnabled'],
@@ -410,15 +424,16 @@ const importantControlIds = {
   ghosts: ['variants', 'manualPlacement', 'wobble', 'displacement', 'tokenAvoidance'],
   sandstorm: ['direction', 'synchronizedDirection', 'wobble', 'backgroundEnabled', 'backgroundMigrationEnabled', 'backgroundTrailsEnabled'],
   windwisps: ['direction', 'synchronizedDirection', 'windTurbulence', 'windGustiness', 'windDistortion'],
-  sunlight: ['parallel', 'angle', 'gain', 'lacunarity', 'beam_length', 'alpha'],
+  sunlight: ['parallel', 'angle', 'gain', 'lacunarity', 'beam_length', 'alpha', 'aboveDarkness'],
   duststorm: ['direction', 'directionRandomization', 'density', 'streakiness', 'backgroundEnabled', 'backgroundTrailsEnabled'],
   ice: ['strength', 'iceScale', 'frostStrength', 'waterStrength', 'reflectionStrength', 'reflectionFresnel'],
   glitch: ['sliceEnable', 'slices', 'offset', 'sliceJaggedness', 'glyphEnable', 'glyphIntensity'],
-  lightningbolts: ['mode', 'triggerChance', 'frequency', 'branches', 'syncFlash', 'audioAware'],
+  lightningbolts: ['mode', 'triggerChance', 'frequency', 'branches', 'syncFlash', 'audioAware', 'aboveDarkness'],
   water: ['flow', 'followRegionPath', 'waves', 'vortex', 'caustics', 'refraction', 'tokenTrailsEnabled'],
   wind: ['manualPlacement', 'direction', 'directionRandomization', 'turbulence', 'gustiness', 'streakiness', 'sheenStrength'],
-  auroraborealis: ['mode', 'palette', 'auroraCount', 'intensity', 'ribbonWidth', 'waviness', 'softness'],
-  fire: ['dimensions', 'height', 'density', 'intensity', 'glow', 'smoke', 'distortion'],
+  auroraborealis: ['mode', 'palette', 'auroraCount', 'intensity', 'ribbonWidth', 'waviness', 'softness', 'aboveDarkness'],
+  fire: ['dimensions', 'height', 'density', 'intensity', 'glow', 'smoke', 'distortion', 'aboveDarkness'],
+  neon: ['sourceColorMode', 'colorFamilies', 'mode', 'intensity', 'glow', 'outlineWidth', 'pulseEnabled', 'slideEnabled', 'flickerEnabled', 'aboveDarkness'],
 };
 
 const effectOverviews = {
@@ -568,6 +583,24 @@ See [Wind Painting](../../../../plus/wind-painting/) for the complete painting w
 
 Wind can act as the direction source for compatible effects. Enable **Synchronized Direction** on a supported particle or filter to follow Wind’s direction changes while retaining its own speed, scale, density, and appearance.
 `,
+  neon: `## Source color matching
+
+Neon applies its Fill, Outline, and Halo only to source artwork that passes the selected matching rules. **Source Color Matching** can use broad **Color Families**, up to five **Custom Source Colors**, or both.
+
+When Color Families are enabled, **Detection Mode**, **Affected Source Colors**, **Threshold**, and **Smoothness** define the match. When Custom Colors are enabled, use **Custom Color Range** for hue tolerance and **Custom Shade Range** for lighter or darker versions of each selected color.
+
+## Neon style and color
+
+**Neon Style** selects Fill, Outline, or Fill + Outline. **Core Color** controls Fill and Outline, while **Halo Color** controls the surrounding glow. Disable Apply on either color to retain or derive color from the matched source artwork.
+
+Outline modes expose **Outline Definition**, **Outline Width**, **Outline Strength**, and **Outline Position**. **Intensity**, **Halo Strength**, **Halo Radius**, and **Saturation** affect the complete result.
+
+## Animation
+
+**Pulse** alternates between on and off states. **Slide** sweeps an active band across the effect area. Pulse and Slide are mutually exclusive, while **Flicker** can be combined with either one.
+
+**Above Darkness** presents Neon’s luminous contribution above Foundry scene darkness without changing its order relative to the other FXMaster rows.
+`,
   fire: `## Fire filter overview
 
 The Fire filter creates a continuous top-down flame field. It is separate from the [Fire particle effect](../fireparticles/), which uses individual flame sprites and supports Manual Placement.
@@ -645,6 +678,8 @@ const exampleOverrides = {
   fireparticles: { manualPlacement: false, scale: 0.5, density: 0.35, alpha: 1, glow: 0.5 },
   lightning: { color: { apply: false, value: '#ffffff' }, frequency: 0.5, spark_duration: 0.5, brightness: 1 },
   lightningbolts: { mode: 'side', thickness: 0.5, branches: 0.5, brightness: 0.8, frequency: 0.5 },
+  predator: { thermalStrength: 0.8, thermalContrast: 0.6, edgeDefinition: 0.35, scanlineStrength: 0.8, noise: 0.15, speed: 0.3, lineWidth: 0.5 },
+  neon: { mode: 'fillOutline', sourceColorMode: 'families', colorFamilies: ['cyan', 'magenta', 'purple'], threshold: 0.42, intensity: 0.5, glow: 0.45 },
   screenshake: { timed: true, strength: 0.25, duration: 1.2, speed: 0.5, smoothness: 0.5, decay: 0.5 },
   bloom: { blur: 2, bloomScale: 1, threshold: 0.5 },
   color: { color: { apply: true, value: '#7c75aa' }, saturation: 1, contrast: 1, brightness: 1, gamma: 1 },

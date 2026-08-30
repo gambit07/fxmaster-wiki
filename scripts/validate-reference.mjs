@@ -86,13 +86,14 @@ if (!Array.isArray(reference.customParticleBases) || reference.customParticleBas
 if (!Array.isArray(reference.presets) || reference.presets.length === 0) fail('Reference data has no presets.');
 if (reference.referenceFormat !== 3) fail(`Expected reference format 3; found ${reference.referenceFormat ?? 'none'}.`);
 if (!reference.sourceVersions?.core || !reference.sourceVersions?.plus) fail('Reference data is missing source version metadata.');
+if (reference.sourceVersions.plus !== '1.1.13') fail(`Expected FXMaster+ source version 1.1.13; found ${reference.sourceVersions.plus}.`);
 
 const expectedCounts = {
-  effects: 43,
+  effects: 44,
   coreParticles: 16,
   coreFilters: 8,
   plusParticles: 10,
-  plusFilters: 9,
+  plusFilters: 10,
   customParticleBases: 4,
   presetFamilies: 42,
   presetVariants: 63,
@@ -121,6 +122,7 @@ const validGroups = new Set(['ambient', 'creatures', 'environmental', 'foliage',
 const manualSoundAvailabilityDetail = 'the matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds';
 const expectedTokenAvoidanceEffects = new Set(['rats', 'spiders', 'fireflies', 'fish', 'ghosts']);
 const expectedWaterRegionOnlyParameters = new Set(['followRegionPath', 'pathInfluence', 'fadePercent']);
+const expectedAboveDarknessEffects = new Set(['lightning', 'sunlight', 'lightningbolts', 'auroraborealis', 'fire', 'neon']);
 const expectedParticleManagementGroups = new Map([
   ['bats', 'creatures'], ['birds', 'creatures'], ['crows', 'creatures'], ['eagles', 'creatures'],
   ['rats', 'creatures'], ['spiders', 'creatures'], ['fireflies', 'creatures'], ['fish', 'creatures'],
@@ -261,6 +263,72 @@ for (const effect of reference.effects ?? []) {
     if (JSON.stringify(triggerChance) !== JSON.stringify([{ syncFlash: true }, { audioAware: true }])) {
       fail('lightningbolts.triggerChance must require Sync Flash or Audio Aware.');
     }
+  }
+
+
+  const aboveDarkness = effect.parameters.find((parameter) => parameter.id === 'aboveDarkness');
+  if (expectedAboveDarknessEffects.has(effect.id)) {
+    if (!aboveDarkness) fail(`${effect.id} is missing Above Darkness.`);
+    else {
+      if (aboveDarkness.label !== 'Above Darkness' || aboveDarkness.type !== 'checkbox' || aboveDarkness.default !== false) {
+        fail(`${effect.id}.aboveDarkness has stale parameter metadata.`);
+      }
+      if (!aboveDarkness.description.includes('above Foundry scene darkness')) {
+        fail(`${effect.id}.aboveDarkness is missing its canvas-facing description.`);
+      }
+    }
+  } else if (aboveDarkness) {
+    fail(`${effect.id} unexpectedly exposes Above Darkness.`);
+  }
+
+  if (effect.id === 'lightningbolts') {
+    const thickness = effect.parameters.find((parameter) => parameter.id === 'thickness');
+    if (thickness?.max !== 3) fail('lightningbolts.thickness must use the current maximum of 3.');
+  }
+
+  if (effect.id === 'predator') {
+    const expectedPredatorParameters = [
+      'belowTokens', 'belowTiles', 'belowForeground', 'levels',
+      'thermalStrength', 'thermalContrast', 'edgeDefinition', 'scanlineStrength',
+      'noise', 'speed', 'lineWidth', 'soundFxEnabled', 'soundFxManualSoundIds',
+      'darknessActivationEnabled', 'darknessActivationRange', 'fadePercent',
+    ];
+    if (JSON.stringify(effect.parameters.map((parameter) => parameter.id)) !== JSON.stringify(expectedPredatorParameters)) {
+      fail('Predator does not match the reviewed thermal-scan parameter list.');
+    }
+    if (effect.parameters.some((parameter) => parameter.id === 'period')) fail('Predator still exposes the retired period parameter.');
+    for (const parameterId of ['thermalStrength', 'thermalContrast', 'edgeDefinition', 'scanlineStrength', 'noise', 'speed', 'lineWidth']) {
+      if (!effect.parameters.some((parameter) => parameter.id === parameterId)) fail(`Predator is missing ${parameterId}.`);
+    }
+  }
+
+  if (effect.id === 'neon') {
+    if (effect.package !== 'plus' || effect.kind !== 'filter' || effect.group !== 'visual') {
+      fail('Neon has incorrect package, kind, or group metadata.');
+    }
+    if (effect.parameterCount !== 48) fail(`Neon must expose 48 parameters; found ${effect.parameterCount}.`);
+    const parameterMap = new Map(effect.parameters.map((parameter) => [parameter.id, parameter]));
+    for (const parameterId of [
+      'sourceColorMode', 'detectionMode', 'colorFamilies', 'customSourceColor1', 'customSourceColor5',
+      'customColorRange', 'customShadeRange', 'mode', 'outlineWidth', 'pulseEnabled', 'slideEnabled',
+      'flickerEnabled', 'aboveDarkness',
+    ]) {
+      if (!parameterMap.has(parameterId)) fail(`Neon is missing ${parameterId}.`);
+    }
+    const familyCondition = JSON.stringify([{ sourceColorMode: 'families' }, { sourceColorMode: 'combined' }]);
+    const customCondition = JSON.stringify([{ sourceColorMode: 'custom' }, { sourceColorMode: 'combined' }]);
+    const outlineCondition = JSON.stringify([{ mode: 'outline' }, { mode: 'fillOutline' }]);
+    for (const parameterId of ['detectionMode', 'colorFamilies', 'threshold', 'smoothness']) {
+      if (JSON.stringify(parameterMap.get(parameterId)?.showWhen) !== familyCondition) fail(`neon.${parameterId} has stale Color Family availability.`);
+    }
+    for (const parameterId of ['customSourceColor1', 'customSourceColor2', 'customSourceColor3', 'customSourceColor4', 'customSourceColor5', 'customColorRange', 'customShadeRange']) {
+      if (JSON.stringify(parameterMap.get(parameterId)?.showWhen) !== customCondition) fail(`neon.${parameterId} has stale Custom Color availability.`);
+    }
+    for (const parameterId of ['edgeDefinition', 'outlineWidth', 'outlineStrength', 'outlinePosition']) {
+      if (JSON.stringify(parameterMap.get(parameterId)?.showWhen) !== outlineCondition) fail(`neon.${parameterId} has stale Outline availability.`);
+    }
+    if (parameterMap.get('pulseEnabled')?.hideWhen?.slideEnabled !== true) fail('Neon Pulse must be hidden while Slide is enabled.');
+    if (parameterMap.get('slideEnabled')?.hideWhen?.pulseEnabled !== true) fail('Neon Slide must be hidden while Pulse is enabled.');
   }
 
   const fadePercent = effect.parameters.find((parameter) => parameter.id === 'fadePercent');
@@ -649,14 +717,47 @@ for (const customBaseId of expectedCustomBaseParameters.keys()) {
   if (!plusIndexContent.includes(`/reference/effects/details/${customBaseId}/`)) fail(`The FXMaster+ overview does not link to ${customBaseId}.`);
 }
 
+const homeContent = read(path.join(docsRoot, 'index.mdx'));
+if (!homeContent.includes('[Browse all 44 effects →]')) fail('The home page has a stale effect count.');
+
+const ogImagePath = path.join(root, 'public/og-image-1.0.4.png');
+if (!fs.existsSync(ogImagePath)) fail('The refreshed 1.0.4 social preview image is missing.');
+if (fs.existsSync(path.join(root, 'public/og-image.png'))) fail('The retired social preview image is still present.');
+const astroConfigForOg = read(path.join(root, 'astro.config.mjs'));
+if (!astroConfigForOg.includes('og-image-1.0.4.png')) fail('Astro is not configured to use the refreshed social preview image.');
+for (const marker of [
+  "property: 'og:image:width', content: '1200'",
+  "property: 'og:image:height', content: '630'",
+  "name: 'twitter:image', content: ogImageUrl",
+  'Bring your scenes to life!',
+]) {
+  if (!astroConfigForOg.includes(marker)) fail(`Astro is missing refreshed social preview metadata: ${marker}`);
+}
+
+const packageJson = JSON.parse(read(path.join(root, 'package.json')));
+if (packageJson.version !== '1.0.4') fail(`Expected package version 1.0.4; found ${packageJson.version}.`);
+
 const installationContent = read(path.join(docsRoot, 'getting-started/installation.mdx'));
 if (!installationContent.includes('../../plus/access/')) fail('Installation does not link to Accessing FXMaster+.');
 
+const comparisonSource = read(path.join(docsRoot, 'getting-started/fxmaster-vs-plus.mdx'));
+for (const phrase of [
+  'FXMaster+ adds 20 more effects:',
+  '- 10 filter effects, including',
+  '/reference/effects/details/neon/',
+]) {
+  if (!comparisonSource.includes(phrase)) fail(`FXMaster vs. FXMaster+ has stale effect totals or listings: ${phrase}`);
+}
+if (comparisonSource.includes('FXMaster+ adds 19 more effects:') || comparisonSource.includes('- 9 filters, including')) {
+  fail('FXMaster vs. FXMaster+ still contains the pre-Neon FXMaster+ totals.');
+}
+
 const compatibilitySource = read(path.join(docsRoot, 'reference/compatibility.md'));
-const expectedCompatibility = 'FXMaster+ 1.1.11 supports Foundry VTT 13 and 14. FXMaster 8.3.2 or newer is required.';
+const expectedCompatibility = 'FXMaster+ 1.1.13 supports Foundry VTT 13 and 14. FXMaster 8.3.2 or newer is required.';
 if (!compatibilitySource.includes(expectedCompatibility)) fail('Compatibility is missing the direct FXMaster+ version requirement.');
 const expectedLevelsCompatibility = "FXMaster supports Foundry's core Levels functionality in Foundry VTT V14. The Levels module used with Foundry VTT V13 is not supported.";
 if (!compatibilitySource.includes(expectedLevelsCompatibility)) fail('Compatibility is missing the Foundry VTT 14 core Levels support note.');
+
 
 const settingsPath = path.join(docsRoot, 'reference/settings.md');
 if (!fs.existsSync(settingsPath)) fail('Settings must use reference/settings.md.');
@@ -929,8 +1030,12 @@ for (const phrase of [
   '## Manage API-created effects',
   '**API - Preset**',
   'Manage API Effects',
+  '| `aboveDarkness` | Boolean |',
+  '### Above Darkness',
+  'aboveDarkness: false',
+  '/reference/effects/details/neon/',
 ]) {
-  if (!presetApiSource.includes(phrase)) fail(`Preset API is missing Manage API-created effects guidance: ${phrase}`);
+  if (!presetApiSource.includes(phrase)) fail(`Preset API is missing requested guidance: ${phrase}`);
 }
 
 const effectApiSource = read(path.join(docsRoot, 'automation/effect-api.mdx'));
@@ -1026,8 +1131,12 @@ for (const phrase of [
   'Particle rows follow the same stack order.',
   '**[Rain](../../reference/effects/details/rain/) above [Fog](../../reference/effects/details/fog-filter/):**',
   '**[Fog](../../reference/effects/details/fog-filter/) above [Rain](../../reference/effects/details/rain/):**',
+  '| Above Darkness |',
+  '## Above Darkness',
+  '/reference/effects/details/neon/',
+  'Display Effects Above Fog/Vision',
 ]) {
-  if (!layersOrderingSource.includes(phrase)) fail(`Layers and Ordering is missing the particle stack example: ${phrase}`);
+  if (!layersOrderingSource.includes(phrase)) fail(`Layers and Ordering is missing requested guidance: ${phrase}`);
 }
 
 const ambientFoliageSource = read(path.join(docsRoot, 'particles/ambient-and-foliage.mdx'));
@@ -1552,6 +1661,7 @@ const expectedEffectShowcases = {
   ice: ['/videos/ice.mp4', 'Preview shows Ice enabled'],
   lightningbolts: ['/videos/lightning-bolts.mp4', 'Preview shows Lightning Bolts with the Horizontal Lightning Mode enabled'],
   magiccrystals: ['/videos/magic-crystals.mp4', 'Preview shows Magic Crystals with Orbit mode turned off'],
+  neon: ['/videos/neon.mp4', 'Preview shows Neon in Fill + Outline mode using custom source color matching'],
   rain: ['/videos/rain.mp4', 'Preview shows Rain in Top Down mode with Background and Token Trails enabled'],
   rats: ['/videos/rats.mp4', 'Preview shows Rats in Directional Movement mode with Directional Spread enabled'],
   sakurabloom: ['/videos/sakura-bloom.mp4', 'Preview shows Sakura Bloom enabled for a Region'],

@@ -1,8 +1,8 @@
 ---
 title: "Predator"
-description: "Applies animated refractive noise with a chromatic edge treatment."
+description: "World-locked thermal scan treatment with false-color heat mapping, edge definition, scanlines, and sensor noise."
 sidebar:
-  order: 27
+  order: 28
   badge:
     text: "FXMaster"
     variant: tip
@@ -16,7 +16,7 @@ import ParameterTable from '../../../../../components/ParameterTable.astro';
   <span class="fxm-badge">API type: predator</span>
 </div>
 
-Applies animated refractive noise with a chromatic edge treatment.
+World-locked thermal scan treatment with false-color heat mapping, edge definition, scanlines, and sensor noise.
 
 Visual filters change the rendered Scene. Check map, token, and text visibility after changing their strength or opacity.
 
@@ -26,18 +26,22 @@ Visual filters change the rendered Scene. Check map, token, and text visibility 
 | Effect kind | Filter effect |
 | Category | Visual |
 | Runtime type | `predator` |
-| Exposed parameters | 12 |
+| Exposed parameters | 16 |
 
 ## Important controls
 
-- **Noise Density:** Controls the amount of animated refractive noise inside the Predator-style distortion.
-- **Speed:** Changes how quickly the distortion pattern evolves and moves across the scene.
-- **Line Width:** Changes the width of the bright refractive outline around distorted areas.
+- **Thermal Strength:** Blends the false-color thermal palette into the source image. 0 retains the original scene colors; 1 uses the full thermal treatment.
+- **Thermal Contrast:** Separates cool and hot values in the thermal palette. Higher values create stronger temperature differences across the scene.
+- **Edge Definition:** Highlights local temperature boundaries so creatures, objects, and terrain produce sharper thermal silhouettes.
+- **Scanline Strength:** Controls the brightness variation of the moving scanline pattern. Set it to 0 to hide the scanlines while keeping the other Predator systems active.
+- **Sensor Noise:** Adds animated sensor grain across the thermal image. Higher values create a noisier and less stable sensor presentation.
+- **Scanline Speed:** Controls how quickly the scanline pattern travels across the scene. 0 stops the scanline movement.
+- **Scanline Width:** Controls the width of the moving scanlines. Higher values create broader bands across the thermal image.
 
 ## Setup notes
 
-- Noise Density and Line Width define the refractive silhouette, while Speed controls the animation cadence.
-- Use a Region to limit the filter to one part of the Scene, or a timed macro when it should appear only briefly.
+- Thermal Strength blends the false-color palette into the original scene, while Thermal Contrast separates cool and hot values.
+- Edge Definition sharpens temperature boundaries. Scanline Strength, Sensor Noise, Scanline Speed, and Scanline Width shape the sensor presentation independently.
 
 ## Bundled preset usage
 
@@ -59,7 +63,13 @@ const created = await FXMASTER.api.effects.play({
     "id": "apiMacro_wikipredator_f",
     "type": "predator",
     "options": {
-      "belowTokens": false
+      "thermalStrength": 0.8,
+      "thermalContrast": 0.6,
+      "edgeDefinition": 0.35,
+      "scanlineStrength": 0.8,
+      "noise": 0.15,
+      "speed": 0.3,
+      "lineWidth": 0.5
     }
   }],
 });

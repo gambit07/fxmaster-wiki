@@ -1,0 +1,108 @@
+---
+title: "Neon"
+description: "Selective neon fill, outlines, halo, source-color matching, pulse, slide, flicker, and above-darkness presentation."
+sidebar:
+  order: 26
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Visual reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="filter">Filter effect</span>
+  <span class="fxm-badge">API type: neon</span>
+</div>
+
+<EffectShowcase src="/videos/neon.mp4" title="Neon" description="Preview shows Neon in Fill + Outline mode using custom source color matching" />
+
+Selective neon fill, outlines, halo, source-color matching, pulse, slide, flicker, and above-darkness presentation.
+
+Visual filters change the rendered Scene. Check map, token, and text visibility after changing their strength or opacity.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Filter effect |
+| Category | Visual |
+| Runtime type | `neon` |
+| Exposed parameters | 48 |
+
+## Source color matching
+
+Neon applies its Fill, Outline, and Halo only to source artwork that passes the selected matching rules. **Source Color Matching** can use broad **Color Families**, up to five **Custom Source Colors**, or both.
+
+When Color Families are enabled, **Detection Mode**, **Affected Source Colors**, **Threshold**, and **Smoothness** define the match. When Custom Colors are enabled, use **Custom Color Range** for hue tolerance and **Custom Shade Range** for lighter or darker versions of each selected color.
+
+## Neon style and color
+
+**Neon Style** selects Fill, Outline, or Fill + Outline. **Core Color** controls Fill and Outline, while **Halo Color** controls the surrounding glow. Disable Apply on either color to retain or derive color from the matched source artwork.
+
+Outline modes expose **Outline Definition**, **Outline Width**, **Outline Strength**, and **Outline Position**. **Intensity**, **Halo Strength**, **Halo Radius**, and **Saturation** affect the complete result.
+
+## Animation
+
+**Pulse** alternates between on and off states. **Slide** sweeps an active band across the effect area. Pulse and Slide are mutually exclusive, while **Flicker** can be combined with either one.
+
+**Above Darkness** presents Neon’s luminous contribution above Foundry scene darkness without changing its order relative to the other FXMaster rows.
+
+## Important controls
+
+- **Source Color Matching:** Chooses whether Neon matches Color Families, Custom Colors, or both.
+- **Affected Source Colors:** Selects which source color families are eligible for Neon. All includes every available family.
+- **Neon Style:** Selects Fill, Outline, or Fill + Outline for the matched parts of the scene.
+- **Intensity:** Controls the overall Neon strength. Higher values increase the visible Fill and Outline contribution.
+- **Halo Strength:** Controls Halo brightness. 0 disables the halo; higher values make it more prominent around matched areas.
+- **Outline Width:** Controls the rendered width of the Outline around matched areas.
+- **Pulse:** Cycles Neon between on and off states. Pulse and Slide are mutually exclusive.
+- **Slide:** Sweeps an active Neon band across the effect area. Slide and Pulse are mutually exclusive.
+- **Flicker:** Adds irregular brightness variation to Fill, Outline, and Halo. Flicker can be used with either Pulse or Slide.
+- **Above Darkness:** Presents the luminous contribution from Neon above Foundry scene darkness. This option is available only on compatible luminous filters.
+
+## Setup notes
+
+- Choose Source Color Matching before tuning Threshold, Smoothness, or the custom color ranges so the filter is matching the intended artwork.
+- Pulse and Slide are mutually exclusive. Flicker can be combined with either animation mode.
+- Halo Radius can be visually expensive at higher values, especially when Neon covers a large portion of the Scene.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="filters">Filter Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="neon" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  filters: [{
+    "id": "apiMacro_wikineon_f",
+    "type": "neon",
+    "options": {
+      "mode": "fillOutline",
+      "sourceColorMode": "families",
+      "colorFamilies": [
+        "cyan",
+        "magenta",
+        "purple"
+      ],
+      "threshold": 0.42,
+      "intensity": 0.5,
+      "glow": 0.45
+    }
+  }],
+});
+
+await FXMASTER.api.effects.filters.stop(created.filters);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.

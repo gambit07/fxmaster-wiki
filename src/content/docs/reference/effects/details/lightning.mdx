@@ -26,7 +26,7 @@ Environmental filters change the Scene surface or atmosphere. They can cover the
 | Effect kind | Filter effect |
 | Category | Environmental |
 | Runtime type | `lightning` |
-| Exposed parameters | 16 |
+| Exposed parameters | 17 |
 
 ## Important controls
 
@@ -34,12 +34,14 @@ Environmental filters change the Scene surface or atmosphere. They can cover the
 - **Duration:** Sets how long each lightning flash remains visible before fading out.
 - **Brightness:** Controls how strongly each lightning flash brightens the rendered scene.
 - **Audio Aware:** Allows bass-heavy audio peaks to trigger Lightning. Use Audio Channels to choose what it listens to and Audio Bass Threshold to control sensitivity.
+- **Above Darkness:** Presents the luminous contribution from Lightning above Foundry scene darkness. This option is available only on compatible luminous filters.
 
 ## Setup notes
 
 - Period controls the spacing between automatic events, while Duration controls each flash.
 - Audio Aware can trigger from selected audio channels when the bass threshold is met.
 - Keep Brightness conservative on already bright maps to avoid washing out large portions of the Scene.
+- Above Darkness presents the luminous flash contribution above Foundry scene darkness.
 
 ## Bundled preset usage
 
