@@ -101,7 +101,49 @@ After an effect is enabled inside the behavior, expand it to configure its avail
 
 ## Events
 
-The **Events** field can use the token-enter and token-exit Region events to start or stop particle and filter behaviors. Use these events when an effect should react to movement through a trap, portal, magical zone, room, or similar area. Leave **Events** empty when the Region effect should remain continuously available.
+Use **Events** in **Subscribed Events** on **FXMaster: Particle Effects** or **FXMaster: Filter Effects** to control a Region effect when tokens enter or leave its area. The same event choices are available on **FXMaster: Suppress Scene Particles** and **FXMaster: Suppress Scene Filters**.
+
+The event setting belongs to the behavior. It controls all effects enabled in that behavior together; use separate behaviors for effects that need different triggers.
+
+### Choose the event behavior
+
+| Events selection | What happens |
+|---|---|
+| No events selected | The behavior is available continuously, subject to its enabled state, elevation constraints, and other visibility settings. |
+| Token Enters | An enter event enables the behavior when an eligible token is inside. Leaving the Region does not by itself turn the behavior off. |
+| Token Enters and Token Exits | The behavior is active while at least one eligible token is inside. It stops after the last eligible token leaves. |
+| Token Exits only | Does not wait for an exit before showing the effect and does not provide an automatic stop rule. Select both events to make the behavior stop when the Region becomes empty. |
+
+### Set up an enter-and-exit effect
+
+1. Draw a Region around the area where tokens should trigger the effect.
+2. Open **Behaviors** and add **FXMaster: Particle Effects** or **FXMaster: Filter Effects**.
+3. Enable and configure the particle or filter effects for that behavior.
+4. In **Subscribed Events → Events**, select both **Token Enters** and **Token Exits**.
+5. For an initial test, leave **Elevation Constraints** set to **None** and turn off **Always Visible for GM** if it is enabled.
+6. Select **Update Region Behavior**, then move a token from outside the Region to inside it and back out.
+
+For example, add [Fireworks](../reference/effects/details/fireworks/) to a Region with both events selected. The display starts while a token occupies the area and stops after the last token leaves. This enables the repeating Fireworks effect; it is not a command to launch one shell for each token crossing.
+
+The Region is both the trigger area and the effect area. Configure its shape and elevation accordingly. These events do not automatically target a different Region or create a Scene-wide effect.
+
+### Multiple tokens and specific tokens
+
+With both events selected, one token leaving does not turn the effect off while another eligible token remains. By default, Region occupancy is not limited to the tokens currently selected by the viewer.
+
+When **Elevation Constraints** is set to **Specific Tokens POV** and **Token UUID** contains targets, the event check counts only those listed tokens inside the Region. The point-of-view elevation check still applies separately: the viewer must control an eligible listed token for the effect to be visible. **Tokens POV** also adds a viewer elevation check; it does not replace the event condition.
+
+### Keep an effect on after entry
+
+Select **Token Enters** without **Token Exits** when leaving should not stop the effect. To reset it for another test, disable and re-enable the behavior, then move a token out and back in. Changing ordinary effect parameters without changing the Events selection does not reset its activation state.
+
+### Testing and troubleshooting
+
+Keep a GM connected while testing; FXMaster updates the shared event activation state through a GM client. Save the behavior before testing a new crossing rather than relying only on a token already standing inside the Region.
+
+**Always Visible for GM** bypasses event and elevation visibility checks for the GM view. Turn it off or check a player view when testing whether the trigger has activated. Also confirm the behavior is not **Disabled**, the token actually crosses the Region boundary, and the token is within the Region elevation range.
+
+These events are separate from Sound Effects Manager **Token Movement** rules. **FXMaster: Suppress Scene Sounds** does not expose this Events selector; its sound-type, easing, and muffling controls are documented under [Sound suppression options](./suppression/#sound-suppression-options).
 
 ## Elevation Constraints
 
@@ -121,10 +163,11 @@ These fields are separate from the elevation thresholds used by token trails and
 
 Individual effect pages combine Scene and Region parameters in one list. A **Region only** badge identifies controls that appear only when the effect is configured through a Region behavior.
 
-The reviewed effect definitions currently include these effect-specific Region controls:
+Region-only effect controls include:
 
 - Every filter includes **Edge Fade %** when it is used through **FXMaster: Filter Effects**. Each enabled filter can use a different edge fade.
 - [Water](../reference/effects/details/water/) includes **Follow Region Path** and **Path Influence**. These controls use the Region geometry to steer Flowing Water.
+- [Animal effects](../particles/creatures/) include **Region Boundary Avoidance** while **Orbit** is off. It steers particles away from the Region edges and holes, independently of Token Avoidance.
 
 For **FXMaster: Particle Effects**, **Edge Fade %** is a shared Region behavior field rather than an individual effect parameter. It applies to every particle effect enabled in that behavior. A value of `0` creates a hard edge; higher values soften the transition between the affected and unaffected portions of the Scene.
 

@@ -28,15 +28,22 @@ const groupContext = {
 const groupDisplayLabel = (group) => group === 'creatures' ? 'Animals' : titleCase(group);
 
 function groupContextFor(effect) {
-  const context = groupContext[effect.group] ?? '';
+  const context = effect.id === 'fireworks'
+    ? 'Use Fireworks for a repeating display across a Scene or within a Region. Burst and Dragon modes have separate timing and shape controls.'
+    : groupContext[effect.group] ?? '';
   if (effect.group !== 'creatures') return context;
+  const regionContext = ' In a Region, Region Boundary Avoidance can keep the animals away from its outer edges and holes while Orbit is off.';
   const hasTokenAvoidance = effect.parameters.some((parameter) => parameter.id === 'tokenAvoidance');
   return hasTokenAvoidance
-    ? `${context} This effect also includes Token Avoidance controls for steering around eligible tokens.`
-    : context;
+    ? `${context} This effect also includes Token Avoidance controls for steering around eligible tokens.${regionContext}`
+    : `${context}${regionContext}`;
 }
 
 const effectShowcases = {
+  fireworks: {
+    src: '/videos/fireworks-dragon.mp4',
+    description: 'Preview shows Fireworks in Dragon mode',
+  },
   auroraborealis: {
     src: '/videos/aurora-borealis.mp4',
     description: 'Preview shows Aurora Borealis being played in Horizon mode',
@@ -117,13 +124,9 @@ const effectShowcases = {
     src: '/videos/rats.mp4',
     description: 'Preview shows Rats in Directional Movement mode with Directional Spread enabled',
   },
-  sakurabloom: {
-    src: '/videos/sakura-bloom.mp4',
-    description: 'Preview shows Sakura Bloom enabled for a Region',
-  },
   sakurablossoms: {
     src: '/videos/sakura-blossoms.mp4',
-    description: 'Preview shows Sakura Bloom enabled with Background and Token Trails enabled',
+    description: 'Preview shows Sakura Blossoms with Background and Token Trails enabled',
   },
   sandstorm: {
     src: '/videos/sandstorm.mp4',
@@ -185,6 +188,13 @@ function effectShowcaseMarkup(effect) {
 }
 
 const specialNotes = {
+  fireworks: [
+    'Choose Firework Mode first. Burst Style, Shells per Volley, and Sparks per Shell apply to Burst; the Flight controls apply to Dragon.',
+    'Top Down changes the viewpoint. Firework Size (grid units) and Launch Height (grid units) are also limited by the available Scene or Region area.',
+    'A longer Period leaves more space between launches. In Dragon mode the pause follows the dragon sequence and its final burst.',
+    'Increase Sparks per Shell, Shells per Volley, or Dragon Spark Detail gradually; higher values require more rendering work.',
+    'Fireworks uses its own Wind Drift and Wind Direction controls and does not expose a Sound FX toggle.',
+  ],
   bats: [
     'Orbit works well when bats should circle a cave chamber, tower, or other focal point. Directional Movement is better when they should cross a wider map.',
     'Shadow Only can suggest bats passing above the ground without showing the bat sprites themselves.',
@@ -294,10 +304,6 @@ const specialNotes = {
     'Speed controls movement while Scale controls the size of the distortion pattern.',
     'Underwater can pair with [Bubbles](../bubbles/), [Fish](../fish/), or [Water](../water/), but several strong distortion filters in the same area can make the map difficult to read.',
   ],
-  sakurabloom: [
-    'Top Down controls the airborne presentation, while Background and Token Trails control accumulated petals.',
-    'Tune Ground Particle Size separately from the airborne Scale.',
-  ],
   sakurablossoms: [
     'Background fill and appearance controls are separate from airborne Scale, Speed, Lifetime, Density, and Opacity while the effect is enabled.',
     'Use Trail Lift Chance sparingly so frequent token movement does not continuously refill the airborne layer.',
@@ -368,7 +374,7 @@ const specialNotes = {
   water: [
     'Flow, Waves, Vortex, Turbulence, Caustics, and Refraction are independent systems.',
     'Follow Region Path and Path Influence are useful for rivers or channels drawn as Regions.',
-    'Token Trails can temporarily calm or part the surface and settle over a configured interval.',
+
   ],
   wind: [
     'Manual Painting opens the Wind painting tools. Brush Radius (Grid Spaces) controls the paint area, and the Painting actions add, erase, or clear the mask.',
@@ -390,6 +396,7 @@ const specialNotes = {
 };
 
 const importantControlIds = {
+  fireworks: ['fireworkMode', 'topDown', 'palette', 'frequency', 'burstRadius', 'dragonPatterns', 'dragonDirection', 'dragonTravel', 'dragonSpeed', 'aboveDarkness'],
   bats: ['orbit', 'directionalMovement', 'dropShadow', 'shadowOnly', 'density'],
   birds: ['animations', 'orbit', 'directionalMovement', 'dropShadow', 'density'],
   crows: ['directionalMovement', 'lateralMovement', 'dropShadow', 'shadowOpacity', 'density'],
@@ -411,11 +418,10 @@ const importantControlIds = {
   'fog-filter': ['dimensions', 'density', 'direction', 'synchronizedDirection', 'tokenTrailsEnabled'],
   lightning: ['frequency', 'spark_duration', 'brightness', 'audioAware', 'aboveDarkness'],
   oldfilm: ['sepia', 'noise', 'noiseSize', 'scratchDensity', 'scratch'],
-  predator: ['thermalStrength', 'thermalContrast', 'edgeDefinition', 'scanlineStrength', 'noise', 'speed', 'lineWidth'],
+  predator: ['tokenHeatSeek', 'tokenHeatSeekDispositions', 'thermalStrength', 'thermalContrast', 'edgeDefinition', 'scanlineStrength', 'speed'],
   screenshake: ['timed', 'strength', 'speed', 'smoothness', 'decay', 'edgeProtection', 'audioAware'],
   underwater: ['scale', 'speed'],
-  sakurabloom: ['topDown', 'rotationStrength', 'direction', 'backgroundEnabled', 'backgroundInteractionEnabled'],
-  sakurablossoms: ['scale', 'density', 'backgroundEnabled', 'backgroundInteractionEnabled', 'backgroundInteractionLiftChance'],
+  sakurablossoms: ['directionalMovement', 'topDown', 'orbit', 'synchronizedDirection', 'backgroundEnabled', 'backgroundInteractionEnabled'],
   summerleaves: ['variants', 'spawnMode', 'turbulence', 'backgroundEnabled', 'backgroundInteractionEnabled'],
   fireflies: ['orbit', 'directionalMovement', 'tokenAvoidance', 'tokenAvoidanceRadius', 'density'],
   fireparticles: ['spritesheets', 'manualPlacement', 'lightSource', 'glow', 'burnTokens'],
@@ -429,7 +435,7 @@ const importantControlIds = {
   ice: ['strength', 'iceScale', 'frostStrength', 'waterStrength', 'reflectionStrength', 'reflectionFresnel'],
   glitch: ['sliceEnable', 'slices', 'offset', 'sliceJaggedness', 'glyphEnable', 'glyphIntensity'],
   lightningbolts: ['mode', 'triggerChance', 'frequency', 'branches', 'syncFlash', 'audioAware', 'aboveDarkness'],
-  water: ['flow', 'followRegionPath', 'waves', 'vortex', 'caustics', 'refraction', 'tokenTrailsEnabled'],
+  water: ['flow', 'followRegionPath', 'pathInfluence', 'flowStrength', 'waves', 'vortex', 'caustics', 'refraction'],
   wind: ['manualPlacement', 'direction', 'directionRandomization', 'turbulence', 'gustiness', 'streakiness', 'sheenStrength'],
   auroraborealis: ['mode', 'palette', 'auroraCount', 'intensity', 'ribbonWidth', 'waviness', 'softness', 'aboveDarkness'],
   fire: ['dimensions', 'height', 'density', 'intensity', 'glow', 'smoke', 'distortion', 'aboveDarkness'],
@@ -437,6 +443,51 @@ const importantControlIds = {
 };
 
 const effectOverviews = {
+  fireworks: `## Burst and Dragon modes
+
+**Firework Mode** selects a conventional **Burst** display or a flying **Dragon** made of sparks. Both can run across the Scene or inside **FXMaster: Particle Effects** on a Region.
+
+### Burst
+
+**Burst Style** selects Chrysanthemum, Peony, Willow, Palm, Ring, or a mixture. **Shells per Volley** sets the number of staggered launches, **Sparks per Shell** fills out each burst, and **Burst Duration (ms)** controls how long those sparks remain visible.
+
+**Period** sets the interval between launches or volleys in milliseconds. **Timing Variation** makes that interval less regular. A shorter Period with a longer Burst Duration produces more overlap.
+
+### Dragon
+
+Dragon mode forms a spark dragon, sends it through a flight pattern, and finishes with a finale and a matching burst. **Dragon Duration (ms)** controls the dragon sequence. The next **Period** starts after the sequence and follow-up burst have finished.
+
+| Parameter | What to adjust |
+|---|---|
+| Flight Patterns | Choose Circular, Figure 8, or both as available paths. |
+| Flight Direction | Rotate the path; the dragon faces along the curve while travelling. |
+| Flight Distance | Increase the distance travelled, or set it to 0 for a dragon that stays near its origin. |
+| Flight Speed | Adjust travel speed without changing Dragon Duration. A value of 0 pauses path travel rather than all animation. |
+| Wingbeat Rate | Adjust wing movement separately from travel speed. |
+| Dragon Spark Detail | Increase silhouette detail, with a corresponding increase in rendering work. |
+
+### Color, size, and viewpoint
+
+**Color Palette** provides coordinated color sets. Select **Custom Colors** to use the five **Custom Color** slots. **Multicolor Shells** mixes palette colors within each shell or dragon; turn it off for one color per shell.
+
+Use **Firework Size (grid units)** for burst or dragon size and **Shell Size** for the launching shell trail. **Launch Height (grid units)** sets the launch distance. Choose **Top Down** for an overhead view. The available Scene or Region space can limit how large the effect appears.
+
+**Spark Trail Length**, **Gravity**, **Wind Drift**, and **Wind Direction** shape the loose sparks. Wind Drift is a Fireworks control, not a link to the Wind filter.
+
+### Above Darkness and Region events
+
+**Above Darkness** is enabled by default. It keeps the luminous fireworks visible over Scene darkness without creating Foundry light sources.
+
+To start the display when a token enters an area, add Fireworks to a Region particle behavior and configure its **Events**. See [Token enter and exit events](../../../../regions/#events). Event activation controls the whole repeating display; it does not fire exactly one shell for each crossing.
+`,
+  predator: `## Thermal image and token heat sources
+
+With **Token Heat Seek** off, **Thermal Strength** blends a thermal palette over the Scene. **Thermal Contrast**, **Edge Definition**, **Scanline Strength**, **Sensor Noise**, **Scanline Speed**, and **Scanline Width** refine the image.
+
+Enable **Token Heat Seek** to use visible tokens as heat sources against cooler surroundings. **Token Disposition** chooses which visible tokens contribute. The effect uses full thermal vision in this mode, so **Thermal Strength** is hidden.
+
+This does not reveal hidden or occluded tokens. Effect masks, layer placement, and the current view still determine what can be seen.
+`,
   rain: `## Rain presentation
 
 Rain has separate normal and Top Down presentations. Choose **Top Down** before tuning movement because it changes how the rain, direction, and splash layer are rendered.
@@ -513,21 +564,15 @@ Choose the Variants first, then configure **Spawn Mode**, **Direction**, **Direc
 
 **Background** controls fill, opacity, coverage, variation, piles, and ground-particle size. **Token Trails** controls the disturbed area, strength, swirl, lift chance, elevation threshold, and settling behavior around moving tokens.
 `,
-  sakurabloom: `## Airborne petals and accumulation
-
-Within an enabled Sakura Bloom effect, directional or Top Down petals and optional **Background** accumulation are configured separately. Disabling Sakura Bloom disables both layers. Choose **Top Down** before adjusting **Rotation Strength**, **Direction**, **Scale**, **Speed**, and **Density**.
-
-### Background petals
-
-**Background** adds persistent coverage with immediate or timed fill, opacity, coverage, variation, pile amount, pile size, and a separate **Ground Particle Size**.
-
-### Token trails
-
-**Token Trails** disturbs the accumulated petals. **Trail Width**, **Trail Strength**, and **Trail Swirl** define the path, **Trail Lift Chance** returns some petals to the airborne layer, and the settle controls determine how the surface returns.
-`,
   sakurablossoms: `## Blossom ambience and ground coverage
 
+Sakura Blossoms includes ambient drifting, **Directional Movement**, **Top Down**, and **Orbit** presentations. It also includes the movement modes previously provided by Sakura Bloom.
+
 Within an enabled Sakura Blossoms effect, the drifting blossom layer and optional persistent **Background** accumulation are configured separately. **Background** is not standalone; disabling Sakura Blossoms disables both layers. The airborne layer uses **Scale**, **Speed**, **Lifetime**, **Density**, and **Opacity**, while **Background** has its own fill and appearance controls.
+
+### Movement modes
+
+Leave Directional Movement, Top Down, and Orbit off for ambient drifting. Enable **Directional Movement** for a travelling stream of petals, then adjust **Direction** or enable **Synchronized Direction** to follow [Wind](../wind/) or [Duststorm](../duststorm/). **Top Down** uses overhead motion with **Rotation Strength**; **Orbit** uses circular motion with **Orbit Distance**. Orbit and Top Down are mutually exclusive.
 
 ### Background and trails
 
@@ -554,10 +599,6 @@ Enable **Flowing Water** for a directional current. **Flow Speed**, **Flow Direc
 ### Caustics and refraction
 
 **Caustics** adds moving light patterns with separate strength and tint. **Refraction** controls how strongly the underlying Scene is displaced. Raise them separately because both can affect map, grid, and text readability.
-
-### Token trails
-
-Token Trails temporarily alter the surface around moving tokens. Trail Width defines the path, Trail Strength defines the disturbance, and Settle Time (Seconds) controls recovery.
 
 :::note[Water module settings]
 Some Water controls are hidden when their world-level feature is disabled. Enable the required group in [Water Module Settings](../../../../plus/water-module-settings/) before configuring it on an effect row.
@@ -665,6 +706,7 @@ The shared ribbon controls are **Aurora Count**, **Intensity**, **Speed**, **Rib
 
 
 const exampleOverrides = {
+  fireworks: { fireworkMode: 'dragon', dragonPatterns: ['circular', 'figure8'], dragonDuration: 15000, dragonTravel: 0.6, dragonSpeed: 0.5, aboveDarkness: true },
   rain: { topDown: true, splash: true, direction: 270, speed: 0.2, density: 0.4, backgroundEnabled: false },
   snow: { topDown: true, direction: 270, speed: 0.25, density: 0.4, backgroundEnabled: false },
   snowstorm: { topDown: true, direction: 270, speed: 0.55, density: 0.45, backgroundEnabled: false },
@@ -828,3 +870,15 @@ For complete API behavior, scene targeting, stack ordering, and toggle groups, s
 }
 
 console.log(`Generated ${reference.effects.length} effect detail pages in ${path.relative(root, outputDirectory)}.`);
+
+fs.writeFileSync(path.join(outputDirectory, 'sakurabloom.mdx'), `---
+title: "Sakura Bloom (legacy)"
+description: "Sakura Bloom is now included in Sakura Blossoms."
+pagefind: false
+sidebar:
+  hidden: true
+---
+Sakura Bloom is no longer a separate effect in the particle manager. Its directional and Top Down presentations are now part of [Sakura Blossoms](../sakurablossoms/).
+
+Use **Directional Movement**, **Top Down**, or **Orbit** on Sakura Blossoms to choose its motion, then configure **Background** and **Token Trails** where needed. The **Sakura Bloom** preset name remains available in the [Preset Catalog](../../../../presets/catalog/).
+`);

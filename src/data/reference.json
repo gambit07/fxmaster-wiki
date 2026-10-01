@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-30T19:30:00.000Z",
+  "generatedAt": "2026-09-30T18:29:39.534Z",
   "sourceVersions": {
-    "core": "8.3.4",
-    "plus": "1.1.13"
+    "core": "8.4.1",
+    "plus": "1.1.15"
   },
   "effects": [
     {
@@ -12,7 +12,7 @@
       "label": "Bats",
       "group": "creatures",
       "description": "Animated bat swarms with orbit, directional movement, lateral drift, and optional shadows.",
-      "parameterCount": 26,
+      "parameterCount": 27,
       "parameters": [
         {
           "id": "belowTokens",
@@ -270,6 +270,18 @@
           "description": "Controls the transparency of bats. Lower values allow more of the map to show through."
         },
         {
+          "id": "regionBoundaryAvoidance",
+          "label": "Region Boundary Avoidance",
+          "type": "checkbox",
+          "default": false,
+          "regionOnly": true,
+          "hideWhen": {
+            "orbit": true
+          },
+          "tooltip": "Steer animals away from Region boundaries and holes. Available when Orbit is disabled.",
+          "description": "Steers moving animals away from the boundary and holes of the Region that contains the effect. It is available only on Region effects and is hidden while Orbit is enabled; it is separate from Token Avoidance."
+        },
+        {
           "id": "darknessActivationEnabled",
           "label": "Darkness Activation",
           "type": "checkbox",
@@ -303,7 +315,7 @@
       "label": "Birds",
       "group": "creatures",
       "description": "Flocks of birds with selectable flight animations, orbiting, directional movement, and shadows.",
-      "parameterCount": 27,
+      "parameterCount": 28,
       "parameters": [
         {
           "id": "belowTokens",
@@ -575,6 +587,18 @@
           "description": "Selects which animation variants are allowed to appear for birds."
         },
         {
+          "id": "regionBoundaryAvoidance",
+          "label": "Region Boundary Avoidance",
+          "type": "checkbox",
+          "default": false,
+          "regionOnly": true,
+          "hideWhen": {
+            "orbit": true
+          },
+          "tooltip": "Steer animals away from Region boundaries and holes. Available when Orbit is disabled.",
+          "description": "Steers moving animals away from the boundary and holes of the Region that contains the effect. It is available only on Region effects and is hidden while Orbit is enabled; it is separate from Token Avoidance."
+        },
+        {
           "id": "darknessActivationEnabled",
           "label": "Darkness Activation",
           "type": "checkbox",
@@ -608,7 +632,7 @@
       "label": "Crows",
       "group": "creatures",
       "description": "Dark bird flocks suited to ominous skies, battlefields, and haunted landscapes.",
-      "parameterCount": 26,
+      "parameterCount": 27,
       "parameters": [
         {
           "id": "belowTokens",
@@ -866,6 +890,18 @@
           "description": "Controls the transparency of crows. Lower values allow more of the map to show through."
         },
         {
+          "id": "regionBoundaryAvoidance",
+          "label": "Region Boundary Avoidance",
+          "type": "checkbox",
+          "default": false,
+          "regionOnly": true,
+          "hideWhen": {
+            "orbit": true
+          },
+          "tooltip": "Steer animals away from Region boundaries and holes. Available when Orbit is disabled.",
+          "description": "Steers moving animals away from the boundary and holes of the Region that contains the effect. It is available only on Region effects and is hidden while Orbit is enabled; it is separate from Token Avoidance."
+        },
+        {
           "id": "darknessActivationEnabled",
           "label": "Darkness Activation",
           "type": "checkbox",
@@ -899,7 +935,7 @@
       "label": "Eagles",
       "group": "creatures",
       "description": "Large soaring birds with configurable movement, orbiting, and shadow projection.",
-      "parameterCount": 27,
+      "parameterCount": 28,
       "parameters": [
         {
           "id": "belowTokens",
@@ -1170,6 +1206,18 @@
           "description": "Selects which animation variants are allowed to appear for eagles."
         },
         {
+          "id": "regionBoundaryAvoidance",
+          "label": "Region Boundary Avoidance",
+          "type": "checkbox",
+          "default": false,
+          "regionOnly": true,
+          "hideWhen": {
+            "orbit": true
+          },
+          "tooltip": "Steer animals away from Region boundaries and holes. Available when Orbit is disabled.",
+          "description": "Steers moving animals away from the boundary and holes of the Region that contains the effect. It is available only on Region effects and is hidden while Orbit is enabled; it is separate from Token Avoidance."
+        },
+        {
           "id": "darknessActivationEnabled",
           "label": "Darkness Activation",
           "type": "checkbox",
@@ -1203,7 +1251,7 @@
       "label": "Rats",
       "group": "creatures",
       "description": "Ground-level rat swarms with token avoidance and directional movement controls.",
-      "parameterCount": 25,
+      "parameterCount": 26,
       "parameters": [
         {
           "id": "belowTokens",
@@ -1392,6 +1440,18 @@
           "description": "Controls the transparency of rats. Lower values allow more of the map to show through."
         },
         {
+          "id": "regionBoundaryAvoidance",
+          "label": "Region Boundary Avoidance",
+          "type": "checkbox",
+          "default": false,
+          "regionOnly": true,
+          "hideWhen": {
+            "orbit": true
+          },
+          "tooltip": "Steer animals away from Region boundaries and holes. Available when Orbit is disabled.",
+          "description": "Steers moving animals away from the boundary and holes of the Region that contains the effect. It is available only on Region effects and is hidden while Orbit is enabled; it is separate from Token Avoidance."
+        },
+        {
           "id": "tokenAvoidance",
           "label": "Token Avoidance",
           "type": "checkbox",
@@ -1491,7 +1551,7 @@
       "label": "Spiders",
       "group": "creatures",
       "description": "Crawling spider swarms with token avoidance and configurable movement behavior.",
-      "parameterCount": 25,
+      "parameterCount": 26,
       "parameters": [
         {
           "id": "belowTokens",
@@ -1678,6 +1738,18 @@
           "max": 1,
           "step": 0.1,
           "description": "Controls the transparency of spiders. Lower values allow more of the map to show through."
+        },
+        {
+          "id": "regionBoundaryAvoidance",
+          "label": "Region Boundary Avoidance",
+          "type": "checkbox",
+          "default": false,
+          "regionOnly": true,
+          "hideWhen": {
+            "orbit": true
+          },
+          "tooltip": "Steer animals away from Region boundaries and holes. Available when Orbit is disabled.",
+          "description": "Steers moving animals away from the boundary and holes of the Region that contains the effect. It is available only on Region effects and is hidden while Orbit is enabled; it is separate from Token Avoidance."
         },
         {
           "id": "tokenAvoidance",
@@ -5790,8 +5862,8 @@
       "package": "core",
       "label": "Predator",
       "group": "visual",
-      "description": "World-locked thermal scan treatment with false-color heat mapping, edge definition, scanlines, and sensor noise.",
-      "parameterCount": 16,
+      "description": "Thermal color grading and token heat seeking with contrast, edge definition, scanlines, and sensor noise.",
+      "parameterCount": 18,
       "parameters": [
         {
           "id": "belowTokens",
@@ -5812,7 +5884,7 @@
           "label": "Below Foreground",
           "type": "checkbox",
           "default": false,
-          "tooltip": "Renders effects underneath foreground coverage visually.",
+          "tooltip": "Renders effects underneath the active foreground image visually.",
           "description": "Places Predator below foreground coverage so foreground artwork can visually cover the effect."
         },
         {
@@ -5820,87 +5892,9 @@
           "label": "Levels",
           "type": "scene-levels",
           "default": [],
-          "tooltip": "Limit this scene effect to selected scene levels. Leave All Levels selected to render everywhere.",
+          "tooltip": "Limit this scene effect to the selected scene levels. Leave it on All Levels to render everywhere.",
           "sceneOnly": true,
           "description": "Limits Predator to the selected Scene Levels. Leave All Levels selected when the effect should appear at every elevation."
-        },
-        {
-          "id": "thermalStrength",
-          "label": "Thermal Strength",
-          "type": "range",
-          "default": 0,
-          "min": 0,
-          "max": 1,
-          "step": 0.05,
-          "tooltip": "Blends the false-color thermal palette into the source image. 0 retains source colors; 1 uses full thermal color.",
-          "description": "Blends the false-color thermal palette into the source image. 0 retains the original scene colors; 1 uses the full thermal treatment."
-        },
-        {
-          "id": "thermalContrast",
-          "label": "Thermal Contrast",
-          "type": "range",
-          "default": 0,
-          "min": 0,
-          "max": 1,
-          "step": 0.05,
-          "tooltip": "Separates cool and hot values in the thermal palette. Higher values create stronger temperature differences.",
-          "description": "Separates cool and hot values in the thermal palette. Higher values create stronger temperature differences across the scene."
-        },
-        {
-          "id": "edgeDefinition",
-          "label": "Edge Definition",
-          "type": "range",
-          "default": 0,
-          "min": 0,
-          "max": 1,
-          "step": 0.05,
-          "tooltip": "Highlights local temperature boundaries for sharper thermal silhouettes.",
-          "description": "Highlights local temperature boundaries so creatures, objects, and terrain produce sharper thermal silhouettes."
-        },
-        {
-          "id": "scanlineStrength",
-          "label": "Scanline Strength",
-          "type": "range",
-          "default": 1,
-          "min": 0,
-          "max": 1,
-          "step": 0.05,
-          "tooltip": "Controls scanline brightness variation. Set to 0 to hide the scanline pattern.",
-          "description": "Controls the brightness variation of the moving scanline pattern. Set it to 0 to hide the scanlines while keeping the other Predator systems active."
-        },
-        {
-          "id": "noise",
-          "label": "Sensor Noise",
-          "type": "range",
-          "default": 0,
-          "min": 0,
-          "max": 1,
-          "step": 0.1,
-          "tooltip": "Adds animated sensor grain.",
-          "description": "Adds animated sensor grain across the thermal image. Higher values create a noisier and less stable sensor presentation."
-        },
-        {
-          "id": "speed",
-          "label": "Scanline Speed",
-          "type": "range",
-          "default": 0.3,
-          "min": 0,
-          "max": 1,
-          "step": 0.01,
-          "tooltip": "Controls scanline movement speed. 0 stops movement; 1 applies the maximum configured speed.",
-          "description": "Controls how quickly the scanline pattern travels across the scene. 0 stops the scanline movement."
-        },
-        {
-          "id": "lineWidth",
-          "label": "Scanline Width",
-          "type": "range",
-          "default": 0.5,
-          "min": 0,
-          "max": 1,
-          "step": 0.01,
-          "decimals": 2,
-          "tooltip": "Controls scanline width.",
-          "description": "Controls the width of the moving scanlines. Higher values create broader bands across the thermal image."
         },
         {
           "id": "soundFxEnabled",
@@ -5914,21 +5908,133 @@
           "label": "Sound FX Sounds",
           "type": "multi-select",
           "default": [],
-          "options": {},
+          "tooltip": "Select the sound entries used when the matching Sound FX rule uses Manual multi-sound mode.",
           "allowEmpty": true,
           "showWhen": {
             "soundFxEnabled": true
           },
           "availabilityDetail": "the matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds",
-          "tooltip": "Choose which sounds are eligible when a matching manual SoundFX rule supplies multiple sounds.",
           "description": "Limits Predator to selected sounds when a matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds. Leave the selection empty to use the rule's normal sound selection."
+        },
+        {
+          "id": "tokenHeatSeek",
+          "label": "Token Heat Seek",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Use full thermal vision with visible matching tokens as heat sources and cooler surroundings. Existing masking and layer placement still apply.",
+          "description": "Uses visible tokens with selected dispositions as the heat sources in a full thermal image, while the surroundings remain cooler. Existing visibility masks and layer placement still apply."
+        },
+        {
+          "id": "tokenHeatSeekDispositions",
+          "label": "Token Disposition",
+          "type": "multi-select",
+          "default": [
+            "friendly",
+            "neutral",
+            "hostile",
+            "secret"
+          ],
+          "tooltip": "Choose which visible token dispositions register as heat sources. Hidden and occluded tokens are excluded.",
+          "allowEmpty": false,
+          "showWhen": {
+            "tokenHeatSeek": true
+          },
+          "options": {
+            "friendly": "Friendly",
+            "neutral": "Neutral",
+            "hostile": "Hostile",
+            "secret": "Secret"
+          },
+          "description": "Selects which visible token dispositions act as heat sources while Token Heat Seek is enabled. Tokens excluded by visibility or masking are not revealed through this setting."
+        },
+        {
+          "id": "thermalStrength",
+          "label": "Thermal Strength",
+          "type": "range",
+          "default": 0,
+          "tooltip": "Blends the false-color thermal palette into the source image. 0 retains source colors; 1 uses full thermal color.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "hideWhen": {
+            "tokenHeatSeek": true
+          },
+          "description": "Blends the false-color thermal palette into the source image. 0 retains the original scene colors; 1 uses the full thermal treatment."
+        },
+        {
+          "id": "thermalContrast",
+          "label": "Thermal Contrast",
+          "type": "range",
+          "default": 0,
+          "tooltip": "Separates cool and hot values in the thermal palette. Higher values create stronger temperature differences.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "description": "Separates cool and hot values in the thermal palette. Higher values create stronger temperature differences across the scene."
+        },
+        {
+          "id": "edgeDefinition",
+          "label": "Edge Definition",
+          "type": "range",
+          "default": 0,
+          "tooltip": "Highlights local temperature boundaries for sharper thermal silhouettes.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "description": "Highlights local temperature boundaries so creatures, objects, and terrain produce sharper thermal silhouettes."
+        },
+        {
+          "id": "scanlineStrength",
+          "label": "Scanline Strength",
+          "type": "range",
+          "default": 1,
+          "tooltip": "Controls scanline brightness variation. Set to 0 to hide the scanline pattern.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "description": "Controls the brightness variation of the moving scanline pattern. Set it to 0 to hide the scanlines while keeping the other Predator systems active."
+        },
+        {
+          "id": "noise",
+          "label": "Sensor Noise",
+          "type": "range",
+          "default": 0,
+          "tooltip": "Adds animated sensor grain.",
+          "min": 0,
+          "max": 1,
+          "step": 0.1,
+          "description": "Adds animated sensor grain across the thermal image. Higher values create a noisier and less stable sensor presentation."
+        },
+        {
+          "id": "speed",
+          "label": "Scanline Speed",
+          "type": "range",
+          "default": 0.3,
+          "tooltip": "Controls scanline movement speed. 0 stops movement; 1 applies the maximum configured speed.",
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "decimals": 2,
+          "description": "Controls how quickly the scanline pattern travels across the scene. 0 stops the scanline movement."
+        },
+        {
+          "id": "lineWidth",
+          "label": "Scanline Width",
+          "type": "range",
+          "default": 0.5,
+          "tooltip": "Controls scanline width.",
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "decimals": 2,
+          "description": "Controls the width of the moving scanlines. Higher values create broader bands across the thermal image."
         },
         {
           "id": "darknessActivationEnabled",
           "label": "Darkness Activation",
           "type": "checkbox",
           "default": false,
-          "tooltip": "Only render the effect while scene darkness is within the configured range.",
+          "tooltip": "Enable scene darkness gating for this effect. When disabled, the effect renders at all darkness levels.",
           "description": "Restricts Predator to a configured Scene Darkness range instead of rendering at every darkness level."
         },
         {
@@ -5939,13 +6045,14 @@
             "min": 0,
             "max": 1
           },
+          "tooltip": "Only render this effect when the current scene darkness level falls within the selected range.",
           "min": 0,
           "max": 1,
           "step": 0.01,
+          "decimals": 2,
           "showWhen": {
             "darknessActivationEnabled": true
           },
-          "tooltip": "Minimum and maximum scene darkness values where the effect remains active.",
           "description": "Sets the minimum and maximum Scene Darkness values where Predator remains visible."
         },
         {
@@ -6340,454 +6447,13 @@
       ]
     },
     {
-      "id": "sakurabloom",
-      "kind": "particle",
-      "package": "plus",
-      "label": "Sakura Bloom",
-      "group": "ambient",
-      "description": "Sakura bloom particles with top-down and orbit modes, rotation, synchronized direction, and persistent background accumulation.",
-      "parameterCount": 36,
-      "parameters": [
-        {
-          "id": "belowTokens",
-          "label": "Below Tokens",
-          "type": "checkbox",
-          "default": false,
-          "description": "Places Sakura Bloom behind token artwork in the effect stack. This changes whether tokens appear in front of the effect; it does not change where the effect is generated."
-        },
-        {
-          "id": "belowTiles",
-          "label": "Below Tiles",
-          "type": "checkbox",
-          "default": false,
-          "tooltip": "Renders effects underneath overhead tiles visually.",
-          "description": "Places Sakura Bloom below overhead tile artwork. Enable it when roofs, canopies, or other overhead tiles should cover the effect."
-        },
-        {
-          "id": "belowForeground",
-          "label": "Below Foreground",
-          "type": "checkbox",
-          "default": false,
-          "tooltip": "Renders effects underneath foreground coverage visually.",
-          "description": "Places Sakura Bloom below foreground coverage so foreground artwork can visually cover the effect."
-        },
-        {
-          "id": "levels",
-          "label": "Levels",
-          "type": "scene-levels",
-          "default": [],
-          "tooltip": "Limit this scene effect to selected scene levels. Leave All Levels selected to render everywhere.",
-          "sceneOnly": true,
-          "description": "Limits Sakura Bloom to the selected Scene Levels. Leave All Levels selected when the effect should appear at every elevation."
-        },
-        {
-          "id": "tint",
-          "label": "Tint",
-          "type": "color",
-          "default": {
-            "value": "#FFFFFF",
-            "apply": false
-          },
-          "description": "Applies the selected color tint to sakura bloom particles. Disable Apply to keep the effect's original colors."
-        },
-        {
-          "id": "soundFxEnabled",
-          "label": "Sound FX",
-          "type": "checkbox",
-          "default": false,
-          "description": "Enables audio for Sakura Bloom when a matching active FXMaster+ SoundFX rule is available. This setting does not create sound by itself."
-        },
-        {
-          "id": "soundFxManualSoundIds",
-          "label": "Sound FX Sounds",
-          "type": "multi-select",
-          "default": [],
-          "options": {},
-          "allowEmpty": true,
-          "showWhen": {
-            "soundFxEnabled": true
-          },
-          "tooltip": "Choose which sounds are eligible when a matching manual SoundFX rule supplies multiple sounds.",
-          "description": "Limits Sakura Bloom to selected sounds when a matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds. Leave the selection empty to use the rule's normal sound selection.",
-          "availabilityDetail": "the matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds"
-        },
-        {
-          "id": "topDown",
-          "label": "Top Down",
-          "type": "checkbox",
-          "default": false,
-          "hideWhen": {
-            "orbit": true
-          },
-          "description": "Switches Sakura Bloom to the overhead presentation intended for top-down maps. This changes particle projection and movement, so set it before finalizing scale and direction."
-        },
-        {
-          "id": "orbit",
-          "label": "Orbit",
-          "type": "checkbox",
-          "default": false,
-          "hideWhen": {
-            "topDown": true
-          },
-          "description": "Makes sakura bloom particles circulate around the effect area instead of only crossing the canvas in a straight or drifting path."
-        },
-        {
-          "id": "orbitDistance",
-          "label": "Orbit Distance",
-          "type": "range",
-          "default": 0.5,
-          "min": 0,
-          "max": 1,
-          "step": 0.01,
-          "showWhen": {
-            "orbit": true
-          },
-          "description": "Controls the radius of the path used while Orbit is enabled. Higher values keep sakura bloom particles farther from the orbit center."
-        },
-        {
-          "id": "rotationStrength",
-          "label": "Rotation Strength",
-          "type": "range",
-          "default": 0,
-          "min": 0,
-          "max": 1,
-          "step": 0.01,
-          "showWhen": {
-            "topDown": true
-          },
-          "hideWhen": {
-            "orbit": true
-          },
-          "description": "Controls how strongly sakura bloom particles rotate while moving. Higher values produce more visible turning and spin."
-        },
-        {
-          "id": "direction",
-          "label": "Direction",
-          "type": "range",
-          "min": 0,
-          "max": 360,
-          "step": 5,
-          "hideWhen": [
-            {
-              "topDown": true
-            },
-            {
-              "orbit": true
-            }
-          ],
-          "description": "Sets the primary travel direction for sakura bloom particles. Directional Spread can add variation around this angle."
-        },
-        {
-          "id": "synchronizedDirection",
-          "label": "Synchronized Direction",
-          "type": "checkbox",
-          "default": false,
-          "hideWhen": [
-            {
-              "topDown": true
-            },
-            {
-              "orbit": true
-            }
-          ],
-          "tooltip": "Use the active Wind or Duststorm direction for this effect.",
-          "description": "Uses the active Wind or Duststorm direction for Sakura Bloom. When the source direction changes, this effect follows it."
-        },
-        {
-          "id": "scale",
-          "label": "Scale",
-          "type": "range",
-          "default": 0.15,
-          "min": 0.1,
-          "max": 1,
-          "step": 0.01,
-          "description": "Changes the rendered size of sakura bloom particles. It does not change how many particles are present."
-        },
-        {
-          "id": "speed",
-          "label": "Speed",
-          "type": "range",
-          "default": 0.29,
-          "min": 0.1,
-          "max": 1,
-          "step": 0.01,
-          "description": "Changes how quickly sakura bloom particles move and animate across the canvas. It does not change particle size or count."
-        },
-        {
-          "id": "lifetime",
-          "label": "Lifetime",
-          "type": "range",
-          "default": 0.27,
-          "min": 0.1,
-          "max": 1,
-          "step": 0.01,
-          "description": "Changes how long individual sakura bloom particles remain active before they are recycled or replaced. Higher values usually allow longer travel paths."
-        },
-        {
-          "id": "density",
-          "label": "Density",
-          "type": "range",
-          "default": 0.5,
-          "min": 0.05,
-          "max": 1,
-          "step": 0.05,
-          "description": "Changes how many sakura bloom particles are visible or spawned at once. It does not change their size."
-        },
-        {
-          "id": "alpha",
-          "label": "Opacity",
-          "type": "range",
-          "default": 1,
-          "min": 0,
-          "max": 1,
-          "step": 0.1,
-          "description": "Controls the transparency of sakura bloom particles. Lower values allow more of the map to show through."
-        },
-        {
-          "id": "backgroundEnabled",
-          "label": "Background",
-          "type": "checkbox",
-          "default": false,
-          "tooltip": "Render a persistent field of settled particles behind the active effect. The field follows the same stack placement, scene or Region mask, Levels selection, and below-token/tile settings.",
-          "description": "Render a persistent field of settled particles behind the active effect. The field follows the same stack placement, scene or Region mask, Levels selection, and below-token/tile settings."
-        },
-        {
-          "id": "backgroundMode",
-          "label": "Background Fill",
-          "type": "select",
-          "default": "accumulate",
-          "options": {
-            "full": "Full Coverage",
-            "accumulate": "Fill Over Time"
-          },
-          "showWhen": {
-            "backgroundEnabled": true
-          },
-          "description": "Chooses whether the persistent background appears at full coverage immediately or builds across the scene over time."
-        },
-        {
-          "id": "backgroundDuration",
-          "label": "Time to Full Coverage",
-          "type": "range",
-          "default": 180,
-          "min": 10,
-          "max": 3600,
-          "step": 10,
-          "showWhen": {
-            "backgroundEnabled": true,
-            "backgroundMode": "accumulate"
-          },
-          "labelOutput": "minutes",
-          "description": "Sets how many seconds an accumulating background takes to reach its configured full coverage."
-        },
-        {
-          "id": "backgroundOpacity",
-          "label": "Background Opacity",
-          "type": "range",
-          "default": 0.8,
-          "min": 0,
-          "max": 1,
-          "step": 0.01,
-          "showWhen": {
-            "backgroundEnabled": true
-          },
-          "description": "Controls the maximum transparency of the persistent background after it reaches full coverage."
-        },
-        {
-          "id": "backgroundCoverage",
-          "label": "Ground Coverage",
-          "type": "range",
-          "default": 0.6,
-          "min": 0.05,
-          "max": 1,
-          "step": 0.05,
-          "showWhen": {
-            "backgroundEnabled": true
-          },
-          "description": "Controls how much of the scene or Region is covered by the persistent background at full coverage."
-        },
-        {
-          "id": "backgroundFillVariation",
-          "label": "Fill Variation",
-          "type": "range",
-          "default": 0.75,
-          "min": 0,
-          "max": 1,
-          "step": 0.05,
-          "showWhen": {
-            "backgroundEnabled": true,
-            "backgroundMode": "accumulate"
-          },
-          "description": "Controls how unevenly the background fills. Higher values create more obvious patches before they merge."
-        },
-        {
-          "id": "backgroundPileStrength",
-          "label": "Pile Amount",
-          "type": "range",
-          "default": 0.45,
-          "min": 0,
-          "max": 1,
-          "step": 0.05,
-          "showWhen": {
-            "backgroundEnabled": true
-          },
-          "description": "Controls how strongly settled particles cluster into overlapping piles instead of spreading evenly."
-        },
-        {
-          "id": "backgroundPileSize",
-          "label": "Pile Size (Grid Spaces)",
-          "type": "range",
-          "default": 4,
-          "min": 0.5,
-          "max": 12,
-          "step": 0.5,
-          "showWhen": {
-            "backgroundEnabled": true
-          },
-          "description": "Controls the broad size of each settled-particle pile in grid spaces."
-        },
-        {
-          "id": "backgroundParticleSize",
-          "label": "Ground Particle Size",
-          "type": "range",
-          "default": 0.08,
-          "min": 0.01,
-          "max": 1,
-          "step": 0.01,
-          "showWhen": {
-            "backgroundEnabled": true
-          },
-          "description": "Changes the rendered size of particles resting in the persistent background without changing the airborne particle scale."
-        },
-        {
-          "id": "backgroundInteractionEnabled",
-          "label": "Token Trails",
-          "type": "checkbox",
-          "default": true,
-          "showWhen": {
-            "backgroundEnabled": true
-          },
-          "description": "Allows moving tokens to disturb the persistent background and leave visible trails through it."
-        },
-        {
-          "id": "backgroundInteractionRadius",
-          "label": "Trail Width",
-          "type": "range",
-          "default": 1,
-          "min": 0,
-          "max": 2,
-          "step": 0.05,
-          "showWhen": {
-            "backgroundEnabled": true,
-            "backgroundInteractionEnabled": true
-          },
-          "description": "Sets the width of each token-created trail as a multiplier of the moving token footprint."
-        },
-        {
-          "id": "backgroundInteractionStrength",
-          "label": "Trail Strength",
-          "type": "range",
-          "default": 0.5,
-          "min": 0,
-          "max": 1,
-          "step": 0.05,
-          "showWhen": {
-            "backgroundEnabled": true,
-            "backgroundInteractionEnabled": true
-          },
-          "description": "Controls how forcefully token movement displaces the settled background particles."
-        },
-        {
-          "id": "backgroundInteractionSwirl",
-          "label": "Trail Swirl",
-          "type": "range",
-          "default": 1,
-          "min": 0,
-          "max": 1,
-          "step": 0.05,
-          "showWhen": {
-            "backgroundEnabled": true,
-            "backgroundInteractionEnabled": true
-          },
-          "description": "Adds sideways spin and curved movement to settled particles displaced by token trails."
-        },
-        {
-          "id": "backgroundInteractionLiftChance",
-          "label": "Trail Lift Chance",
-          "type": "range",
-          "default": 1,
-          "min": 0,
-          "max": 1,
-          "step": 0.05,
-          "showWhen": {
-            "backgroundEnabled": true,
-            "backgroundInteractionEnabled": true
-          },
-          "description": "Controls how often a disturbed background particle is lifted briefly into the air instead of only sliding along the surface."
-        },
-        {
-          "id": "backgroundInteractionSettleTime",
-          "label": "Settle Time (Seconds)",
-          "type": "range",
-          "default": 5,
-          "min": 0.1,
-          "max": 12,
-          "step": 0.1,
-          "showWhen": {
-            "backgroundEnabled": true,
-            "backgroundInteractionEnabled": true
-          },
-          "description": "Sets the approximate number of seconds disturbed background particles remain active before settling."
-        },
-        {
-          "id": "backgroundInteractionSettleImpact",
-          "label": "Settle Impact",
-          "type": "range",
-          "default": 1,
-          "min": 0,
-          "max": 1,
-          "step": 0.05,
-          "showWhen": {
-            "backgroundEnabled": true,
-            "backgroundInteractionEnabled": true
-          },
-          "description": "Controls how strongly disturbed particles bounce or react when they settle back onto the surface."
-        },
-        {
-          "id": "darknessActivationEnabled",
-          "label": "Darkness Activation",
-          "type": "checkbox",
-          "default": false,
-          "tooltip": "Only render the effect while scene darkness is within the configured range.",
-          "description": "Restricts Sakura Bloom to a configured Scene Darkness range instead of rendering at every darkness level."
-        },
-        {
-          "id": "darknessActivationRange",
-          "label": "Darkness Activation Range",
-          "type": "range-dual",
-          "default": {
-            "min": 0,
-            "max": 1
-          },
-          "min": 0,
-          "max": 1,
-          "step": 0.01,
-          "showWhen": {
-            "darknessActivationEnabled": true
-          },
-          "tooltip": "Minimum and maximum scene darkness values where the effect remains active.",
-          "description": "Sets the minimum and maximum Scene Darkness values where Sakura Bloom remains visible."
-        }
-      ]
-    },
-    {
       "id": "sakurablossoms",
       "kind": "particle",
       "package": "plus",
       "label": "Sakura Blossoms",
       "group": "ambient",
-      "description": "Sakura blossom particles with standard movement controls and persistent background accumulation.",
-      "parameterCount": 30,
+      "description": "Sakura petals with ambient, directional, Top Down, and Orbit movement, an optional settled Background, and token trails.",
+      "parameterCount": 37,
       "parameters": [
         {
           "id": "belowTokens",
@@ -6801,6 +6467,7 @@
           "label": "Below Tiles",
           "type": "checkbox",
           "default": false,
+          "tooltip": "Renders effects underneath tiles visually.",
           "description": "Places Sakura Blossoms below overhead tile artwork. Enable it when roofs, canopies, or other overhead tiles should cover the effect."
         },
         {
@@ -6808,7 +6475,7 @@
           "label": "Below Foreground",
           "type": "checkbox",
           "default": false,
-          "tooltip": "Renders effects underneath foreground coverage visually.",
+          "tooltip": "Renders effects underneath the active foreground image visually.",
           "description": "Places Sakura Blossoms below foreground coverage so foreground artwork can visually cover the effect."
         },
         {
@@ -6816,7 +6483,7 @@
           "label": "Levels",
           "type": "scene-levels",
           "default": [],
-          "tooltip": "Limit this scene effect to selected scene levels. Leave All Levels selected to render everywhere.",
+          "tooltip": "Limit this scene effect to the selected scene levels. Leave it on All Levels to render everywhere.",
           "sceneOnly": true,
           "description": "Limits Sakura Blossoms to the selected Scene Levels. Leave All Levels selected when the effect should appear at every elevation."
         },
@@ -6842,33 +6509,142 @@
           "label": "Sound FX Sounds",
           "type": "multi-select",
           "default": [],
-          "options": {},
+          "tooltip": "Select the sound entries used when the matching Sound FX rule uses Manual multi-sound mode.",
           "allowEmpty": true,
           "showWhen": {
             "soundFxEnabled": true
           },
-          "tooltip": "Choose which sounds are eligible when a matching manual SoundFX rule supplies multiple sounds.",
-          "description": "Limits Sakura Blossoms to selected sounds when a matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds. Leave the selection empty to use the rule's normal sound selection.",
-          "availabilityDetail": "the matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds"
+          "availabilityDetail": "the matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds",
+          "description": "Limits Sakura Blossoms to selected sounds when a matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds. Leave the selection empty to use the rule's normal sound selection."
+        },
+        {
+          "id": "topDown",
+          "label": "Top Down",
+          "type": "checkbox",
+          "default": false,
+          "hideWhen": {
+            "orbit": true
+          },
+          "description": "Switches Sakura Blossoms to the overhead presentation intended for top-down maps. This changes particle projection and movement, so set it before finalizing scale and direction."
+        },
+        {
+          "id": "orbit",
+          "label": "Orbit",
+          "type": "checkbox",
+          "default": false,
+          "hideWhen": {
+            "topDown": true
+          },
+          "description": "Makes sakura blossoms circulate around the effect area instead of only crossing the canvas in a straight or drifting path."
+        },
+        {
+          "id": "orbitDistance",
+          "label": "Orbit Distance",
+          "type": "range",
+          "default": 0.5,
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "decimals": 2,
+          "showWhen": {
+            "orbit": true
+          },
+          "description": "Controls the radius of the path used while Orbit is enabled. Higher values keep sakura blossoms farther from the orbit center."
+        },
+        {
+          "id": "rotationStrength",
+          "label": "Rotation Strength",
+          "type": "range",
+          "default": 0,
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "decimals": 2,
+          "showWhen": {
+            "topDown": true
+          },
+          "hideWhen": {
+            "orbit": true
+          },
+          "description": "Controls how strongly sakura blossoms rotate while moving. Higher values produce more visible turning and spin."
+        },
+        {
+          "id": "directionalMovement",
+          "label": "Directional Movement",
+          "type": "checkbox",
+          "default": false,
+          "hideWhen": [
+            {
+              "topDown": true
+            },
+            {
+              "orbit": true
+            }
+          ],
+          "description": "Makes sakura blossoms travel in the configured Direction instead of relying only on the effect's default random movement."
+        },
+        {
+          "id": "direction",
+          "label": "Direction",
+          "type": "range",
+          "default": 270,
+          "min": 0,
+          "max": 360,
+          "step": 5,
+          "decimals": 0,
+          "compassDirection": true,
+          "showWhen": {
+            "directionalMovement": true
+          },
+          "hideWhen": [
+            {
+              "topDown": true
+            },
+            {
+              "orbit": true
+            }
+          ],
+          "description": "Sets the primary travel direction for sakura blossoms. Directional Spread can add variation around this angle."
+        },
+        {
+          "id": "synchronizedDirection",
+          "label": "Synchronized Direction",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Use the active Wind or Duststorm direction for this effect.",
+          "showWhen": {
+            "directionalMovement": true
+          },
+          "hideWhen": [
+            {
+              "topDown": true
+            },
+            {
+              "orbit": true
+            }
+          ],
+          "description": "Uses the active Wind or Duststorm direction for Sakura Blossoms. When the source direction changes, this effect follows it."
         },
         {
           "id": "scale",
           "label": "Scale",
           "type": "range",
-          "default": 0.24,
+          "default": 0.15,
           "min": 0.1,
           "max": 1,
           "step": 0.01,
+          "decimals": 2,
           "description": "Changes the rendered size of sakura blossoms. It does not change how many particles are present."
         },
         {
           "id": "speed",
           "label": "Speed",
           "type": "range",
-          "default": 0.27,
+          "default": 0.29,
           "min": 0.1,
           "max": 1,
           "step": 0.01,
+          "decimals": 2,
           "description": "Changes how quickly sakura blossoms move and animate across the canvas. It does not change particle size or count."
         },
         {
@@ -6879,16 +6655,18 @@
           "min": 0.1,
           "max": 1,
           "step": 0.01,
+          "decimals": 2,
           "description": "Changes how long individual sakura blossoms remain active before they are recycled or replaced. Higher values usually allow longer travel paths."
         },
         {
           "id": "density",
           "label": "Density",
           "type": "range",
-          "default": 0.15,
+          "default": 0.5,
           "min": 0.05,
           "max": 1,
           "step": 0.05,
+          "decimals": 2,
           "description": "Changes how many sakura blossoms are visible or spawned at once. It does not change their size."
         },
         {
@@ -6899,6 +6677,7 @@
           "min": 0,
           "max": 1,
           "step": 0.1,
+          "decimals": 1,
           "description": "Controls the transparency of sakura blossoms. Lower values allow more of the map to show through."
         },
         {
@@ -6914,209 +6693,237 @@
           "label": "Background Fill",
           "type": "select",
           "default": "accumulate",
+          "tooltip": "Place the complete scatter field immediately or let individual particles arrive in clustered patches over time.",
+          "showWhen": {
+            "backgroundEnabled": true
+          },
           "options": {
             "full": "Full Coverage",
             "accumulate": "Fill Over Time"
           },
-          "showWhen": {
-            "backgroundEnabled": true
-          },
-          "description": "Chooses whether the persistent background appears at full coverage immediately or builds across the scene over time."
+          "description": "Place the complete scatter field immediately or let individual particles arrive in clustered patches over time."
         },
         {
           "id": "backgroundDuration",
           "label": "Time to Full Coverage",
           "type": "range",
           "default": 180,
+          "tooltip": "Seconds required for the settled particle field to reach its configured ground coverage.",
           "min": 10,
           "max": 3600,
           "step": 10,
+          "decimals": 0,
+          "labelOutput": "minutes",
           "showWhen": {
             "backgroundEnabled": true,
             "backgroundMode": "accumulate"
           },
-          "labelOutput": "minutes",
-          "description": "Sets how many seconds an accumulating background takes to reach its configured full coverage."
+          "description": "Seconds required for the settled particle field to reach its configured ground coverage."
         },
         {
           "id": "backgroundOpacity",
           "label": "Background Opacity",
           "type": "range",
-          "default": 0.86,
+          "default": 0.8,
+          "tooltip": "Maximum opacity of settled particles at full coverage.",
           "min": 0,
           "max": 1,
           "step": 0.01,
+          "decimals": 2,
           "showWhen": {
             "backgroundEnabled": true
           },
-          "description": "Controls the maximum transparency of the persistent background after it reaches full coverage."
+          "description": "Maximum opacity of settled particles at full coverage."
         },
         {
           "id": "backgroundCoverage",
           "label": "Ground Coverage",
           "type": "range",
-          "default": 0.7,
+          "default": 0.6,
+          "tooltip": "Controls the number of settled particles generated across the scene or Region.",
           "min": 0.05,
           "max": 1,
           "step": 0.05,
+          "decimals": 2,
           "showWhen": {
             "backgroundEnabled": true
           },
-          "description": "Controls how much of the scene or Region is covered by the persistent background at full coverage."
+          "description": "Controls the number of settled particles generated across the scene or Region."
         },
         {
           "id": "backgroundFillVariation",
           "label": "Fill Variation",
           "type": "range",
-          "default": 0.8,
+          "default": 0.75,
+          "tooltip": "Controls how strongly nearby particles arrive together. Higher values create more obvious patches and piles that grow over time.",
           "min": 0,
           "max": 1,
           "step": 0.05,
+          "decimals": 2,
           "showWhen": {
             "backgroundEnabled": true,
             "backgroundMode": "accumulate"
           },
-          "description": "Controls how unevenly the background fills. Higher values create more obvious patches before they merge."
+          "description": "Controls how strongly nearby particles arrive together. Higher values create more obvious patches and piles that grow over time."
         },
         {
           "id": "backgroundPileStrength",
           "label": "Pile Amount",
           "type": "range",
-          "default": 0.4,
+          "default": 0.45,
+          "tooltip": "Controls how strongly particles cluster into overlapping piles instead of distributing evenly.",
           "min": 0,
           "max": 1,
           "step": 0.05,
+          "decimals": 2,
           "showWhen": {
             "backgroundEnabled": true
           },
-          "description": "Controls how strongly settled particles cluster into overlapping piles instead of spreading evenly."
+          "description": "Controls how strongly particles cluster into overlapping piles instead of distributing evenly."
         },
         {
           "id": "backgroundPileSize",
           "label": "Pile Size (Grid Spaces)",
           "type": "range",
-          "default": 4.5,
+          "default": 4,
+          "tooltip": "Sets the broad size of clustered piles in grid spaces.",
           "min": 0.5,
           "max": 12,
           "step": 0.5,
+          "decimals": 1,
           "showWhen": {
             "backgroundEnabled": true
           },
-          "description": "Controls the broad size of each settled-particle pile in grid spaces."
+          "description": "Sets the broad size of clustered piles in grid spaces."
         },
         {
           "id": "backgroundParticleSize",
           "label": "Ground Particle Size",
           "type": "range",
-          "default": 0.23,
+          "default": 0.08,
+          "tooltip": "Controls the rendered size of particles resting on the ground independently of the moving particle scale.",
           "min": 0.01,
           "max": 1,
           "step": 0.01,
+          "decimals": 2,
           "showWhen": {
             "backgroundEnabled": true
           },
-          "description": "Changes the rendered size of particles resting in the persistent background without changing the airborne particle scale."
+          "description": "Controls the rendered size of particles resting on the ground independently of the moving particle scale."
         },
         {
           "id": "backgroundInteractionEnabled",
           "label": "Token Trails",
           "type": "checkbox",
-          "default": false,
+          "default": true,
+          "tooltip": "Allow visible token trails to push, spin, and briefly lift nearby settled particles while moving through them. Displaced particles settle in their new positions for the current canvas session.",
           "showWhen": {
             "backgroundEnabled": true
           },
-          "description": "Allows moving tokens to disturb the persistent background and leave visible trails through it."
+          "description": "Allow visible token trails to push, spin, and briefly lift nearby settled particles while moving through them. Displaced particles settle in their new positions for the current canvas session."
         },
         {
           "id": "backgroundInteractionRadius",
           "label": "Trail Width",
           "type": "range",
-          "default": 0.95,
+          "default": 1,
+          "tooltip": "Sets trail width as a multiplier of the moving token's footprint. 1 is approximately the token's size.",
           "min": 0,
           "max": 2,
           "step": 0.05,
+          "decimals": 2,
           "showWhen": {
             "backgroundEnabled": true,
             "backgroundInteractionEnabled": true
           },
-          "description": "Sets the width of each token-created trail as a multiplier of the moving token footprint."
+          "description": "Sets trail width as a multiplier of the moving token's footprint. 1 is approximately the token's size."
         },
         {
           "id": "backgroundInteractionStrength",
           "label": "Trail Strength",
           "type": "range",
-          "default": 0.55,
+          "default": 0.5,
+          "tooltip": "Controls how forcefully token trails push nearby particles.",
           "min": 0,
           "max": 1,
           "step": 0.05,
+          "decimals": 2,
           "showWhen": {
             "backgroundEnabled": true,
             "backgroundInteractionEnabled": true
           },
-          "description": "Controls how forcefully token movement displaces the settled background particles."
+          "description": "Controls how forcefully token trails push nearby particles."
         },
         {
           "id": "backgroundInteractionSwirl",
           "label": "Trail Swirl",
           "type": "range",
-          "default": 0.85,
+          "default": 1,
+          "tooltip": "Adds sideways flutter and spin to particles disturbed by token trails.",
           "min": 0,
           "max": 1,
           "step": 0.05,
+          "decimals": 2,
           "showWhen": {
             "backgroundEnabled": true,
             "backgroundInteractionEnabled": true
           },
-          "description": "Adds sideways spin and curved movement to settled particles displaced by token trails."
+          "description": "Adds sideways flutter and spin to particles disturbed by token trails."
         },
         {
           "id": "backgroundInteractionLiftChance",
           "label": "Trail Lift Chance",
           "type": "range",
-          "default": 0.65,
+          "default": 1,
+          "tooltip": "Controls the chance that a trailed particle briefly lifts above the ground before settling.",
           "min": 0,
           "max": 1,
           "step": 0.05,
+          "decimals": 2,
           "showWhen": {
             "backgroundEnabled": true,
             "backgroundInteractionEnabled": true
           },
-          "description": "Controls how often a disturbed background particle is lifted briefly into the air instead of only sliding along the surface."
+          "description": "Controls the chance that a trailed particle briefly lifts above the ground before settling."
         },
         {
           "id": "backgroundInteractionSettleTime",
           "label": "Settle Time (Seconds)",
           "type": "range",
-          "default": 2,
+          "default": 5,
+          "tooltip": "Approximate time trailed particles remain active before friction brings them to rest.",
           "min": 0.1,
           "max": 12,
           "step": 0.1,
+          "decimals": 1,
           "showWhen": {
             "backgroundEnabled": true,
             "backgroundInteractionEnabled": true
           },
-          "description": "Sets the approximate number of seconds disturbed background particles remain active before settling."
+          "description": "Approximate time trailed particles remain active before friction brings them to rest."
         },
         {
           "id": "backgroundInteractionSettleImpact",
           "label": "Settle Impact",
           "type": "range",
           "default": 1,
+          "tooltip": "Controls how strongly disturbed particles bounce when they settle back onto the ground.",
           "min": 0,
           "max": 1,
           "step": 0.05,
+          "decimals": 2,
           "showWhen": {
             "backgroundEnabled": true,
             "backgroundInteractionEnabled": true
           },
-          "description": "Controls how strongly disturbed particles bounce or react when they settle back onto the surface."
+          "description": "Controls how strongly disturbed particles bounce when they settle back onto the ground."
         },
         {
           "id": "darknessActivationEnabled",
           "label": "Darkness Activation",
           "type": "checkbox",
           "default": false,
-          "tooltip": "Only render the effect while scene darkness is within the configured range.",
+          "tooltip": "Enable scene darkness gating for this effect. When disabled, the effect renders at all darkness levels.",
           "description": "Restricts Sakura Blossoms to a configured Scene Darkness range instead of rendering at every darkness level."
         },
         {
@@ -7127,13 +6934,14 @@
             "min": 0,
             "max": 1
           },
+          "tooltip": "Only render this effect when the current scene darkness level falls within the selected range.",
           "min": 0,
           "max": 1,
           "step": 0.01,
+          "decimals": 2,
           "showWhen": {
             "darknessActivationEnabled": true
           },
-          "tooltip": "Minimum and maximum scene darkness values where the effect remains active.",
           "description": "Sets the minimum and maximum Scene Darkness values where Sakura Blossoms remains visible."
         }
       ]
@@ -7787,7 +7595,7 @@
       "label": "Fireflies",
       "group": "creatures",
       "description": "Glowing fireflies with ambient movement, light-like bloom, and configurable density.",
-      "parameterCount": 24,
+      "parameterCount": 25,
       "parameters": [
         {
           "id": "belowTokens",
@@ -7962,6 +7770,18 @@
           "max": 1,
           "step": 0.1,
           "description": "Controls the transparency of fireflies. Lower values allow more of the map to show through."
+        },
+        {
+          "id": "regionBoundaryAvoidance",
+          "label": "Region Boundary Avoidance",
+          "type": "checkbox",
+          "default": false,
+          "regionOnly": true,
+          "hideWhen": {
+            "orbit": true
+          },
+          "tooltip": "Steer animals away from Region boundaries and holes. Available when Orbit is disabled.",
+          "description": "Steers moving animals away from the boundary and holes of the Region that contains the effect. It is available only on Region effects and is hidden while Orbit is enabled; it is separate from Token Avoidance."
         },
         {
           "id": "tokenAvoidance",
@@ -8498,7 +8318,7 @@
       "label": "Fish",
       "group": "creatures",
       "description": "Animated koi, betta, manta ray, and spirit variants with orbit, directional movement, glow, trails, and token avoidance.",
-      "parameterCount": 30,
+      "parameterCount": 31,
       "parameters": [
         {
           "id": "belowTokens",
@@ -8752,6 +8572,18 @@
           "max": 1,
           "step": 0.1,
           "description": "Controls the transparency of fish. Lower values allow more of the map to show through."
+        },
+        {
+          "id": "regionBoundaryAvoidance",
+          "label": "Region Boundary Avoidance",
+          "type": "checkbox",
+          "default": false,
+          "regionOnly": true,
+          "hideWhen": {
+            "orbit": true
+          },
+          "tooltip": "Steer animals away from Region boundaries and holes. Available when Orbit is disabled.",
+          "description": "Steers moving animals away from the boundary and holes of the Region that contains the effect. It is available only on Region effects and is hidden while Orbit is enabled; it is separate from Token Avoidance."
         },
         {
           "id": "tokenAvoidance",
@@ -11767,8 +11599,8 @@
       "package": "plus",
       "label": "Water",
       "group": "environmental",
-      "description": "Water refraction, caustics, flow, waves, vortices, region-path steering, and token trails.",
-      "parameterCount": 38,
+      "description": "Water refraction, caustics, flowing currents, waves, vortices, and Region-path steering.",
+      "parameterCount": 34,
       "parameters": [
         {
           "id": "belowTokens",
@@ -12129,54 +11961,6 @@
             "vortex": false
           },
           "description": "Changes the subtle motion speed used when Flow, Waves, and Vortex are not providing stronger movement."
-        },
-        {
-          "id": "tokenTrailsEnabled",
-          "label": "Token Trails",
-          "type": "checkbox",
-          "default": false,
-          "tooltip": "Create temporary swimming-style ripples, side displacement, and a slight wake where visible tokens move through the Water filter.",
-          "description": "Create temporary swimming-style ripples, side displacement, and a slight wake where visible tokens move through the Water filter."
-        },
-        {
-          "id": "tokenTrailWidth",
-          "label": "Trail Width",
-          "type": "range",
-          "default": 1,
-          "min": 0,
-          "max": 2,
-          "step": 0.05,
-          "showWhen": {
-            "tokenTrailsEnabled": true
-          },
-          "tooltip": "Sets trail width as a multiplier of the moving token's footprint. 1 is approximately the token's size.",
-          "description": "Sets trail width as a multiplier of the moving token's footprint. 1 is approximately the token's size."
-        },
-        {
-          "id": "tokenTrailStrength",
-          "label": "Trail Strength",
-          "type": "range",
-          "default": 0.85,
-          "min": 0,
-          "max": 1,
-          "step": 0.01,
-          "showWhen": {
-            "tokenTrailsEnabled": true
-          },
-          "description": "Controls how strongly moving tokens displace the water and brighten the wake around their recent path."
-        },
-        {
-          "id": "tokenTrailSettleTime",
-          "label": "Settle Time (Seconds)",
-          "type": "range",
-          "default": 3.2,
-          "min": 0.4,
-          "max": 5,
-          "step": 0.1,
-          "showWhen": {
-            "tokenTrailsEnabled": true
-          },
-          "description": "Sets how many seconds token-created ripples and wake displacement take to fade back into the normal water surface."
         },
         {
           "id": "darknessActivationEnabled",
@@ -13918,6 +13702,521 @@
           "description": "Controls the edge fade for Neon when it is used in an FXMaster: Filter Effects Region behavior. A value of 0 creates a hard Region boundary; higher values soften the transition between filtered and unfiltered areas."
         }
       ]
+    },
+    {
+      "id": "fireworks",
+      "label": "Fireworks",
+      "kind": "particle",
+      "package": "plus",
+      "group": "ambient",
+      "description": "Procedural firework shells and spark dragons with selectable palettes, flight patterns, launch trails, and Above Darkness presentation.",
+      "parameters": [
+        {
+          "id": "belowTokens",
+          "label": "Below Tokens",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Renders effects underneath tokens visually.",
+          "description": "Places Fireworks behind token artwork in the effect stack. This changes whether tokens appear in front of the effect; it does not change where the effect is generated."
+        },
+        {
+          "id": "belowTiles",
+          "label": "Below Tiles",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Renders effects underneath tiles visually.",
+          "description": "Places Fireworks below overhead tile artwork. Enable it when roofs, canopies, or other overhead tiles should cover the effect."
+        },
+        {
+          "id": "belowForeground",
+          "label": "Below Foreground",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Renders effects underneath the active foreground image visually.",
+          "description": "Places Fireworks below foreground coverage so foreground artwork can visually cover the effect."
+        },
+        {
+          "id": "levels",
+          "label": "Levels",
+          "type": "scene-levels",
+          "default": [],
+          "tooltip": "Limit this scene effect to the selected scene levels. Leave it on All Levels to render everywhere.",
+          "sceneOnly": true,
+          "description": "Limits Fireworks to the selected Scene Levels. Leave All Levels selected when the effect should appear at every elevation."
+        },
+        {
+          "id": "fireworkMode",
+          "label": "Firework Mode",
+          "type": "select",
+          "default": "normal",
+          "tooltip": "Burst launches timed firework shells. Dragon repeats one flight and spark finale at a time.",
+          "options": {
+            "normal": "Burst",
+            "dragon": "Dragon"
+          },
+          "description": "Selects Burst for conventional firework shells or Dragon for a forming, flying spark dragon and its finale. Mode-specific controls appear for the selected presentation."
+        },
+        {
+          "id": "topDown",
+          "label": "Top Down",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Play effect in top-down mode",
+          "description": "Shows the launch and burst from an overhead viewpoint instead of a side-facing view. Top Down also changes the projected dragon flight; it does not select a different burst style."
+        },
+        {
+          "id": "burstStyle",
+          "label": "Burst Style",
+          "type": "multi-select",
+          "default": [
+            "mixed"
+          ],
+          "tooltip": "Choose one or more burst styles. Each shell independently chooses from the selected styles, including within a volley. Mixed or no selection uses all five styles; Mixed overrides other selections. Random choices can repeat.",
+          "allowEmpty": true,
+          "hideWhen": {
+            "fireworkMode": "dragon"
+          },
+          "options": {
+            "mixed": "Mixed",
+            "chrysanthemum": "Chrysanthemum",
+            "peony": "Peony",
+            "willow": "Willow",
+            "palm": "Palm",
+            "ring": "Ring"
+          },
+          "description": "Chooses the shell shapes available for Burst mode. Each shell can use a selected style; Mixed or an empty selection allows all five styles, including rings and trailing willow sparks."
+        },
+        {
+          "id": "palette",
+          "label": "Color Palette",
+          "type": "multi-select",
+          "default": [
+            "celebration"
+          ],
+          "tooltip": "Choose one or more color palettes. Each shell independently chooses one of the selected palettes. No selection uses Celebration. Include Custom Colors to use the five individual color choices.",
+          "allowEmpty": true,
+          "options": {
+            "celebration": "Celebration",
+            "gold": "Golden Finale",
+            "silver": "Silver Stars",
+            "ember": "Ember & Gold",
+            "ocean": "Ocean Jewels",
+            "rose": "Rose & Violet",
+            "patriotic": "Ruby & Sapphire",
+            "custom": "Custom Colors"
+          },
+          "description": "Chooses the color palettes available to the effect. Each shell or dragon selects one palette; Custom Colors uses the enabled custom color slots, and an empty selection uses Celebration."
+        },
+        {
+          "id": "fireworkColor1",
+          "label": "Custom Color 1",
+          "type": "color",
+          "default": {
+            "value": "#ff375b",
+            "apply": true
+          },
+          "tooltip": "Enable this color to include it in the custom palette. If all five colors are disabled, fireworks use white.",
+          "showWhen": {
+            "palette": {
+              "operator": "contains",
+              "value": "custom"
+            }
+          },
+          "description": "Sets custom palette color 1. The slot is used when Custom Colors is selected in Color Palette; disable Apply to exclude it. With no custom slots enabled, the custom palette uses white."
+        },
+        {
+          "id": "fireworkColor2",
+          "label": "Custom Color 2",
+          "type": "color",
+          "default": {
+            "value": "#ffbc42",
+            "apply": true
+          },
+          "tooltip": "Enable this color to include it in the custom palette. If all five colors are disabled, fireworks use white.",
+          "showWhen": {
+            "palette": {
+              "operator": "contains",
+              "value": "custom"
+            }
+          },
+          "description": "Sets custom palette color 2. The slot is used when Custom Colors is selected in Color Palette; disable Apply to exclude it. With no custom slots enabled, the custom palette uses white."
+        },
+        {
+          "id": "fireworkColor3",
+          "label": "Custom Color 3",
+          "type": "color",
+          "default": {
+            "value": "#45efa1",
+            "apply": true
+          },
+          "tooltip": "Enable this color to include it in the custom palette. If all five colors are disabled, fireworks use white.",
+          "showWhen": {
+            "palette": {
+              "operator": "contains",
+              "value": "custom"
+            }
+          },
+          "description": "Sets custom palette color 3. The slot is used when Custom Colors is selected in Color Palette; disable Apply to exclude it. With no custom slots enabled, the custom palette uses white."
+        },
+        {
+          "id": "fireworkColor4",
+          "label": "Custom Color 4",
+          "type": "color",
+          "default": {
+            "value": "#4b9bff",
+            "apply": true
+          },
+          "tooltip": "Enable this color to include it in the custom palette. If all five colors are disabled, fireworks use white.",
+          "showWhen": {
+            "palette": {
+              "operator": "contains",
+              "value": "custom"
+            }
+          },
+          "description": "Sets custom palette color 4. The slot is used when Custom Colors is selected in Color Palette; disable Apply to exclude it. With no custom slots enabled, the custom palette uses white."
+        },
+        {
+          "id": "fireworkColor5",
+          "label": "Custom Color 5",
+          "type": "color",
+          "default": {
+            "value": "#bd72ff",
+            "apply": true
+          },
+          "tooltip": "Enable this color to include it in the custom palette. If all five colors are disabled, fireworks use white.",
+          "showWhen": {
+            "palette": {
+              "operator": "contains",
+              "value": "custom"
+            }
+          },
+          "description": "Sets custom palette color 5. The slot is used when Custom Colors is selected in Color Palette; disable Apply to exclude it. With no custom slots enabled, the custom palette uses white."
+        },
+        {
+          "id": "mixedColors",
+          "label": "Multicolor Shells",
+          "type": "checkbox",
+          "default": true,
+          "tooltip": "Mix colors from the chosen palette within each shell. When disabled, each shell uses one color from its chosen palette.",
+          "description": "Uses several colors from the selected palette within each shell or dragon. Turn it off for one palette color per shell rather than mixing colors inside the same firework."
+        },
+        {
+          "id": "dragonPatterns",
+          "label": "Flight Patterns",
+          "type": "multi-select",
+          "default": [
+            "circular",
+            "figure8"
+          ],
+          "tooltip": "Choose one or more flight patterns. Each dragon randomly chooses from the selected patterns. No selection uses both patterns. Random choices can repeat.",
+          "allowEmpty": true,
+          "showWhen": {
+            "fireworkMode": "dragon"
+          },
+          "options": {
+            "circular": "Circular",
+            "figure8": "Figure 8"
+          },
+          "description": "Chooses Circular, Figure 8, or both as possible dragon flight paths. An empty selection allows both patterns; Flight Direction rotates the chosen path."
+        },
+        {
+          "id": "brightness",
+          "label": "Brightness",
+          "type": "range",
+          "default": 0.8,
+          "tooltip": "Intensity of the spark cores and glow. Higher values brighten overlapping sparks and haze; zero hides the effect.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "description": "Controls the brightness of the firework sparks and their glow. Set it to 0 to hide the luminous result without changing the selected timing or flight options."
+        },
+        {
+          "id": "alpha",
+          "label": "Opacity",
+          "type": "range",
+          "default": 1,
+          "tooltip": "Global transparency of the effect. 0 = invisible; 1 = fully opaque.",
+          "min": 0,
+          "max": 1,
+          "step": 0.1,
+          "decimals": 1,
+          "description": "Controls the overall transparency of the fireworks. Lower values allow more of the map to show through the sparks and their glow."
+        },
+        {
+          "id": "frequency",
+          "label": "Period",
+          "type": "range",
+          "default": 3600,
+          "tooltip": "In Burst mode, the time between launches or volleys. In Dragon mode, the pause after the dragon and its follow-up burst finish before the next dragon launches. Measured in milliseconds.",
+          "min": 1000,
+          "max": 30000,
+          "step": 100,
+          "decimals": 0,
+          "description": "Sets the interval in milliseconds between Burst launches or volleys. In Dragon mode, this pause starts after the dragon sequence and its follow-up burst finish."
+        },
+        {
+          "id": "burstRadius",
+          "label": "Firework Size (grid units)",
+          "type": "range",
+          "default": 3.5,
+          "tooltip": "Nominal size in scene grid units. New fireworks fit the visible scene or Region bounds; dragons reserve space for wings and flight path.",
+          "min": 1,
+          "max": 10,
+          "step": 0.25,
+          "decimals": 2,
+          "description": "Sets the size of the firework burst or dragon in grid units. The effect fits the result to the visible Scene or Region area, so a narrow Region can limit the final size."
+        },
+        {
+          "id": "shellSize",
+          "label": "Shell Size",
+          "type": "range",
+          "default": 0.5,
+          "tooltip": "Thickness of the rising shell and its launch trail, independent of the burst or dragon size. Applies in both viewing modes.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "description": "Changes the size and thickness of the launching shell and its trail. Use Firework Size for the burst or dragon dimensions rather than enlarging the launch trail."
+        },
+        {
+          "id": "burstDuration",
+          "label": "Burst Duration (ms)",
+          "type": "range",
+          "default": 3200,
+          "tooltip": "Time from detonation until the final sparks extinguish.",
+          "min": 600,
+          "max": 8000,
+          "step": 100,
+          "decimals": 0,
+          "hideWhen": {
+            "fireworkMode": "dragon"
+          },
+          "description": "Sets how long the sparks from a Burst shell remain visible, in milliseconds. Longer bursts can overlap more heavily when Period is short."
+        },
+        {
+          "id": "dragonDuration",
+          "label": "Dragon Duration (ms)",
+          "type": "range",
+          "default": 15000,
+          "tooltip": "Time from ignition through formation, flight, and the spark finale. A matching firework then bursts before the next dragon starts.",
+          "min": 2000,
+          "max": 30000,
+          "step": 100,
+          "decimals": 0,
+          "showWhen": {
+            "fireworkMode": "dragon"
+          },
+          "description": "Sets the duration of the dragon formation, flight, and finale in milliseconds. A matching firework burst follows the dragon sequence before the next Period begins."
+        },
+        {
+          "id": "dragonDirection",
+          "label": "Flight Direction",
+          "type": "range",
+          "default": 0,
+          "tooltip": "Orientation of the looping flight path. The dragon turns to follow each curve. With Flight Distance at zero, sets the direction the hovering dragon faces.",
+          "min": 0,
+          "max": 360,
+          "step": 5,
+          "decimals": 0,
+          "compassDirection": true,
+          "showWhen": {
+            "fireworkMode": "dragon"
+          },
+          "description": "Rotates the dragon flight path and establishes its facing when Flight Distance is zero. While travelling, the dragon faces along its path."
+        },
+        {
+          "id": "dragonTravel",
+          "label": "Flight Distance",
+          "type": "range",
+          "default": 0.6,
+          "tooltip": "Amount of the available area covered by the looping flight path. Higher values make wider loops; zero holds position apart from body motion and wind drift.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "showWhen": {
+            "fireworkMode": "dragon"
+          },
+          "description": "Controls how far the dragon moves along its flight pattern. At 0 it stays near its origin, while body animation and Wind Drift can still provide movement."
+        },
+        {
+          "id": "dragonSpeed",
+          "label": "Flight Speed",
+          "type": "range",
+          "default": 0.5,
+          "tooltip": "Speed along the looping flight path, independent of Dragon Duration. The default 0.5 preserves the standard flight pace; 1 doubles it. Zero pauses path travel while body motion and wind drift continue.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "showWhen": {
+            "fireworkMode": "dragon"
+          },
+          "description": "Controls how quickly the dragon moves along its flight path without changing Dragon Duration. At 0 path travel pauses; at 0.5 it uses the standard travel speed and at 1 it travels twice as quickly."
+        },
+        {
+          "id": "dragonWingbeat",
+          "label": "Wingbeat Rate",
+          "type": "range",
+          "default": 0.25,
+          "tooltip": "Wing-flap speed. Zero holds the wings still.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "showWhen": {
+            "fireworkMode": "dragon"
+          },
+          "description": "Controls how quickly the dragon flaps its wings. At 0 the wings hold still while the other flight and spark animations can continue."
+        },
+        {
+          "id": "dragonDetail",
+          "label": "Dragon Spark Detail",
+          "type": "range",
+          "default": 0.65,
+          "tooltip": "Spark density defining the body, head, wings, tail, and trailing haze. Higher values add detail and rendering work.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "showWhen": {
+            "fireworkMode": "dragon"
+          },
+          "description": "Changes the number of sparks defining the dragon. Higher values create a more detailed silhouette and require more rendering work."
+        },
+        {
+          "id": "timingVariation",
+          "label": "Timing Variation",
+          "type": "range",
+          "default": 0.25,
+          "tooltip": "Randomize the Burst-mode launch interval by up to 35% of Period at the maximum setting. Zero keeps a regular cadence.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "hideWhen": {
+            "fireworkMode": "dragon"
+          },
+          "description": "Varies the interval between Burst launches so they do not repeat at exactly the same pace. At 0 the timing is regular; higher values make the spacing less predictable."
+        },
+        {
+          "id": "volley",
+          "label": "Shells per Volley",
+          "type": "range",
+          "default": 1,
+          "tooltip": "Launch 1-10 shells with a short stagger. Each shell independently chooses from the selected burst styles and color palettes.",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "decimals": 0,
+          "hideWhen": {
+            "fireworkMode": "dragon"
+          },
+          "description": "Sets how many shells launch in each Burst volley. Their launches are staggered, and each shell can select its own burst style and palette."
+        },
+        {
+          "id": "starCount",
+          "label": "Sparks per Shell",
+          "type": "range",
+          "default": 112,
+          "tooltip": "Number of sparks in each Burst-mode shell. Higher values make denser bursts.",
+          "min": 32,
+          "max": 240,
+          "step": 8,
+          "decimals": 0,
+          "hideWhen": {
+            "fireworkMode": "dragon"
+          },
+          "description": "Sets how many sparks are emitted by each Burst shell. More sparks create fuller bursts and increase rendering cost, especially with several shells per volley."
+        },
+        {
+          "id": "launchHeight",
+          "label": "Launch Height (grid units)",
+          "type": "range",
+          "default": 5,
+          "tooltip": "Height of the rising rocket trail in grid units. Dragon launches shorten to fit the available space. The trail appears foreshortened in Top Down view.",
+          "min": 1,
+          "max": 12,
+          "step": 0.5,
+          "decimals": 1,
+          "description": "Sets the distance of the rising shell trail in grid units. The effect can shorten it to fit the available area; Top Down uses a foreshortened launch."
+        },
+        {
+          "id": "trailLength",
+          "label": "Spark Trail Length",
+          "type": "range",
+          "default": 0.6,
+          "tooltip": "Length of the sparks left behind the moving firework. In Dragon mode, also controls the lifetime of released sparks and haze, which drift from their release positions.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "description": "Controls the length of the spark trails. Longer trails emphasize motion and leave more visible streaks behind the burst or dragon."
+        },
+        {
+          "id": "gravity",
+          "label": "Gravity",
+          "type": "range",
+          "default": 0.5,
+          "tooltip": "Downward pull on firework sparks and the Dragon spark finale. Does not change the dragon flight path.",
+          "min": 0,
+          "max": 1,
+          "step": 0.05,
+          "description": "Controls how strongly loose sparks fall during the burst and finale. It does not replace the dragon flight pattern with a falling trajectory."
+        },
+        {
+          "id": "wind",
+          "label": "Wind Drift",
+          "type": "range",
+          "default": 0.08,
+          "tooltip": "Amount of wind drift applied to fireworks. In Dragon mode, adds a small drift to the flight and finale.",
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "description": "Controls how far the sparks drift in the selected Wind Direction. This is a local Fireworks control, not the Synchronized Direction option used by other effects."
+        },
+        {
+          "id": "windDirection",
+          "label": "Wind Direction",
+          "type": "range",
+          "default": 0,
+          "tooltip": "Direction of wind drift. Has no visible effect when Wind Drift is zero.",
+          "min": 0,
+          "max": 360,
+          "step": 5,
+          "decimals": 0,
+          "compassDirection": true,
+          "description": "Sets the direction used by Wind Drift. Increase Wind Drift above 0 to make the direction visible in the spark motion."
+        },
+        {
+          "id": "aboveDarkness",
+          "label": "Above Darkness",
+          "type": "checkbox",
+          "default": true,
+          "tooltip": "Presents the effect's luminous contribution above scene darkness.",
+          "description": "Presents the fireworks above Foundry scene darkness. Enabled by default; it changes the luminous presentation rather than creating Foundry light sources."
+        },
+        {
+          "id": "darknessActivationEnabled",
+          "label": "Darkness Activation",
+          "type": "checkbox",
+          "default": false,
+          "tooltip": "Enable scene darkness gating for this effect. When disabled, the effect renders at all darkness levels.",
+          "description": "Restricts Fireworks to a configured Scene Darkness range instead of rendering at every darkness level."
+        },
+        {
+          "id": "darknessActivationRange",
+          "label": "Darkness Activation Range",
+          "type": "range-dual",
+          "default": {
+            "min": 0,
+            "max": 1
+          },
+          "tooltip": "Only render this effect when the current scene darkness level falls within the selected range.",
+          "min": 0,
+          "max": 1,
+          "step": 0.01,
+          "decimals": 2,
+          "showWhen": {
+            "darknessActivationEnabled": true
+          },
+          "description": "Sets the minimum and maximum Scene Darkness values where Fireworks remains visible."
+        }
+      ],
+      "parameterCount": 38
     }
   ],
   "presets": [
@@ -14456,7 +14755,7 @@
       "tier": "plus",
       "variant": "normal",
       "particles": [
-        "sakurabloom"
+        "sakurablossoms"
       ],
       "filters": [
         "color"
@@ -14469,7 +14768,7 @@
       "tier": "plus",
       "variant": "topDown",
       "particles": [
-        "sakurabloom"
+        "sakurablossoms"
       ],
       "filters": [
         "color"
@@ -14699,7 +14998,7 @@
     }
   ],
   "referenceFormat": 3,
-  "normalizedAt": "2026-08-30T19:23:34.153Z",
+  "normalizedAt": "2026-09-30T18:39:54.269Z",
   "customParticleBases": [
     {
       "id": "custom-directional-drift",

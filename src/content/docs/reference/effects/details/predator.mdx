@@ -1,8 +1,8 @@
 ---
 title: "Predator"
-description: "World-locked thermal scan treatment with false-color heat mapping, edge definition, scanlines, and sensor noise."
+description: "Thermal color grading and token heat seeking with contrast, edge definition, scanlines, and sensor noise."
 sidebar:
-  order: 28
+  order: 29
   badge:
     text: "FXMaster"
     variant: tip
@@ -16,7 +16,7 @@ import ParameterTable from '../../../../../components/ParameterTable.astro';
   <span class="fxm-badge">API type: predator</span>
 </div>
 
-World-locked thermal scan treatment with false-color heat mapping, edge definition, scanlines, and sensor noise.
+Thermal color grading and token heat seeking with contrast, edge definition, scanlines, and sensor noise.
 
 Visual filters change the rendered Scene. Check map, token, and text visibility after changing their strength or opacity.
 
@@ -26,17 +26,25 @@ Visual filters change the rendered Scene. Check map, token, and text visibility 
 | Effect kind | Filter effect |
 | Category | Visual |
 | Runtime type | `predator` |
-| Exposed parameters | 16 |
+| Exposed parameters | 18 |
+
+## Thermal image and token heat sources
+
+With **Token Heat Seek** off, **Thermal Strength** blends a thermal palette over the Scene. **Thermal Contrast**, **Edge Definition**, **Scanline Strength**, **Sensor Noise**, **Scanline Speed**, and **Scanline Width** refine the image.
+
+Enable **Token Heat Seek** to use visible tokens as heat sources against cooler surroundings. **Token Disposition** chooses which visible tokens contribute. The effect uses full thermal vision in this mode, so **Thermal Strength** is hidden.
+
+This does not reveal hidden or occluded tokens. Effect masks, layer placement, and the current view still determine what can be seen.
 
 ## Important controls
 
+- **Token Heat Seek:** Uses visible tokens with selected dispositions as the heat sources in a full thermal image, while the surroundings remain cooler. Existing visibility masks and layer placement still apply.
+- **Token Disposition:** Selects which visible token dispositions act as heat sources while Token Heat Seek is enabled. Tokens excluded by visibility or masking are not revealed through this setting.
 - **Thermal Strength:** Blends the false-color thermal palette into the source image. 0 retains the original scene colors; 1 uses the full thermal treatment.
 - **Thermal Contrast:** Separates cool and hot values in the thermal palette. Higher values create stronger temperature differences across the scene.
 - **Edge Definition:** Highlights local temperature boundaries so creatures, objects, and terrain produce sharper thermal silhouettes.
 - **Scanline Strength:** Controls the brightness variation of the moving scanline pattern. Set it to 0 to hide the scanlines while keeping the other Predator systems active.
-- **Sensor Noise:** Adds animated sensor grain across the thermal image. Higher values create a noisier and less stable sensor presentation.
 - **Scanline Speed:** Controls how quickly the scanline pattern travels across the scene. 0 stops the scanline movement.
-- **Scanline Width:** Controls the width of the moving scanlines. Higher values create broader bands across the thermal image.
 
 ## Setup notes
 

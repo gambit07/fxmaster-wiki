@@ -20,7 +20,7 @@ FXMaster+ provides a GM-only **Water Options** settings menu. These world settin
       src: '/images/screenshots/water-options-modal.webp',
       alt: 'Water Options window showing Caustics, Vortex Water, Follow Region Path, Waves, and Token Trails feature toggles.',
       label: 'Water Options',
-      caption: 'Water Options controls which optional Water shader feature groups are available to the world.',
+      caption: 'Water Options controls optional Water shader features. This older screenshot also shows Token Trails, which has been removed; the current options are Caustics, Vortex Water, Follow Region Path, and Waves.',
       width: 530,
       height: 749,
     },
@@ -35,7 +35,6 @@ FXMaster+ provides a GM-only **Water Options** settings menu. These world settin
 | Caustics | Enabled | Medium-heavy | Caustics, strength, and tint |
 | Waves | Enabled | Medium | Waves, speed, direction, and strength |
 | Vortex | Enabled | Low | Vortex toggle, size, speed, direction, and strength |
-| Token Trails | Disabled | Heavy | Token Trails, width, strength, and settle time |
 
 ### Change the settings
 
@@ -66,8 +65,10 @@ When a feature is disabled, stored Scene, Region, API, and passive Water configu
 
 ## Choosing what to enable
 
-Keep commonly used systems enabled when several Scenes need them. Disable high-impact systems such as **Follow Region Path** or **Token Trails** when the world does not use them. The settings remove those controls from Water and reduce the shader work included during its initial setup.
+Keep commonly used systems enabled when several Scenes need them. Disable **Follow Region Path** when the world does not use path-following Water. The settings remove those controls from Water and reduce the shader work included during its initial setup.
 
 ## Existing effects
+
+Water no longer includes Token Trails or its width, strength, and settle-time controls. Older Water trail options are removed from stored configurations. This does not remove token trails from other effects that still support them.
 
 After changing a feature gate, review active Water rows. A disabled feature is cleared from stored options; re-enabling the world feature does not necessarily restore the previous per-effect value.

@@ -7,10 +7,10 @@ description: Supported FXMaster and FXMaster+ versions, Levels compatibility, PS
 
 | Module | Version |
 |---|---|
-| FXMaster | 8.3.4 |
-| FXMaster+ | 1.1.13 |
+| FXMaster | 8.4.1 |
+| FXMaster+ | 1.1.15 |
 
-FXMaster+ 1.1.13 supports Foundry VTT 13 and 14. FXMaster 8.3.2 or newer is required.
+FXMaster+ 1.1.15 supports Foundry VTT 13 and 14. FXMaster 8.4.1 or newer is required.
 
 ### FXMaster+
 

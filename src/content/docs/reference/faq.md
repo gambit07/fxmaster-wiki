@@ -48,3 +48,7 @@ If the remaining effect belongs to a Region, disable its Region behavior or righ
 ## I'd like to change how an FXMaster preset looks while using the Calendaria module
 
 Calendaria contains UI modifiers for some aspects of a preset, such as speed and density. It also supports adding a user-generated FXMaster macro directly in place of a preset for a given weather type. Visit the [Calendaria Weather Wiki](https://wiki.3deathsaves.com/calendaria/weather-editor/) or the Calendaria Discord for additional questions.
+
+## Can a token entering a Region start an effect?
+
+Yes. Set **Events** to **Token Enters** on the Region particle or filter behavior. Add **Token Exits** as well to stop it after the last eligible token leaves. See [Token enter and exit events](../../regions/#events) for setup and testing.

@@ -86,7 +86,8 @@ if (!Array.isArray(reference.customParticleBases) || reference.customParticleBas
 if (!Array.isArray(reference.presets) || reference.presets.length === 0) fail('Reference data has no presets.');
 if (reference.referenceFormat !== 3) fail(`Expected reference format 3; found ${reference.referenceFormat ?? 'none'}.`);
 if (!reference.sourceVersions?.core || !reference.sourceVersions?.plus) fail('Reference data is missing source version metadata.');
-if (reference.sourceVersions.plus !== '1.1.13') fail(`Expected FXMaster+ source version 1.1.13; found ${reference.sourceVersions.plus}.`);
+if (reference.sourceVersions.core !== '8.4.1') fail(`Expected FXMaster source version 8.4.1; found ${reference.sourceVersions.core}.`);
+if (reference.sourceVersions.plus !== '1.1.15') fail(`Expected FXMaster+ source version 1.1.15; found ${reference.sourceVersions.plus}.`);
 
 const expectedCounts = {
   effects: 44,
@@ -122,12 +123,12 @@ const validGroups = new Set(['ambient', 'creatures', 'environmental', 'foliage',
 const manualSoundAvailabilityDetail = 'the matching enabled SoundFX rule uses Multi-Sound Mode = Manual with at least two configured sounds';
 const expectedTokenAvoidanceEffects = new Set(['rats', 'spiders', 'fireflies', 'fish', 'ghosts']);
 const expectedWaterRegionOnlyParameters = new Set(['followRegionPath', 'pathInfluence', 'fadePercent']);
-const expectedAboveDarknessEffects = new Set(['lightning', 'sunlight', 'lightningbolts', 'auroraborealis', 'fire', 'neon']);
+const expectedAboveDarknessEffects = new Set(['lightning', 'sunlight', 'lightningbolts', 'auroraborealis', 'fire', 'neon', 'fireworks']);
 const expectedParticleManagementGroups = new Map([
   ['bats', 'creatures'], ['birds', 'creatures'], ['crows', 'creatures'], ['eagles', 'creatures'],
   ['rats', 'creatures'], ['spiders', 'creatures'], ['fireflies', 'creatures'], ['fish', 'creatures'],
   ['bubbles', 'ambient'], ['embers', 'ambient'], ['stars', 'ambient'], ['autumnleaves', 'ambient'],
-  ['sakurabloom', 'ambient'], ['sakurablossoms', 'ambient'], ['summerleaves', 'ambient'], ['ghosts', 'ambient'],
+  ['fireworks', 'ambient'], ['sakurablossoms', 'ambient'], ['summerleaves', 'ambient'], ['ghosts', 'ambient'],
   ['magiccrystals', 'ambient'], ['clouds', 'weather'], ['fog', 'weather'], ['rain', 'weather'],
   ['hail', 'weather'], ['snow', 'weather'], ['snowstorm', 'weather'], ['fireparticles', 'weather'],
   ['sandstorm', 'weather'], ['windwisps', 'weather'],
@@ -141,7 +142,8 @@ const integratedOverviewMarkers = {
   snowstorm: '## Snowstorm layers',
   autumnleaves: '## Airborne and background leaves',
   summerleaves: '## Summer leaf layers',
-  sakurabloom: '## Airborne petals and accumulation',
+  fireworks: '## Burst and Dragon modes',
+  predator: '## Thermal image and token heat sources',
   sakurablossoms: '## Blossom ambience and ground coverage',
   water: '## Major systems',
   wind: '## Procedural and painted Wind',
@@ -231,6 +233,7 @@ for (const effect of reference.effects ?? []) {
 
   const actualRegionOnly = new Set((effect.parameters ?? []).filter((parameter) => parameter.regionOnly).map((parameter) => parameter.id));
   const expectedRegionOnly = new Set(effect.kind === 'filter' ? ['fadePercent'] : []);
+  if (effect.kind === 'particle' && effect.group === 'creatures') expectedRegionOnly.add('regionBoundaryAvoidance');
   if (effect.id === 'water') {
     expectedWaterRegionOnlyParameters.forEach((parameterId) => expectedRegionOnly.add(parameterId));
   }
@@ -270,7 +273,7 @@ for (const effect of reference.effects ?? []) {
   if (expectedAboveDarknessEffects.has(effect.id)) {
     if (!aboveDarkness) fail(`${effect.id} is missing Above Darkness.`);
     else {
-      if (aboveDarkness.label !== 'Above Darkness' || aboveDarkness.type !== 'checkbox' || aboveDarkness.default !== false) {
+      if (aboveDarkness.label !== 'Above Darkness' || aboveDarkness.type !== 'checkbox' || aboveDarkness.default !== (effect.id === 'fireworks')) {
         fail(`${effect.id}.aboveDarkness has stale parameter metadata.`);
       }
       if (!aboveDarkness.description.includes('above Foundry scene darkness')) {
@@ -289,12 +292,12 @@ for (const effect of reference.effects ?? []) {
   if (effect.id === 'predator') {
     const expectedPredatorParameters = [
       'belowTokens', 'belowTiles', 'belowForeground', 'levels',
+      'soundFxEnabled', 'soundFxManualSoundIds', 'tokenHeatSeek', 'tokenHeatSeekDispositions',
       'thermalStrength', 'thermalContrast', 'edgeDefinition', 'scanlineStrength',
-      'noise', 'speed', 'lineWidth', 'soundFxEnabled', 'soundFxManualSoundIds',
-      'darknessActivationEnabled', 'darknessActivationRange', 'fadePercent',
+      'noise', 'speed', 'lineWidth', 'darknessActivationEnabled', 'darknessActivationRange', 'fadePercent',
     ];
     if (JSON.stringify(effect.parameters.map((parameter) => parameter.id)) !== JSON.stringify(expectedPredatorParameters)) {
-      fail('Predator does not match the reviewed thermal-scan parameter list.');
+      fail('Predator does not match the reviewed thermal-scan and token heat-seeking parameter list.');
     }
     if (effect.parameters.some((parameter) => parameter.id === 'period')) fail('Predator still exposes the retired period parameter.');
     for (const parameterId of ['thermalStrength', 'thermalContrast', 'edgeDefinition', 'scanlineStrength', 'noise', 'speed', 'lineWidth']) {
@@ -512,10 +515,59 @@ for (const preset of reference.presets ?? []) {
   for (const effectId of listedEffects) if (!effectRuntimeIds.has(effectId)) fail(`${key} references unknown effect: ${effectId}`);
 }
 
+const fireworks = reference.effects.find((effect) => effect.id === 'fireworks');
+if (!fireworks || fireworks.kind !== 'particle' || fireworks.group !== 'ambient' || fireworks.package !== 'plus') {
+  fail('Fireworks must be an FXMaster+ Ambient particle effect.');
+} else {
+  const params = new Map(fireworks.parameters.map((parameter) => [parameter.id, parameter]));
+  if (params.size !== 38) fail('Fireworks must expose the 38 reviewed Scene parameters.');
+  for (const unsupported of ['soundFxEnabled', 'soundFxManualSoundIds', 'density', 'scale', 'orbit', 'fadePercent']) {
+    if (params.has(unsupported)) fail(`Fireworks incorrectly exposes ${unsupported}.`);
+  }
+  for (const id of ['dragonDuration', 'dragonDirection', 'dragonTravel', 'dragonSpeed', 'dragonWingbeat', 'dragonDetail', 'dragonPatterns']) {
+    if (JSON.stringify(params.get(id)?.showWhen) !== JSON.stringify({ fireworkMode: 'dragon' })) fail(`Fireworks ${id} must require Dragon mode.`);
+  }
+  for (const id of ['burstStyle', 'burstDuration', 'timingVariation', 'volley', 'starCount']) {
+    if (JSON.stringify(params.get(id)?.hideWhen) !== JSON.stringify({ fireworkMode: 'dragon' })) fail(`Fireworks ${id} must be hidden in Dragon mode.`);
+  }
+  for (let i = 1; i <= 5; i += 1) {
+    if (JSON.stringify(params.get(`fireworkColor${i}`)?.showWhen) !== JSON.stringify({ palette: { operator: 'contains', value: 'custom' } })) {
+      fail(`Fireworks custom color ${i} must require the Custom Colors palette.`);
+    }
+  }
+  if (params.get('fireworkMode')?.options?.normal !== 'Burst' || params.get('fireworkMode')?.default !== 'normal') fail('Fireworks default mode must be Burst.');
+  if (params.get('frequency')?.default !== 3600 || params.get('frequency')?.max !== 30000) fail('Fireworks Period must retain its millisecond range.');
+}
+for (const effect of reference.effects.filter((effect) => effect.kind === 'particle' && effect.group === 'creatures')) {
+  const boundary = effect.parameters.find((parameter) => parameter.id === 'regionBoundaryAvoidance');
+  if (boundary?.default !== false || !boundary?.regionOnly || JSON.stringify(boundary.hideWhen) !== JSON.stringify({ orbit: true })) {
+    fail(`${effect.id} has stale Region Boundary Avoidance metadata.`);
+  }
+}
+const predatorParams = new Map(reference.effects.find((effect) => effect.id === 'predator').parameters.map((parameter) => [parameter.id, parameter]));
+if (JSON.stringify(predatorParams.get('thermalStrength')?.hideWhen) !== JSON.stringify({ tokenHeatSeek: true })) fail('Thermal Strength must be hidden during Token Heat Seek.');
+if (JSON.stringify(predatorParams.get('tokenHeatSeekDispositions')?.showWhen) !== JSON.stringify({ tokenHeatSeek: true })) fail('Token Disposition must require Token Heat Seek.');
+if (reference.effects.some((effect) => effect.id === 'sakurabloom')) fail('Legacy Sakura Bloom must not appear in the current effect catalog.');
+const legacySakura = read(path.join(docsRoot, 'reference/effects/details/sakurabloom.mdx'));
+if (!legacySakura.includes('hidden: true') || !legacySakura.includes('../sakurablossoms/') || legacySakura.includes('<ParameterTable')) fail('The legacy Sakura Bloom route must direct users to current Sakura Blossoms without an obsolete parameter table.');
+const sakura = reference.effects.find((effect) => effect.id === 'sakurablossoms');
+if (sakura?.parameterCount !== 37) fail('Sakura Blossoms must include its consolidated movement modes.');
+for (const id of ['topDown', 'orbit', 'directionalMovement', 'direction', 'synchronizedDirection', 'backgroundEnabled']) {
+  if (!sakura?.parameters.some((parameter) => parameter.id === id)) fail(`Sakura Blossoms is missing ${id}.`);
+}
+const water = reference.effects.find((effect) => effect.id === 'water');
+if (water?.parameterCount !== 34 || water.parameters.some((parameter) => parameter.id.startsWith('tokenTrail'))) fail('Water still contains removed Token Trails parameters.');
+const eventsGuide = read(path.join(docsRoot, 'regions/index.mdx'));
+for (const text of ['## Events', '| Token Enters |', '| Token Enters and Token Exits |', '| Token Exits only |', 'last eligible token', 'Keep a GM connected', 'Always Visible for GM', 'Specific Tokens POV', 'disable and re-enable', 'does not expose this Events selector', '../reference/effects/details/fireworks/']) {
+  if (!eventsGuide.includes(text)) fail(`Region event guidance is missing: ${text}`);
+}
+const waterFeatureGuide = read(path.join(docsRoot, 'plus/water-module-settings.mdx'));
+if (/^\| Token Trails \|/m.test(waterFeatureGuide) || !waterFeatureGuide.includes('This older screenshot')) fail('Water module settings must distinguish removed trails from the historical screenshot.');
+
 const detailPages = docFiles.filter((filePath) => relative(filePath).startsWith('src/content/docs/reference/effects/details/'));
 for (const detailPage of detailPages) {
   const id = path.basename(detailPage, path.extname(detailPage));
-  if (!parameterDefinitionIds.has(id)) fail(`Stale effect detail page has no reference entry: ${relative(detailPage)}`);
+  if (!parameterDefinitionIds.has(id) && id !== 'sakurabloom') fail(`Stale effect detail page has no reference entry: ${relative(detailPage)}`);
 }
 
 const routes = new Map();
@@ -735,7 +787,7 @@ for (const marker of [
 }
 
 const packageJson = JSON.parse(read(path.join(root, 'package.json')));
-if (packageJson.version !== '1.0.4') fail(`Expected package version 1.0.4; found ${packageJson.version}.`);
+if (packageJson.version !== '1.0.5') fail(`Expected package version 1.0.5; found ${packageJson.version}.`);
 
 const installationContent = read(path.join(docsRoot, 'getting-started/installation.mdx'));
 if (!installationContent.includes('../../plus/access/')) fail('Installation does not link to Accessing FXMaster+.');
@@ -753,7 +805,7 @@ if (comparisonSource.includes('FXMaster+ adds 19 more effects:') || comparisonSo
 }
 
 const compatibilitySource = read(path.join(docsRoot, 'reference/compatibility.md'));
-const expectedCompatibility = 'FXMaster+ 1.1.13 supports Foundry VTT 13 and 14. FXMaster 8.3.2 or newer is required.';
+const expectedCompatibility = 'FXMaster+ 1.1.15 supports Foundry VTT 13 and 14. FXMaster 8.4.1 or newer is required.';
 if (!compatibilitySource.includes(expectedCompatibility)) fail('Compatibility is missing the direct FXMaster+ version requirement.');
 const expectedLevelsCompatibility = "FXMaster supports Foundry's core Levels functionality in Foundry VTT V14. The Levels module used with Foundry VTT V13 is not supported.";
 if (!compatibilitySource.includes(expectedLevelsCompatibility)) fail('Compatibility is missing the Foundry VTT 14 core Levels support note.');
@@ -1015,7 +1067,6 @@ for (const phrase of [
   '| Caustics |',
   '| Waves |',
   '| Vortex |',
-  '| Token Trails |',
   '| Heavy |',
   '| Medium-heavy |',
   '| Medium |',
@@ -1410,7 +1461,6 @@ for (const filePath of [...docFiles, path.join(root, 'scripts/generate-effect-pa
 const backgroundRelationshipRequirements = new Map([
   ['autumnleaves', '**Background** is not a standalone effect; disabling Autumn Leaves disables both layers.'],
   ['summerleaves', '**Background** is not standalone; disabling Summer Leaves disables both layers.'],
-  ['sakurabloom', 'Disabling Sakura Bloom disables both layers.'],
   ['sakurablossoms', '**Background** is not standalone; disabling Sakura Blossoms disables both layers.'],
   ['rain', 'Disabling Rain disables the Background as well.'],
   ['snow', 'disabling Snow disables both layers.'],
@@ -1664,8 +1714,8 @@ const expectedEffectShowcases = {
   neon: ['/videos/neon.mp4', 'Preview shows Neon in Fill + Outline mode using custom source color matching'],
   rain: ['/videos/rain.mp4', 'Preview shows Rain in Top Down mode with Background and Token Trails enabled'],
   rats: ['/videos/rats.mp4', 'Preview shows Rats in Directional Movement mode with Directional Spread enabled'],
-  sakurabloom: ['/videos/sakura-bloom.mp4', 'Preview shows Sakura Bloom enabled for a Region'],
-  sakurablossoms: ['/videos/sakura-blossoms.mp4', 'Preview shows Sakura Bloom enabled with Background and Token Trails enabled'],
+  fireworks: ['/videos/fireworks-dragon.mp4', 'Preview shows Fireworks in Dragon mode'],
+  sakurablossoms: ['/videos/sakura-blossoms.mp4', 'Preview shows Sakura Blossoms with Background and Token Trails enabled'],
   sandstorm: ['/videos/sandstorm.mp4', 'Preview shows Sandstorm and Duststorm enabled together'],
   screenshake: ['/videos/screen-shake.mp4', 'Preview shows Screen Shake with Timed mode disabled'],
   snowstorm: ['/videos/snowstorm.mp4', 'Preview shows Snowstorm in Top Down mode with Background and Sweeping Snow enabled'],

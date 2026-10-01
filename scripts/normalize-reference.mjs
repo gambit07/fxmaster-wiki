@@ -75,7 +75,7 @@ const particleManagementGroups = {
   embers: 'ambient',
   stars: 'ambient',
   autumnleaves: 'ambient',
-  sakurabloom: 'ambient',
+  fireworks: 'ambient',
   sakurablossoms: 'ambient',
   summerleaves: 'ambient',
   ghosts: 'ambient',
@@ -130,6 +130,10 @@ function conditionOperator(operator, value = undefined) {
 
 function patchConditionalVisibility(effect, parameter) {
   const hideOrbitOrTopDown = [{ orbit: true }, { topDown: true }];
+
+  if (effect.id === 'fireworks' && /^fireworkColor[1-5]$/.test(parameter.id)) {
+    parameter.showWhen = { palette: conditionOperator('contains', 'custom') };
+  }
 
   if (['embers', 'autumnleaves', 'summerleaves'].includes(effect.id) && ['directionalMovement', 'direction', 'synchronizedDirection'].includes(parameter.id)) {
     parameter.hideWhen = clone(hideOrbitOrTopDown);

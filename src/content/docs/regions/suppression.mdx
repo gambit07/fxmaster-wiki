@@ -52,6 +52,12 @@ Add one or more suppression behaviors to a Region:
 
 Suppression affects Scene-level content. Region-local effects can remain active inside the same area, allowing a Region to replace a broad Scene effect with a more specific local effect.
 
+### Token enter and exit events
+
+**FXMaster: Suppress Scene Particles** and **FXMaster: Suppress Scene Filters** also provide **Events**. Select **Token Enters** and **Token Exits** to activate visual suppression while an eligible token is inside and remove it after the last eligible token leaves. With **Token Enters** alone, leaving does not by itself end suppression.
+
+See [Token enter and exit events](../#events) for the full behavior table, multiple-token checks, and GM testing notes. These event controls do not apply to **FXMaster: Suppress Scene Sounds**.
+
 ### Optional elevation constraints and edge fade
 
 **FXMaster: Suppress Scene Particles** and **FXMaster: Suppress Scene Filters** can optionally use **Elevation Constraints** and **Edge Fade %**:

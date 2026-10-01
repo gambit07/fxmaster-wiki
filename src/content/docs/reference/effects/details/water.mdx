@@ -1,6 +1,6 @@
 ---
 title: "Water"
-description: "Water refraction, caustics, flow, waves, vortices, region-path steering, and token trails."
+description: "Water refraction, caustics, flowing currents, waves, vortices, and Region-path steering."
 sidebar:
   order: 42
   badge:
@@ -19,7 +19,7 @@ import EffectShowcase from '../../../../../components/EffectShowcase.astro';
 
 <EffectShowcase src="/videos/water.mp4" title="Water" description="Preview shows Water enabled for a Region with Flowing Water and Follow Region Path enabled" mapName="Angela's Maps" mapUrl="https://angelamaps.com/" />
 
-Water refraction, caustics, flow, waves, vortices, region-path steering, and token trails.
+Water refraction, caustics, flowing currents, waves, vortices, and Region-path steering.
 
 Environmental filters change the Scene surface or atmosphere. They can cover the full Scene, be limited to Regions, and be moved within the effect stack.
 
@@ -29,7 +29,7 @@ Environmental filters change the Scene surface or atmosphere. They can cover the
 | Effect kind | Filter effect |
 | Category | Environmental |
 | Runtime type | `water` |
-| Exposed parameters | 38 |
+| Exposed parameters | 34 |
 
 ## Major systems
 
@@ -53,10 +53,6 @@ Enable **Flowing Water** for a directional current. **Flow Speed**, **Flow Direc
 
 **Caustics** adds moving light patterns with separate strength and tint. **Refraction** controls how strongly the underlying Scene is displaced. Raise them separately because both can affect map, grid, and text readability.
 
-### Token trails
-
-Token Trails temporarily alter the surface around moving tokens. Trail Width defines the path, Trail Strength defines the disturbance, and Settle Time (Seconds) controls recovery.
-
 :::note[Water module settings]
 Some Water controls are hidden when their world-level feature is disabled. Enable the required group in [Water Module Settings](../../../../plus/water-module-settings/) before configuring it on an effect row.
 :::
@@ -65,17 +61,17 @@ Some Water controls are hidden when their world-level feature is disabled. Enabl
 
 - **Flowing Water:** Enables continuous directional water flow. This moves the surface pattern without enabling waves or a vortex.
 - **Follow Region Path:** Uses the Region path as the local flow direction so rivers and channels can bend through the Region instead of moving in one global direction. Tweak the Flow Strength and Path Influence parameters to achieve natural bending motion for the water based on your specific region path.
+- **Path Influence:** Available only in a Region Water effect while Follow Region Path is enabled. Controls how strongly the Region path overrides the base Flow Direction. Higher values follow the path more closely.
+- **Flow Strength:** Controls how strongly the directional flow displaces and stretches the water surface.
 - **Waves:** Enables a separate directional wave layer over the water surface.
 - **Vortex Water:** Enables rotating water around a central vortex area.
 - **Caustics:** Controls how visible the animated light patterns are on the water surface. Set it to 0 to remove caustics.
 - **Refraction:** Controls how strongly the Water filter bends and distorts the map beneath it.
-- **Token Trails:** Create temporary swimming-style ripples, side displacement, and a slight wake where visible tokens move through the Water filter.
 
 ## Setup notes
 
 - Flow, Waves, Vortex, Turbulence, Caustics, and Refraction are independent systems.
 - Follow Region Path and Path Influence are useful for rivers or channels drawn as Regions.
-- Token Trails can temporarily calm or part the surface and settle over a configured interval.
 
 ## Bundled preset usage
 

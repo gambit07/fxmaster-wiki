@@ -1,6 +1,6 @@
 ---
 title: "Sakura Blossoms"
-description: "Sakura blossom particles with standard movement controls and persistent background accumulation."
+description: "Sakura petals with ambient, directional, Top Down, and Orbit movement, an optional settled Background, and token trails."
 sidebar:
   order: 32
   badge:
@@ -17,9 +17,9 @@ import EffectShowcase from '../../../../../components/EffectShowcase.astro';
   <span class="fxm-badge">API type: sakurablossoms</span>
 </div>
 
-<EffectShowcase src="/videos/sakura-blossoms.mp4" title="Sakura Blossoms" description="Preview shows Sakura Bloom enabled with Background and Token Trails enabled" />
+<EffectShowcase src="/videos/sakura-blossoms.mp4" title="Sakura Blossoms" description="Preview shows Sakura Blossoms with Background and Token Trails enabled" />
 
-Sakura blossom particles with standard movement controls and persistent background accumulation.
+Sakura petals with ambient, directional, Top Down, and Orbit movement, an optional settled Background, and token trails.
 
 Ambient effects add visible movement without replacing the full weather setup. Use them on their own or layer them with another particle or filter.
 
@@ -29,11 +29,17 @@ Ambient effects add visible movement without replacing the full weather setup. U
 | Effect kind | Particle effect |
 | Category | Ambient |
 | Runtime type | `sakurablossoms` |
-| Exposed parameters | 30 |
+| Exposed parameters | 37 |
 
 ## Blossom ambience and ground coverage
 
+Sakura Blossoms includes ambient drifting, **Directional Movement**, **Top Down**, and **Orbit** presentations. It also includes the movement modes previously provided by Sakura Bloom.
+
 Within an enabled Sakura Blossoms effect, the drifting blossom layer and optional persistent **Background** accumulation are configured separately. **Background** is not standalone; disabling Sakura Blossoms disables both layers. The airborne layer uses **Scale**, **Speed**, **Lifetime**, **Density**, and **Opacity**, while **Background** has its own fill and appearance controls.
+
+### Movement modes
+
+Leave Directional Movement, Top Down, and Orbit off for ambient drifting. Enable **Directional Movement** for a travelling stream of petals, then adjust **Direction** or enable **Synchronized Direction** to follow [Wind](../wind/) or [Duststorm](../duststorm/). **Top Down** uses overhead motion with **Rotation Strength**; **Orbit** uses circular motion with **Orbit Distance**. Orbit and Top Down are mutually exclusive.
 
 ### Background and trails
 
@@ -41,11 +47,12 @@ Within an enabled Sakura Blossoms effect, the drifting blossom layer and optiona
 
 ## Important controls
 
-- **Scale:** Changes the rendered size of sakura blossoms. It does not change how many particles are present.
-- **Density:** Changes how many sakura blossoms are visible or spawned at once. It does not change their size.
+- **Directional Movement:** Makes sakura blossoms travel in the configured Direction instead of relying only on the effect's default random movement.
+- **Top Down:** Switches Sakura Blossoms to the overhead presentation intended for top-down maps. This changes particle projection and movement, so set it before finalizing scale and direction.
+- **Orbit:** Makes sakura blossoms circulate around the effect area instead of only crossing the canvas in a straight or drifting path.
+- **Synchronized Direction:** Uses the active Wind or Duststorm direction for Sakura Blossoms. When the source direction changes, this effect follows it.
 - **Background:** Render a persistent field of settled particles behind the active effect. The field follows the same stack placement, scene or Region mask, Levels selection, and below-token/tile settings.
-- **Token Trails:** Allows moving tokens to disturb the persistent background and leave visible trails through it.
-- **Trail Lift Chance:** Controls how often a disturbed background particle is lifted briefly into the air instead of only sliding along the surface.
+- **Token Trails:** Allow visible token trails to push, spin, and briefly lift nearby settled particles while moving through them. Displaced particles settle in their new positions for the current canvas session.
 
 ## Setup notes
 
@@ -54,7 +61,9 @@ Within an enabled Sakura Blossoms effect, the drifting blossom layer and optiona
 
 ## Bundled preset usage
 
-No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or the Direct Effect API.
+| Preset | API name | Availability | Variants |
+|---|---|---|---|
+| Sakura Bloom | `sakura-bloom` | FXMaster+ | Normal, Top Down |
 
 ## Parameters
 
@@ -77,9 +86,9 @@ const created = await FXMASTER.api.effects.play({
         "value": "#FFFFFF",
         "apply": false
       },
-      "scale": 0.24,
-      "speed": 0.27,
-      "density": 0.15
+      "topDown": false,
+      "orbit": false,
+      "directionalMovement": false
     }
   }],
 });

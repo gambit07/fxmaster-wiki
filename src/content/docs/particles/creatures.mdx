@@ -20,4 +20,10 @@ Animal effects are particle systems rather than tokens. They provide flocks, swa
 
 [Fish](../../reference/effects/details/fish/) and [Fireflies](../../reference/effects/details/fireflies/) also use the Animals grouping. Both include Token Avoidance controls, while their remaining movement and presentation options are specific to the effect.
 
+## Region boundaries
+
+On a Region effect, enable **Region Boundary Avoidance** to steer animals away from its outer boundary and holes. For example, [Fish](../../reference/effects/details/fish/) can turn away from the shore of a pond-shaped Region, or [Bats](../../reference/effects/details/bats/) can stay within a cave chamber. The control is hidden while **Orbit** is enabled.
+
+This is separate from **Token Avoidance**: Region Boundary Avoidance uses the Region shape, while Token Avoidance responds to eligible tokens. All eight Animal effects provide Region Boundary Avoidance; only the effects that expose Token Avoidance can avoid tokens.
+
 <EffectCatalog kind="particle" group="creatures" interactive={false} />

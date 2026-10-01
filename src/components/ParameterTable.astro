@@ -75,6 +75,9 @@ function formatDefault(parameter: ParameterDefinition): string {
       .map((value) => parameter.options?.[String(value)] ?? String(value))
       .join(', ');
   }
+  if (parameter.type === 'select' && parameter.options && parameter.default !== undefined) {
+    return parameter.options[String(parameter.default)] ?? formatValue(parameter.default);
+  }
   return formatValue(parameter.default);
 }
 

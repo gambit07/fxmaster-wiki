@@ -15,7 +15,7 @@ const particleSubjects = {
   hail: 'hail particles',
   snow: 'snowflakes',
   snowstorm: 'storm snowflakes',
-  sakurabloom: 'sakura bloom particles',
+  fireworks: 'firework sparks',
   sakurablossoms: 'sakura blossoms',
   summerleaves: 'airborne summer leaves',
   fireflies: 'fireflies',
@@ -45,6 +45,40 @@ function resolveDescription(value, context) {
 }
 
 const effectOverrides = {
+  fireworks: {
+    fireworkMode: "Selects Burst for conventional firework shells or Dragon for a forming, flying spark dragon and its finale. Mode-specific controls appear for the selected presentation.",
+    topDown: "Shows the launch and burst from an overhead viewpoint instead of a side-facing view. Top Down also changes the projected dragon flight; it does not select a different burst style.",
+    burstStyle: "Chooses the shell shapes available for Burst mode. Each shell can use a selected style; Mixed or an empty selection allows all five styles, including rings and trailing willow sparks.",
+    palette: "Chooses the color palettes available to the effect. Each shell or dragon selects one palette; Custom Colors uses the enabled custom color slots, and an empty selection uses Celebration.",
+    mixedColors: "Uses several colors from the selected palette within each shell or dragon. Turn it off for one palette color per shell rather than mixing colors inside the same firework.",
+    dragonPatterns: "Chooses Circular, Figure 8, or both as possible dragon flight paths. An empty selection allows both patterns; Flight Direction rotates the chosen path.",
+    brightness: "Controls the brightness of the firework sparks and their glow. Set it to 0 to hide the luminous result without changing the selected timing or flight options.",
+    alpha: "Controls the overall transparency of the fireworks. Lower values allow more of the map to show through the sparks and their glow.",
+    frequency: "Sets the interval in milliseconds between Burst launches or volleys. In Dragon mode, this pause starts after the dragon sequence and its follow-up burst finish.",
+    burstRadius: "Sets the size of the firework burst or dragon in grid units. The effect fits the result to the visible Scene or Region area, so a narrow Region can limit the final size.",
+    shellSize: "Changes the size and thickness of the launching shell and its trail. Use Firework Size for the burst or dragon dimensions rather than enlarging the launch trail.",
+    burstDuration: "Sets how long the sparks from a Burst shell remain visible, in milliseconds. Longer bursts can overlap more heavily when Period is short.",
+    dragonDuration: "Sets the duration of the dragon formation, flight, and finale in milliseconds. A matching firework burst follows the dragon sequence before the next Period begins.",
+    dragonDirection: "Rotates the dragon flight path and establishes its facing when Flight Distance is zero. While travelling, the dragon faces along its path.",
+    dragonTravel: "Controls how far the dragon moves along its flight pattern. At 0 it stays near its origin, while body animation and Wind Drift can still provide movement.",
+    dragonSpeed: "Controls how quickly the dragon moves along its flight path without changing Dragon Duration. At 0 path travel pauses; at 0.5 it uses the standard travel speed and at 1 it travels twice as quickly.",
+    dragonWingbeat: "Controls how quickly the dragon flaps its wings. At 0 the wings hold still while the other flight and spark animations can continue.",
+    dragonDetail: "Changes the number of sparks defining the dragon. Higher values create a more detailed silhouette and require more rendering work.",
+    timingVariation: "Varies the interval between Burst launches so they do not repeat at exactly the same pace. At 0 the timing is regular; higher values make the spacing less predictable.",
+    volley: "Sets how many shells launch in each Burst volley. Their launches are staggered, and each shell can select its own burst style and palette.",
+    starCount: "Sets how many sparks are emitted by each Burst shell. More sparks create fuller bursts and increase rendering cost, especially with several shells per volley.",
+    launchHeight: "Sets the distance of the rising shell trail in grid units. The effect can shorten it to fit the available area; Top Down uses a foreshortened launch.",
+    trailLength: "Controls the length of the spark trails. Longer trails emphasize motion and leave more visible streaks behind the burst or dragon.",
+    gravity: "Controls how strongly loose sparks fall during the burst and finale. It does not replace the dragon flight pattern with a falling trajectory.",
+    wind: "Controls how far the sparks drift in the selected Wind Direction. This is a local Fireworks control, not the Synchronized Direction option used by other effects.",
+    windDirection: "Sets the direction used by Wind Drift. Increase Wind Drift above 0 to make the direction visible in the spark motion.",
+    aboveDarkness: "Presents the fireworks above Foundry scene darkness. Enabled by default; it changes the luminous presentation rather than creating Foundry light sources.",
+    fireworkColor1: "Sets custom palette color 1. The slot is used when Custom Colors is selected in Color Palette; disable Apply to exclude it. With no custom slots enabled, the custom palette uses white.",
+    fireworkColor2: "Sets custom palette color 2. The slot is used when Custom Colors is selected in Color Palette; disable Apply to exclude it. With no custom slots enabled, the custom palette uses white.",
+    fireworkColor3: "Sets custom palette color 3. The slot is used when Custom Colors is selected in Color Palette; disable Apply to exclude it. With no custom slots enabled, the custom palette uses white.",
+    fireworkColor4: "Sets custom palette color 4. The slot is used when Custom Colors is selected in Color Palette; disable Apply to exclude it. With no custom slots enabled, the custom palette uses white.",
+    fireworkColor5: "Sets custom palette color 5. The slot is used when Custom Colors is selected in Color Palette; disable Apply to exclude it. With no custom slots enabled, the custom palette uses white.",
+  },
   bloom: {
     blur: 'Controls how far bright pixels spread before they are composited back over the scene. Higher values create a softer, wider glow.',
     bloomScale: 'Controls the strength of the bloom added around pixels that pass the Threshold setting. Higher values make those highlights brighter and more prominent.',
@@ -78,6 +112,8 @@ const effectOverrides = {
     scratchDensity: 'Changes how many film scratches are visible at the same time.',
   },
   predator: {
+    tokenHeatSeek: 'Uses visible tokens with selected dispositions as the heat sources in a full thermal image, while the surroundings remain cooler. Existing visibility masks and layer placement still apply.',
+    tokenHeatSeekDispositions: 'Selects which visible token dispositions act as heat sources while Token Heat Seek is enabled. Tokens excluded by visibility or masking are not revealed through this setting.',
     thermalStrength: 'Blends the false-color thermal palette into the source image. 0 retains the original scene colors; 1 uses the full thermal treatment.',
     thermalContrast: 'Separates cool and hot values in the thermal palette. Higher values create stronger temperature differences across the scene.',
     edgeDefinition: 'Highlights local temperature boundaries so creatures, objects, and terrain produce sharper thermal silhouettes.',
@@ -242,7 +278,6 @@ const effectOverrides = {
     causticsTint: 'Sets the color of the caustic highlights.',
     refraction: 'Controls how strongly the Water filter bends and distorts the map beneath it.',
     stillSpeed: 'Changes the subtle motion speed used when Flow, Waves, and Vortex are not providing stronger movement.',
-    tokenTrailStrength: 'Controls how strongly moving tokens displace the water and brighten the wake around their recent path.',
     tokenTrailSettleTime: 'Sets how many seconds token-created ripples and wake displacement take to fade back into the normal water surface.',
   },
   wind: {
@@ -365,6 +400,7 @@ const effectOverrides = {
 };
 
 const sharedDescriptions = {
+  regionBoundaryAvoidance: 'Steers moving animals away from the boundary and holes of the Region that contains the effect. It is available only on Region effects and is hidden while Orbit is enabled; it is separate from Token Avoidance.',
   belowTokens: ({ effectLabel }) => `Places ${effectLabel} behind token artwork in the effect stack. This changes whether tokens appear in front of the effect; it does not change where the effect is generated.`,
   belowTiles: ({ effectLabel }) => `Places ${effectLabel} below overhead tile artwork. Enable it when roofs, canopies, or other overhead tiles should cover the effect.`,
   belowForeground: ({ effectLabel }) => `Places ${effectLabel} below foreground coverage so foreground artwork can visually cover the effect.`,
@@ -453,6 +489,7 @@ const sharedDescriptions = {
 };
 
 const preferShared = new Set([
+  'regionBoundaryAvoidance',
   'belowTokens',
   'belowTiles',
   'belowForeground',

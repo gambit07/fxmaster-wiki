@@ -1,0 +1,128 @@
+---
+title: "Fireworks"
+description: "Procedural firework shells and spark dragons with selectable palettes, flight patterns, launch trails, and Above Darkness presentation."
+sidebar:
+  order: 16
+  badge:
+    text: "FXMaster+"
+    variant: caution
+---
+import ParameterTable from '../../../../../components/ParameterTable.astro';
+import EffectShowcase from '../../../../../components/EffectShowcase.astro';
+
+<div class="fxm-kicker">Ambient reference</div>
+<div class="fxm-badge-row">
+  <a class="fxm-badge" data-tier="plus" href="https://foundryvtt.com/packages/fxmaster-plus" target="_blank" rel="noopener noreferrer" title="Open Gambit's FXMaster+ on Foundry VTT">FXMaster+</a>
+  <span class="fxm-badge" data-kind="particle">Particle effect</span>
+  <span class="fxm-badge">API type: fireworks</span>
+</div>
+
+<EffectShowcase src="/videos/fireworks-dragon.mp4" title="Fireworks" description="Preview shows Fireworks in Dragon mode" />
+
+Procedural firework shells and spark dragons with selectable palettes, flight patterns, launch trails, and Above Darkness presentation.
+
+Use Fireworks for a repeating display across a Scene or within a Region. Burst and Dragon modes have separate timing and shape controls.
+
+| Reference | Value |
+|---|---|
+| Package | FXMaster+ |
+| Effect kind | Particle effect |
+| Category | Ambient |
+| Runtime type | `fireworks` |
+| Exposed parameters | 38 |
+
+## Burst and Dragon modes
+
+**Firework Mode** selects a conventional **Burst** display or a flying **Dragon** made of sparks. Both can run across the Scene or inside **FXMaster: Particle Effects** on a Region.
+
+### Burst
+
+**Burst Style** selects Chrysanthemum, Peony, Willow, Palm, Ring, or a mixture. **Shells per Volley** sets the number of staggered launches, **Sparks per Shell** fills out each burst, and **Burst Duration (ms)** controls how long those sparks remain visible.
+
+**Period** sets the interval between launches or volleys in milliseconds. **Timing Variation** makes that interval less regular. A shorter Period with a longer Burst Duration produces more overlap.
+
+### Dragon
+
+Dragon mode forms a spark dragon, sends it through a flight pattern, and finishes with a finale and a matching burst. **Dragon Duration (ms)** controls the dragon sequence. The next **Period** starts after the sequence and follow-up burst have finished.
+
+| Parameter | What to adjust |
+|---|---|
+| Flight Patterns | Choose Circular, Figure 8, or both as available paths. |
+| Flight Direction | Rotate the path; the dragon faces along the curve while travelling. |
+| Flight Distance | Increase the distance travelled, or set it to 0 for a dragon that stays near its origin. |
+| Flight Speed | Adjust travel speed without changing Dragon Duration. A value of 0 pauses path travel rather than all animation. |
+| Wingbeat Rate | Adjust wing movement separately from travel speed. |
+| Dragon Spark Detail | Increase silhouette detail, with a corresponding increase in rendering work. |
+
+### Color, size, and viewpoint
+
+**Color Palette** provides coordinated color sets. Select **Custom Colors** to use the five **Custom Color** slots. **Multicolor Shells** mixes palette colors within each shell or dragon; turn it off for one color per shell.
+
+Use **Firework Size (grid units)** for burst or dragon size and **Shell Size** for the launching shell trail. **Launch Height (grid units)** sets the launch distance. Choose **Top Down** for an overhead view. The available Scene or Region space can limit how large the effect appears.
+
+**Spark Trail Length**, **Gravity**, **Wind Drift**, and **Wind Direction** shape the loose sparks. Wind Drift is a Fireworks control, not a link to the Wind filter.
+
+### Above Darkness and Region events
+
+**Above Darkness** is enabled by default. It keeps the luminous fireworks visible over Scene darkness without creating Foundry light sources.
+
+To start the display when a token enters an area, add Fireworks to a Region particle behavior and configure its **Events**. See [Token enter and exit events](../../../../regions/#events). Event activation controls the whole repeating display; it does not fire exactly one shell for each crossing.
+
+## Important controls
+
+- **Firework Mode:** Selects Burst for conventional firework shells or Dragon for a forming, flying spark dragon and its finale. Mode-specific controls appear for the selected presentation.
+- **Top Down:** Shows the launch and burst from an overhead viewpoint instead of a side-facing view. Top Down also changes the projected dragon flight; it does not select a different burst style.
+- **Color Palette:** Chooses the color palettes available to the effect. Each shell or dragon selects one palette; Custom Colors uses the enabled custom color slots, and an empty selection uses Celebration.
+- **Period:** Sets the interval in milliseconds between Burst launches or volleys. In Dragon mode, this pause starts after the dragon sequence and its follow-up burst finish.
+- **Firework Size (grid units):** Sets the size of the firework burst or dragon in grid units. The effect fits the result to the visible Scene or Region area, so a narrow Region can limit the final size.
+- **Flight Patterns:** Chooses Circular, Figure 8, or both as possible dragon flight paths. An empty selection allows both patterns; Flight Direction rotates the chosen path.
+- **Flight Direction:** Rotates the dragon flight path and establishes its facing when Flight Distance is zero. While travelling, the dragon faces along its path.
+- **Flight Distance:** Controls how far the dragon moves along its flight pattern. At 0 it stays near its origin, while body animation and Wind Drift can still provide movement.
+- **Flight Speed:** Controls how quickly the dragon moves along its flight path without changing Dragon Duration. At 0 path travel pauses; at 0.5 it uses the standard travel speed and at 1 it travels twice as quickly.
+- **Above Darkness:** Presents the fireworks above Foundry scene darkness. Enabled by default; it changes the luminous presentation rather than creating Foundry light sources.
+
+## Setup notes
+
+- Choose Firework Mode first. Burst Style, Shells per Volley, and Sparks per Shell apply to Burst; the Flight controls apply to Dragon.
+- Top Down changes the viewpoint. Firework Size (grid units) and Launch Height (grid units) are also limited by the available Scene or Region area.
+- A longer Period leaves more space between launches. In Dragon mode the pause follows the dragon sequence and its final burst.
+- Increase Sparks per Shell, Shells per Volley, or Dragon Spark Detail gradually; higher values require more rendering work.
+- Fireworks uses its own Wind Drift and Wind Direction controls and does not expose a Sound FX toggle.
+
+## Bundled preset usage
+
+No bundled preset currently uses this effect directly. Add it through <span class="fxm-control-label" data-control="particle-effects">Particle Effects</span> or the Direct Effect API.
+
+## Parameters
+
+The table combines the settings available for this effect in Scene and Region contexts. Scene-only and Region-only badges identify controls limited to one context. Hover or focus an info button to see what the parameter changes on the canvas. Select it to keep the card open. Each card also includes the default, range or choices, context, availability, API key, and control type.
+
+<ParameterTable effectId="fireworks" />
+
+## Direct-effect API example
+
+The Direct Effect API creates a separate row shown through <span class="fxm-control-label" data-control="api-effects">Manage API Effects</span>. Add a stable `apiMacro_…_p` or `apiMacro_…_f` ID when later macro calls need to update or stop the same row.
+
+```js
+const created = await FXMASTER.api.effects.play({
+  particles: [{
+    "id": "apiMacro_wikifireworks_p",
+    "type": "fireworks",
+    "options": {
+      "fireworkMode": "dragon",
+      "dragonPatterns": [
+        "circular",
+        "figure8"
+      ],
+      "dragonDuration": 15000,
+      "dragonTravel": 0.6,
+      "dragonSpeed": 0.5,
+      "aboveDarkness": true
+    }
+  }],
+});
+
+await FXMASTER.api.effects.particles.stop(created.particles);
+```
+
+For complete API behavior, scene targeting, stack ordering, and toggle groups, see the [Direct Effect API](../../../../automation/effect-api/) guide.
