@@ -787,7 +787,7 @@ for (const marker of [
 }
 
 const packageJson = JSON.parse(read(path.join(root, 'package.json')));
-if (packageJson.version !== '1.0.5') fail(`Expected package version 1.0.5; found ${packageJson.version}.`);
+if (packageJson.version !== '1.0.6') fail(`Expected package version 1.0.6; found ${packageJson.version}.`);
 
 const installationContent = read(path.join(docsRoot, 'getting-started/installation.mdx'));
 if (!installationContent.includes('../../plus/access/')) fail('Installation does not link to Accessing FXMaster+.');
@@ -1740,6 +1740,130 @@ for (const [effectId, [videoPath, description]] of Object.entries(expectedEffect
 }
 if (fs.existsSync(path.join(root, 'public/videos/sakura-blossom.mp4'))) {
   fail('The retired sakura-blossom.mp4 asset is still present; Sakura Blossoms must use sakura-blossoms.mp4.');
+}
+
+const expectedMapMakerCredits = {
+  "auroraborealis": [
+    "Cze & Peku",
+    "https://www.czepeku.com/"
+  ],
+  "bubbles": [
+    "Tom Cartos",
+    "https://www.tomcartos.com/"
+  ],
+  "duststorm": [
+    "Cze & Peku",
+    "https://www.czepeku.com/"
+  ],
+  "fireflies": [
+    "Sanctum of Maps",
+    "https://www.patreon.com/sanctumofmaps"
+  ],
+  "fireparticles": [
+    "Moonlight Maps",
+    "https://moonlight-maps.com/"
+  ],
+  "fireworks": [
+    "Tom Cartos",
+    "https://www.tomcartos.com/"
+  ],
+  "fish": [
+    "Moonlight Maps",
+    "https://moonlight-maps.com/"
+  ],
+  "ghosts": [
+    "Angela's Maps",
+    "https://angelamaps.com/"
+  ],
+  "glitch": [
+    "Cze & Peku",
+    "https://www.czepeku.com/"
+  ],
+  "ice": [
+    "The MAD Cartographer",
+    "https://themad.network/the-mad-cartographer"
+  ],
+  "lightningbolts": [
+    "Angela's Maps",
+    "https://angelamaps.com/"
+  ],
+  "magiccrystals": [
+    "Zach Moeller",
+    "https://www.patreon.com/zachmoeller"
+  ],
+  "neon": [
+    "Cze & Peku",
+    "https://www.czepeku.com/"
+  ],
+  "rain": [
+    "Angela's Maps",
+    "https://angelamaps.com/"
+  ],
+  "rats": [
+    "Cze & Peku",
+    "https://www.czepeku.com/"
+  ],
+  "sakurablossoms": [
+    "Moonlight Maps",
+    "https://moonlight-maps.com/"
+  ],
+  "sandstorm": [
+    "Cze & Peku",
+    "https://www.czepeku.com/"
+  ],
+  "screenshake": [
+    "Cze & Peku",
+    "https://www.czepeku.com/"
+  ],
+  "snowstorm": [
+    "Angela's Maps",
+    "https://angelamaps.com/"
+  ],
+  "summerleaves": [
+    "Cze & Peku",
+    "https://www.czepeku.com/"
+  ],
+  "sunlight": [
+    "Sanctum of Maps",
+    "https://www.patreon.com/sanctumofmaps"
+  ],
+  "underwater": [
+    "Moonlight Maps",
+    "https://moonlight-maps.com/"
+  ],
+  "water": [
+    "Angela's Maps",
+    "https://angelamaps.com/"
+  ],
+  "wind": [
+    "Cze & Peku",
+    "https://www.czepeku.com/"
+  ],
+  "windwisps": [
+    "Angela's Maps",
+    "https://angelamaps.com/"
+  ]
+};
+for (const [effectId, [mapName, mapUrl]] of Object.entries(expectedMapMakerCredits)) {
+  const pagePath = path.join(docsRoot, 'reference/effects/details', `${effectId}.mdx`);
+  if (!fs.existsSync(pagePath)) {
+    fail(`Missing map-credit page: ${effectId}`);
+    continue;
+  }
+  const showcases = [...read(pagePath).matchAll(/<EffectShowcase\b[^>]*\/>/g)];
+  if (showcases.length !== 1) {
+    fail(`${effectId} must have exactly one effect showcase for its map credit.`);
+    continue;
+  }
+  const markup = showcases[0][0];
+  const names = [...markup.matchAll(/\bmapName="([^"]*)"/g)];
+  const urls = [...markup.matchAll(/\bmapUrl="([^"]*)"/g)];
+  if (names.length !== 1 || names[0][1] !== mapName) {
+    fail(`${effectId} must credit ${mapName} in its Map maker slideout.`);
+  }
+  if (urls.length !== 1 || urls[0][1] !== mapUrl) {
+    fail(`${effectId} must use the expected Map maker URL: ${mapUrl}`);
+  }
 }
 
 const routeSet = new Set(routes.keys());

@@ -43,6 +43,8 @@ const effectShowcases = {
   fireworks: {
     src: '/videos/fireworks-dragon.mp4',
     description: 'Preview shows Fireworks in Dragon mode',
+    mapName: "Tom Cartos",
+    mapUrl: "https://www.tomcartos.com/",
   },
   auroraborealis: {
     src: '/videos/aurora-borealis.mp4',
@@ -53,6 +55,8 @@ const effectShowcases = {
   bubbles: {
     src: '/videos/bubbles.mp4',
     description: 'Preview shows Bubbles being played with Token Trails enabled',
+    mapName: "Tom Cartos",
+    mapUrl: "https://www.tomcartos.com/",
   },
   duststorm: {
     src: '/videos/duststorm.mp4',
@@ -71,10 +75,14 @@ const effectShowcases = {
   fireflies: {
     src: '/videos/fireflies.mp4',
     description: 'Preview shows Fireflies enabled',
+    mapName: "Sanctum of Maps",
+    mapUrl: "https://www.patreon.com/sanctumofmaps",
   },
   fireparticles: {
     src: '/videos/fire-particle.mp4',
     description: 'Preview shows Fire in Manual Placement mode with Light Source enabled',
+    mapName: "Moonlight Maps",
+    mapUrl: "https://moonlight-maps.com/",
   },
   fish: {
     src: '/videos/fish.mp4',
@@ -97,8 +105,8 @@ const effectShowcases = {
   ice: {
     src: '/videos/ice.mp4',
     description: 'Preview shows Ice enabled',
-    mapName: 'Cze & Peku',
-    mapUrl: 'https://www.czepeku.com/',
+    mapName: "The MAD Cartographer",
+    mapUrl: "https://themad.network/the-mad-cartographer",
   },
   lightningbolts: {
     src: '/videos/lightning-bolts.mp4',
@@ -115,18 +123,26 @@ const effectShowcases = {
   neon: {
     src: '/videos/neon.mp4',
     description: 'Preview shows Neon in Fill + Outline mode using custom source color matching',
+    mapName: "Cze & Peku",
+    mapUrl: "https://www.czepeku.com/",
   },
   rain: {
     src: '/videos/rain.mp4',
     description: 'Preview shows Rain in Top Down mode with Background and Token Trails enabled',
+    mapName: "Angela's Maps",
+    mapUrl: "https://angelamaps.com/",
   },
   rats: {
     src: '/videos/rats.mp4',
     description: 'Preview shows Rats in Directional Movement mode with Directional Spread enabled',
+    mapName: "Cze & Peku",
+    mapUrl: "https://www.czepeku.com/",
   },
   sakurablossoms: {
     src: '/videos/sakura-blossoms.mp4',
     description: 'Preview shows Sakura Blossoms with Background and Token Trails enabled',
+    mapName: "Moonlight Maps",
+    mapUrl: "https://moonlight-maps.com/",
   },
   sandstorm: {
     src: '/videos/sandstorm.mp4',
@@ -137,18 +153,26 @@ const effectShowcases = {
   screenshake: {
     src: '/videos/screen-shake.mp4',
     description: 'Preview shows Screen Shake with Timed mode disabled',
+    mapName: "Cze & Peku",
+    mapUrl: "https://www.czepeku.com/",
   },
   snowstorm: {
     src: '/videos/snowstorm.mp4',
     description: 'Preview shows Snowstorm in Top Down mode with Background and Sweeping Snow enabled',
+    mapName: "Angela's Maps",
+    mapUrl: "https://angelamaps.com/",
   },
   summerleaves: {
     src: '/videos/summer-leaves.mp4',
     description: 'Preview shows Summer Leaves and Wind enabled together, with Directional Movement and Synchronized Direction enabled',
+    mapName: "Cze & Peku",
+    mapUrl: "https://www.czepeku.com/",
   },
   sunlight: {
     src: '/videos/sunlight.mp4',
     description: 'Preview shows Sunlight with Parallel mode disabled',
+    mapName: "Sanctum of Maps",
+    mapUrl: "https://www.patreon.com/sanctumofmaps",
   },
   underwater: {
     src: '/videos/fish.mp4',
@@ -165,12 +189,14 @@ const effectShowcases = {
   wind: {
     src: '/videos/wind.mp4',
     description: 'Preview shows Wind and Summer Leaves enabled together, with Wind in Manual Painting mode',
-    mapName: "Angela's Maps",
-    mapUrl: 'https://angelamaps.com/',
+    mapName: "Cze & Peku",
+    mapUrl: "https://www.czepeku.com/",
   },
   windwisps: {
     src: '/videos/wind-wisps.mp4',
     description: 'Preview shows Wind Wisps and Wind enabled together',
+    mapName: "Angela's Maps",
+    mapUrl: "https://angelamaps.com/",
   },
 };
 
